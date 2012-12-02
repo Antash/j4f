@@ -15,13 +15,19 @@ namespace PGM
 		static void Main(string[] args)
 		{
             DirectoryInfo d = null, dd = null;
-            var inp = new FolderBrowserDialog();
+            var inp = new FolderBrowserDialog
+                          {
+                              Description = "Choose folder with images needed to be import"
+                          };
             if (inp.ShowDialog() == DialogResult.OK)
             {
                 Console.WriteLine(String.Format("Source directory selected: \r\n\t{0}", inp.SelectedPath));
                 d = new DirectoryInfo(inp.SelectedPath);
             }
-            var outp = new FolderBrowserDialog();
+            var outp = new FolderBrowserDialog
+                           {
+                               Description = "Choose target directory"
+                           };
             if (outp.ShowDialog() == DialogResult.OK)
             {
                 Console.WriteLine(String.Format("Destenation directory selected: \r\n\t{0}", outp.SelectedPath));
