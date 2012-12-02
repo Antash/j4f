@@ -35,7 +35,7 @@ namespace PGM
             }
             if (dd != null && d != null)
             {
-                DialogResult dr = MessageBox.Show("Move or Copy", "Keep source files?", MessageBoxButtons.YesNo);
+                var dr = MessageBox.Show("Keep source files?", "Move or Copy", MessageBoxButtons.YesNo);
                 Console.WriteLine(String.Format("Keep source images = {0}", dr == DialogResult.Yes));
                 ImageProc(d, dd, dr == DialogResult.Yes);
             }
