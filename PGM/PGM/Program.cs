@@ -132,7 +132,7 @@ namespace PGM
         {
             string newName = fileName;
             int i = 1;
-            while (File.Exists(fileName))
+            while (File.Exists(newName))
             {
                 newName = Path.Combine(baseDir, String.Format("{0:yyyy-mm-dd_hhmmss}({1}).{2}", dateOfShot, i++, Ext));
             }
