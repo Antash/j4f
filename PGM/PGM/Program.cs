@@ -63,6 +63,7 @@ namespace PGM
                         dateOfShot = Convert.ToDateTime(tmpImgExif.DateTaken);
                     }
                 }
+                // if there is no chance to read shot taken date, or if it is simply missing use LastWriteDate instead
                 if (dateOfShot == DateTime.MinValue)
                 {
                     dateOfShot = new FileInfo(tf.FullName).LastWriteTime;
