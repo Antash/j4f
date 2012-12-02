@@ -7,13 +7,13 @@ using System.Windows.Media.Imaging;
 namespace PGM
 {
     class Program
-	{
+    {
         static readonly CultureInfo UsCulture = new CultureInfo("en-US");
         private const string Ext = "jpg";
 
         [STAThread]
-		static void Main(string[] args)
-		{
+        static void Main(string[] args)
+        {
             DirectoryInfo d = null, dd = null;
             var inp = new FolderBrowserDialog
                           {
@@ -45,9 +45,14 @@ namespace PGM
             }
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
-		}
+        }
 
-        private static void ImageProc(DirectoryInfo d, DirectoryInfo ddest, bool saveOriginal)
+        private enum DefaulAction
+        {
+            Copy, Skip
+        }
+
+        private static void ImageProc(DirectoryInfo d, DirectoryInfo ddest, bool saveOriginal, bool collisionActionToAll = false, DefaulAction defAct = DefaulAction.Copy)
         {
             foreach (var tf in d.EnumerateFiles(String.Format("*.{0}", Ext)))
             {
@@ -79,11 +84,27 @@ namespace PGM
                     Directory.CreateDirectory(dmd);
                 }
                 var nname = Path.Combine(dmd, String.Format("{0:yyyy-mm-dd_hhmmss}.{1}", dateOfShot, Ext));
-                int i = 1;
-                while (File.Exists(nname))
+
+                if (File.Exists(nname))
                 {
-                    nname = Path.Combine(dmd, String.Format("{0:yyyy-mm-dd_hhmmss}({1}).{2}", dateOfShot, i++, Ext));
+                    if (!collisionActionToAll)
+                    {
+                        var dr = MessageBox.Show("Copy this file anyway?", "File with the same name exists!",
+                                                 MessageBoxButtons.YesNo);
+                        var drmemo = MessageBox.Show("Repeat to all?", "Save selected option",
+                             MessageBoxButtons.YesNo);
+                        collisionActionToAll = drmemo == DialogResult.OK;
+
+                        if (dr != DialogResult.OK)
+                        {
+                            defAct = DefaulAction.Skip;
+                            continue;
+                        }
+                        defAct = DefaulAction.Copy;
+                    }
+                    nname = ChooseName(nname, dmd, dateOfShot);
                 }
+
                 try
                 {
                     Console.WriteLine(String.Format("Copying image {0} to {1}", tf.Name, nname));
@@ -103,8 +124,19 @@ namespace PGM
             }
             foreach (var td in d.EnumerateDirectories())
             {
-                ImageProc(td, ddest, saveOriginal);
+                ImageProc(td, ddest, saveOriginal, collisionActionToAll, defAct);
             }
         }
-	}
+
+        private static string ChooseName(string fileName, string baseDir, DateTime dateOfShot)
+        {
+            string newName = fileName;
+            int i = 1;
+            while (File.Exists(fileName))
+            {
+                newName = Path.Combine(baseDir, String.Format("{0:yyyy-mm-dd_hhmmss}({1}).{2}", dateOfShot, i++, Ext));
+            }
+            return newName;
+        }
+    }
 }

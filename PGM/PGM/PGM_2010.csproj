@@ -8,8 +8,8 @@
     <ProjectGuid>{724302B9-FB40-4AD8-B88F-3024D349CB16}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PGM_2010</RootNamespace>
-    <AssemblyName>PGM_2010</AssemblyName>
+    <RootNamespace>PGM</RootNamespace>
+    <AssemblyName>PGM</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
