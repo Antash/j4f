@@ -1,19 +1,31 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.Linq;
+using System.Reflection;
 using SearcherCore;
 
 namespace NETSearcherPlug
 {
-	[Export(typeof(ISearcher))]
-	public class NetAssemblyProcessor : ISearcher
+	[Export(typeof(IFileProcessor))]
+	public class NetAssemblyProcessor : IFileProcessor
     {
-		public SearcherType GetSearcherType()
+		public bool IsSuitable(string fileName, string param)
 		{
-			return SearcherType.NetSearcher;
-		}
-
-		public void Search()
-		{
-			throw new System.NotImplementedException();
+			try
+			{
+				var assembly = Assembly.LoadFrom(fileName);
+				return assembly.GetTypes().Any(t => t.Name.Contains(param));
+			}
+			catch (BadImageFormatException)
+			{
+				// not a valid .net assembly, skip
+				return false;
+			}
+			catch (Exception ex)
+			{
+				//process this
+				return false;
+			}
 		}
     }
 }

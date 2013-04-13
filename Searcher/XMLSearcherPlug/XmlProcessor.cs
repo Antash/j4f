@@ -1,12 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.Composition;
+using System.Xml;
+using SearcherCore;
 
 namespace XMLSearcherPlug
 {
-    public class XmlProcessor
+	[Export(typeof(IFileProcessor))]
+	public class XmlProcessor : IFileProcessor
     {
+		public bool IsSuitable(string fileName, string param)
+		{
+			var doc = new XmlDocument();
+			try
+			{
+				doc.Load(fileName);
+				return doc.GetElementsByTagName(param).Count > 0;
+			}
+			catch (XmlException)
+			{
+				// not a valid xml file, skip
+				return false;
+			}
+			catch (Exception ex)
+			{
+				//process this
+				return false;
+			}
+		}
     }
 }
