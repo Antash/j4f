@@ -23,7 +23,6 @@ namespace NETSearcherPlug
 			}
 			catch (Exception ex)
 			{
-				//process this
 				Console.WriteLine(ex.ToString());
 				return false;
 			}
