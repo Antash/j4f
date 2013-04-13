@@ -4,13 +4,8 @@ using System.Linq;
 
 namespace SearcherCore
 {
-    public class FileSearcher : IFileProcessor
+    public class FileSearcher
     {
-	    public SearcherType GetSearcherType()
-	    {
-		    return SearcherType.FileSearcher;
-	    }
-
 	    public void Search()
 	    {
 		    var drives = DriveInfo.GetDrives();
