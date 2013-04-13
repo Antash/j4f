@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{16003D86-73F6-40BA-AC99-78F268EA4B18}</ProjectGuid>
+    <ProjectGuid>{15ED4748-2B64-4A9A-8341-16B56FF1EE05}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SearcherCore</RootNamespace>
-    <AssemblyName>SearcherCore</AssemblyName>
+    <RootNamespace>XMLSearcherPlug</RootNamespace>
+    <AssemblyName>XMLSearcherPlug</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,10 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DirectorySearcher.cs" />
-    <Compile Include="ISearcher.cs" />
-    <Compile Include="PluginManager.cs" />
+    <Compile Include="XmlSearcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SearcherCore\SearcherCore.csproj">
+      <Project>{16003d86-73f6-40ba-ac99-78f268ea4b18}</Project>
+      <Name>SearcherCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
