@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SearcherCore
 {
-    public class FileSearcher : ISearcher
+    public class FileSearcher : IFileProcessor
     {
 	    public SearcherType GetSearcherType()
 	    {

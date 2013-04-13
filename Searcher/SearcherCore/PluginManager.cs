@@ -10,7 +10,7 @@ namespace SearcherCore
 	class PluginManager
 	{
 		[ImportMany]
-		public IEnumerable<ISearcher> Searchers { get; set; }
+		public IEnumerable<IFileProcessor> Processors { get; set; }
 
 		public void LoadPlugins()
 		{

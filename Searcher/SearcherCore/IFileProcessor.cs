@@ -11,16 +11,8 @@ namespace SearcherCore
 	//	IEnumerable<TResultType> Search(TParamType data);
 	//}
 
-	public enum SearcherType
+	public interface IFileProcessor
 	{
-		FileSearcher,
-		XmlSearcher,
-		NetSearcher
-	}
-
-	public interface ISearcher
-	{
-		SearcherType GetSearcherType();
-		void Search();
+		bool IsSuitable(string fileName, string param);
 	}
 }
