@@ -3,6 +3,13 @@ using System.ComponentModel.Composition;
 
 namespace SearcherCore
 {
+	public enum SearchType
+	{
+		File,
+		XmlTag,
+		DotNetType
+	}
+
 	public interface IFileProcessor
 	{
 		bool IsSuitable(string fileName, string param);

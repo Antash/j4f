@@ -5,13 +5,6 @@ using System.Linq;
 
 namespace SearcherCore
 {
-	public enum SearchType
-	{
-		File,
-		XmlTag,
-		DotNetType
-	}
-
 	public class FileSearcher
 	{
 		private readonly SearchType _type;
@@ -60,25 +53,24 @@ namespace SearcherCore
 			}
 			else
 			{
-				SearchInternal(root, pattern);
+				SearchInternal(root, pattern, _proc.FileExtentionPattern);
 			}
 		}
 
-		private void SearchInternal(string root, string pattern)
+		private void SearchInternal(string root, string pattern, string extPattern = null)
 		{
 			try
 			{
 				var directories = from dir in Directory.EnumerateDirectories(root) select dir;
-				var files = from file in Directory.EnumerateFiles(root, pattern) select file;
+				var files = from file in Directory.EnumerateFiles(root, extPattern ?? pattern) select file;
 				foreach (var file in files)
 				{
-
-					//TODO process found files
-					Console.WriteLine("File found: {0}", file);
+					if (_proc != null && _proc.IsSuitable(file, pattern))
+						Console.WriteLine("File found: {0}", file);
 				}
 				foreach (var dir in directories)
 				{
-					SearchInternal(dir, pattern);
+					SearchInternal(dir, pattern, extPattern);
 				}
 			}
 			catch (UnauthorizedAccessException)
