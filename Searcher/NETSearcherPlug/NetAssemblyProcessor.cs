@@ -29,7 +29,7 @@ namespace NETSearcherPlug
 
 		public string FileExtentionPattern
 		{
-			get { return "*.net"; }
+			get { return "*.dll|*.exe"; }
 		}
     }
 }

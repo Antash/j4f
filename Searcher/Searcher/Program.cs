@@ -12,8 +12,9 @@ namespace Searcher
     {
         static void Main(string[] args)
         {
-	        var s = new FileSearcher();
-			s.Search(@"C:\Windows", "foo");
+	        var s = new FileSearcher(SearchType.DotNetType);
+			//s.Search(@"C:\Windows", "foo");
+			s.Search(@"C:\Users\Антон\Documents\Visual Studio 2012\Projects\j4f\Searcher\Searcher\bin\Debug", "Program");
 	        //s.Search(@"D:\photo", "2007-35-02_103534");
         }
     }

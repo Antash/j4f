@@ -24,12 +24,26 @@ namespace SearcherCore
 			_proc = _pluginManager.GetProcessor(_type);
 		}
 
+		public void Search(string root, string pattern)
+		{
+			DirectoryInfo rootDir;
+			try
+			{
+				rootDir = new DirectoryInfo(root);
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+			Search(rootDir, pattern);
+		}
+
 		public void Search(string pattern)
 		{
 			var drives = DriveInfo.GetDrives();
 			foreach (var drive in drives)
 			{
-				Search(drive.RootDirectory.FullName, pattern);
+				Search(drive.RootDirectory, pattern);
 			}
 		}
 
@@ -38,11 +52,11 @@ namespace SearcherCore
 			var drives = DriveInfo.GetDrives().Where(d => d.DriveType == driveType);
 			foreach (var drive in drives)
 			{
-				Search(drive.RootDirectory.FullName, pattern);
+				Search(drive.RootDirectory, pattern);
 			}
 		}
 
-		public void Search(string root, string pattern)
+		public void Search(DirectoryInfo root, string pattern)
 		{
 			if (_proc == null)
 			{
@@ -57,16 +71,17 @@ namespace SearcherCore
 			}
 		}
 
-		private void SearchInternal(string root, string pattern, string extPattern = null)
+		private void SearchInternal(DirectoryInfo root, string pattern, string extPattern = null)
 		{
 			try
 			{
-				var directories = from dir in Directory.EnumerateDirectories(root) select dir;
-				var files = from file in Directory.EnumerateFiles(root, extPattern ?? pattern) select file;
+				var directories = from dir in root.EnumerateDirectories() select dir;
+				var files = from file in root.EnumerateFiles(extPattern ?? pattern) select file;
 				foreach (var file in files)
 				{
-					if (_proc != null && _proc.IsSuitable(file, pattern))
-						Console.WriteLine("File found: {0}", file);
+					var fileName = file.FullName;
+					if (_proc != null && _proc.IsSuitable(fileName, pattern))
+						Console.WriteLine("File found: {0}", fileName);
 				}
 				foreach (var dir in directories)
 				{
