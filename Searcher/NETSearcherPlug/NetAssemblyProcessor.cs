@@ -14,7 +14,7 @@ namespace NETSearcherPlug
 			try
 			{
 				var assembly = Assembly.LoadFrom(fileName);
-				return assembly.GetTypes().Any(t => t.Name.Contains(param));
+				return assembly.GetTypes().Any(t => t.Name.Contains(param) && (t.IsClass || t.IsInterface));
 			}
 			catch (BadImageFormatException)
 			{
