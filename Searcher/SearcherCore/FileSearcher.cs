@@ -14,8 +14,9 @@ namespace SearcherCore
 
 	public class FileSearcher
 	{
-		private SearchType _type;
+		private readonly SearchType _type;
 		private readonly PluginManager _pluginManager;
+		private readonly IFileProcessor _proc;
 
 		public FileSearcher()
 		{
@@ -27,7 +28,7 @@ namespace SearcherCore
 			: this()
 		{
 			_type = type;
-			var p = _pluginManager.GetProcessor(_type);
+			_proc = _pluginManager.GetProcessor(_type);
 		}
 
 		public void Search(string pattern)
@@ -50,21 +51,28 @@ namespace SearcherCore
 
 		public void Search(string root, string pattern)
 		{
-			// search ignoring extention if any specified
-			if (!pattern.Contains('.'))
-				pattern += ".*";
-			SearchInternal(root, pattern);
+			if (_proc == null)
+			{
+				// search ignoring extention if any specified
+				if (!pattern.Contains('.'))
+					pattern += ".*";
+				SearchInternal(root, pattern);
+			}
+			else
+			{
+				SearchInternal(root, pattern);
+			}
 		}
 
 		private void SearchInternal(string root, string pattern)
 		{
-			var files = from file in Directory.EnumerateFiles(root, pattern) select file;
-			var directories = from dir in Directory.EnumerateDirectories(root) select dir;
-
 			try
 			{
+				var directories = from dir in Directory.EnumerateDirectories(root) select dir;
+				var files = from file in Directory.EnumerateFiles(root, pattern) select file;
 				foreach (var file in files)
 				{
+
 					//TODO process found files
 					Console.WriteLine("File found: {0}", file);
 				}

@@ -13,7 +13,8 @@ namespace Searcher
         static void Main(string[] args)
         {
 	        var s = new FileSearcher();
-			s.Search(@"D:\photo", "2007-35-02_103534");
+			s.Search(@"C:\Windows", "foo");
+	        //s.Search(@"D:\photo", "2007-35-02_103534");
         }
     }
 }

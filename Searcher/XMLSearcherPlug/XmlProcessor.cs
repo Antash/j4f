@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml;
 using SearcherCore;
 
@@ -26,6 +25,11 @@ namespace XMLSearcherPlug
 				Console.WriteLine(ex.ToString());
 				return false;
 			}
+		}
+
+		public string FileExtentionPattern
+		{
+			get { return "*.xml"; }
 		}
     }
 }
