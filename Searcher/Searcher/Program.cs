@@ -12,16 +12,8 @@ namespace Searcher
     {
         static void Main(string[] args)
         {
-			var doc = new XmlDocument();
-			doc.Load("books.xml");
-			if (doc.HasChildNodes)
-				foreach (XmlNode node in doc.ChildNodes)
-				{
-					//node.
-				}
-
 	        var s = new FileSearcher();
-	        s.Search();
+			s.Search(@"D:\photo", "2007-35-02_103534");
         }
     }
 }
