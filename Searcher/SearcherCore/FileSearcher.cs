@@ -86,6 +86,7 @@ namespace SearcherCore
 			{
 				foreach (var file in listFunc(root, pattern))
 				{
+					//TODO process found file
 					var fileName = file.FullName;
 					if (_proc == null || _proc.IsSuitable(fileName, pattern))
 						Console.WriteLine("File found: {0}", fileName);
