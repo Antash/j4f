@@ -67,16 +67,19 @@ namespace SearcherCore
 			}
 			else
 			{
-				SearchInternal(root, pattern, _proc.FileExtentionPattern);
+				SearchInternal(root, pattern, _proc.FileExtentionPatterns);
 			}
 		}
 
-		private void SearchInternal(DirectoryInfo root, string pattern, string extPattern = null)
+		private void SearchInternal(DirectoryInfo root, string pattern, string [] extPatterns = null)
 		{
 			try
 			{
 				var directories = from dir in root.EnumerateDirectories() select dir;
-				var files = from file in root.EnumerateFiles(extPattern ?? pattern) select file;
+				var files = extPatterns != null ? 
+					extPatterns.SelectMany(extPattern => root.EnumerateFiles(extPattern ?? pattern)) :
+					root.EnumerateFiles(pattern);
+				
 				foreach (var file in files)
 				{
 					var fileName = file.FullName;
@@ -85,7 +88,7 @@ namespace SearcherCore
 				}
 				foreach (var dir in directories)
 				{
-					SearchInternal(dir, pattern, extPattern);
+					SearchInternal(dir, pattern, extPatterns);
 				}
 			}
 			catch (UnauthorizedAccessException)

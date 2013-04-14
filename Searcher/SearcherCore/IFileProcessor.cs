@@ -13,7 +13,7 @@ namespace SearcherCore
 	public interface IFileProcessor
 	{
 		bool IsSuitable(string fileName, string param);
-		string FileExtentionPattern { get; }
+		string [] FileExtentionPatterns { get; }
 	}
 
 	public interface IFileProcessorMetadata
