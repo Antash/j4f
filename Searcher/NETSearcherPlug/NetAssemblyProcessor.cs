@@ -6,7 +6,7 @@ using SearcherCore;
 
 namespace NETSearcherPlug
 {
-	[Export(typeof(IFileProcessor))]
+	[FileProcessorMetadataAttribute(SearchType.DotNetType)]
 	public class NetAssemblyProcessor : IFileProcessor
     {
 		public bool IsSuitable(string fileName, string param)
