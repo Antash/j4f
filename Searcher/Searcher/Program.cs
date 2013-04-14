@@ -12,6 +12,10 @@ namespace Searcher
     {
         static void Main(string[] args)
         {
+			//TODO UI
+			//TODO search params
+			//TODO multiprocessing/threading
+
 	        var s = new FileSearcher(SearchType.DotNetType);
 			//s.Search(@"C:\Windows", "foo");
 			//s.Search(@"C:\Users\Антон\Documents\Visual Studio 2012\Projects\j4f\Searcher\Searcher\bin\Debug", "Program");
