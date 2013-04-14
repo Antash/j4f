@@ -21,13 +21,13 @@ namespace SearcherCore
 		{
 			_type = SearchType.File;
 			_pluginManager = new PluginManager();
-			_pluginManager.LoadPlugins();
 		}
 
 		public FileSearcher(SearchType type)
 			: this()
 		{
 			_type = type;
+			var p = _pluginManager.GetProcessor(_type);
 		}
 
 		public void Search(string pattern)
