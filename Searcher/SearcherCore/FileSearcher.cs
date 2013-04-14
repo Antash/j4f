@@ -87,7 +87,7 @@ namespace SearcherCore
 				foreach (var file in listFunc(root, pattern))
 				{
 					var fileName = file.FullName;
-					if (_proc != null && _proc.IsSuitable(fileName, pattern))
+					if (_proc == null || _proc.IsSuitable(fileName, pattern))
 						Console.WriteLine("File found: {0}", fileName);
 				}
 				foreach (var dir in root.EnumerateDirectories())
