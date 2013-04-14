@@ -27,9 +27,9 @@ namespace XMLSearcherPlug
 			}
 		}
 
-		public string FileExtentionPattern
+		public string [] FileExtentionPatterns
 		{
-			get { return "*.xml"; }
+			get { return new [] {"*.xml"}; }
 		}
     }
 }
