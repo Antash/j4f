@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 
 namespace SearcherCore
@@ -13,7 +14,7 @@ namespace SearcherCore
 	public interface IFileProcessor
 	{
 		bool IsSuitable(string fileName, string param);
-		string [] FileExtentionPatterns { get; }
+		IEnumerable<string> FileExtentionPatterns { get; }
 	}
 
 	public interface IFileProcessorMetadata
