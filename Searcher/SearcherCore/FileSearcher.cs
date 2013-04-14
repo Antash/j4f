@@ -5,16 +5,39 @@ using System.Linq;
 
 namespace SearcherCore
 {
-    public class FileSearcher
-    {
-	    public void Search(string pattern)
-	    {
+	public enum SearchType
+	{
+		File,
+		XmlTag,
+		DotNetType
+	}
+
+	public class FileSearcher
+	{
+		private SearchType _type;
+		private readonly PluginManager _pluginManager;
+
+		public FileSearcher()
+		{
+			_type = SearchType.File;
+			_pluginManager = new PluginManager();
+			_pluginManager.LoadPlugins();
+		}
+
+		public FileSearcher(SearchType type)
+			: this()
+		{
+			_type = type;
+		}
+
+		public void Search(string pattern)
+		{
 			var drives = DriveInfo.GetDrives();
-		    foreach (var drive in drives)
-		    {
+			foreach (var drive in drives)
+			{
 				Search(drive.RootDirectory.FullName, pattern);
-		    }
-	    }
+			}
+		}
 
 		public void Search(DriveType driveType, string pattern)
 		{
@@ -34,7 +57,7 @@ namespace SearcherCore
 		}
 
 		private void SearchInternal(string root, string pattern)
-	    {
+		{
 			var files = from file in Directory.EnumerateFiles(root, pattern) select file;
 			var directories = from dir in Directory.EnumerateDirectories(root) select dir;
 
@@ -52,12 +75,12 @@ namespace SearcherCore
 			}
 			catch (UnauthorizedAccessException)
 			{
-				
+
 			}
 			catch (Exception)
 			{
 				throw;
 			}
-	    }
-    }
+		}
+	}
 }
