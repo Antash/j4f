@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Reflection;
 using SearcherCore;
@@ -26,6 +25,11 @@ namespace NETSearcherPlug
 				Console.WriteLine(ex.ToString());
 				return false;
 			}
+		}
+
+		public string FileExtentionPattern
+		{
+			get { return "*.net"; }
 		}
     }
 }
