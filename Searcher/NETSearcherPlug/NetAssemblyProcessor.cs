@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using SearcherCore;
@@ -27,7 +28,7 @@ namespace NETSearcherPlug
 			}
 		}
 
-		public string [] FileExtentionPatterns
+		public IEnumerable<string> FileExtentionPatterns
 		{
 			get { return new []{"*.dll", "*.exe"}; }
 		}

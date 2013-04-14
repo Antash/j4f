@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml;
 using SearcherCore;
 
@@ -27,7 +28,7 @@ namespace XMLSearcherPlug
 			}
 		}
 
-		public string [] FileExtentionPatterns
+		public IEnumerable<string> FileExtentionPatterns
 		{
 			get { return new [] {"*.xml"}; }
 		}

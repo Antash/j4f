@@ -63,22 +63,32 @@ namespace SearcherCore
 				// search ignoring extention if any specified
 				if (!pattern.Contains('.'))
 					pattern += ".*";
-				SearchInternal(root, pattern);
+				SearchInternal(root, pattern, ListFiles);
 			}
 			else
 			{
-				SearchInternal(root, pattern, _proc.FileExtentionPatterns);
+				SearchInternal(root, pattern, ListFilesForPlugin);
 			}
 		}
 
-		private void SearchInternal(DirectoryInfo root, string pattern, string [] extPatterns = null)
+		private IEnumerable<FileInfo> ListFilesForPlugin(DirectoryInfo root, string pattern)
+		{
+			return _proc.FileExtentionPatterns.Any() ?
+				_proc.FileExtentionPatterns.SelectMany(root.EnumerateFiles) :
+				root.EnumerateFiles();
+		}
+
+		private IEnumerable<FileInfo> ListFiles(DirectoryInfo root, string pattern)
+		{
+			return root.EnumerateFiles(pattern);
+		}
+
+		private void SearchInternal(DirectoryInfo root, string pattern, Func<DirectoryInfo, string, IEnumerable<FileInfo>> listFunc)
 		{
 			try
 			{
 				var directories = from dir in root.EnumerateDirectories() select dir;
-				var files = extPatterns != null ? 
-					extPatterns.SelectMany(extPattern => root.EnumerateFiles(extPattern ?? pattern)) :
-					root.EnumerateFiles(pattern);
+				var files = listFunc(root, pattern);
 				
 				foreach (var file in files)
 				{
@@ -88,7 +98,7 @@ namespace SearcherCore
 				}
 				foreach (var dir in directories)
 				{
-					SearchInternal(dir, pattern, extPatterns);
+					SearchInternal(dir, pattern, listFunc);
 				}
 			}
 			catch (UnauthorizedAccessException)
