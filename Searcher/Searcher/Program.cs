@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 using SearcherCore;
 
@@ -15,6 +16,10 @@ namespace Searcher
 			//TODO UI
 			//TODO search params
 			//TODO multiprocessing/threading
+
+	        var form = new SearcherMainForm();
+			Application.EnableVisualStyles();
+			Application.Run(form);
 
 	        var sf = new FileSearcher();
 			sf.Search(@"D:\photo", "2007-35-02_103534");
