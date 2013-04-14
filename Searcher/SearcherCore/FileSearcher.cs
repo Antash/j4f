@@ -7,22 +7,17 @@ namespace SearcherCore
 {
 	public class FileSearcher
 	{
-		private readonly SearchType _type;
-		private readonly PluginManager _pluginManager;
+		private static readonly PluginManager PluginManager = new PluginManager();
 		private readonly IFileProcessor _proc;
 
-		public FileSearcher()
-		{
-			_type = SearchType.File;
-			_pluginManager = new PluginManager();
-		}
+		public FileSearcher() { }
 
 		public FileSearcher(SearchType type)
-			: this()
 		{
-			_type = type;
-			_proc = _pluginManager.GetProcessor(_type);
+			_proc = PluginManager.GetProcessor(type);
 		}
+
+		#region Search public overrides
 
 		public void Search(string root, string pattern)
 		{
@@ -71,6 +66,8 @@ namespace SearcherCore
 			}
 		}
 
+		#endregion
+
 		private IEnumerable<FileInfo> ListFilesForPlugin(DirectoryInfo root, string pattern)
 		{
 			return _proc.FileExtentionPatterns.Any() ?
@@ -87,16 +84,13 @@ namespace SearcherCore
 		{
 			try
 			{
-				var directories = from dir in root.EnumerateDirectories() select dir;
-				var files = listFunc(root, pattern);
-				
-				foreach (var file in files)
+				foreach (var file in listFunc(root, pattern))
 				{
 					var fileName = file.FullName;
 					if (_proc != null && _proc.IsSuitable(fileName, pattern))
 						Console.WriteLine("File found: {0}", fileName);
 				}
-				foreach (var dir in directories)
+				foreach (var dir in root.EnumerateDirectories())
 				{
 					SearchInternal(dir, pattern, listFunc);
 				}
