@@ -41,10 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileSearcher.cs" />
-    <Compile Include="IFileProcessor.cs" />
-    <Compile Include="PluginManager.cs" />
-    <Compile Include="ProcessManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SearcherExtensibility\SearcherExtensibility.csproj">
+      <Project>{a693ac30-2c8b-4f43-8102-1dc3417e309f}</Project>
+      <Name>SearcherExtensibility</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

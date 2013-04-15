@@ -6,9 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace SearcherCore
+namespace SearcherExtensibility
 {
-	class PluginManager
+	public class PluginManager
 	{
 		[ImportMany(typeof(IFileProcessor), AllowRecomposition = true)]
 		private IEnumerable<Lazy<IFileProcessor, IFileProcessorMetadata>> Processors { get; set; }
