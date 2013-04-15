@@ -10,11 +10,11 @@ namespace SearcherCore
 	{
 		private static readonly PluginManager PluginManager = new PluginManager();
 		private readonly IFileProcessor _proc;
-		private readonly IList<string> _visitedReparsePoints;
+		private readonly HashSet<string> _visitedPaths;
 
 		public FileSearcher()
 		{
- 			_visitedReparsePoints = new List<string>();
+			_visitedPaths = new HashSet<string>();
 		}
 
 		public FileSearcher(SearchType type)
@@ -89,14 +89,12 @@ namespace SearcherCore
 				}
 				foreach (var dir in root.EnumerateDirectories())
 				{
-					if (!_visitedReparsePoints.Contains(dir.FullName) &&
-						(File.GetAttributes(dir.FullName) & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
+					var dirStamp = dir.Name + dir.CreationTime;
+					if (!_visitedPaths.Contains(dirStamp))
 					{
-						_visitedReparsePoints.Add(dir.FullName);
-						SearchInternal(dir, pattern, listFunc);
-					}
-					else
-					{
+						if ((File.GetAttributes(dir.FullName) & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
+							_visitedPaths.Add(dirStamp);
+
 						SearchInternal(dir, pattern, listFunc);
 					}
 				}
