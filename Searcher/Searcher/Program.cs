@@ -19,11 +19,12 @@ namespace Searcher
 
 	        var form = new SearcherMainForm();
 			Application.EnableVisualStyles();
-			Application.Run(form);
+			//Application.Run(form);
 
 	        var sf = new FileSearcher();
 			//sf.Search(@"D:\photo", "2007-35-02_103534");
-			sf.Search(@"C:\Windows\system32", "*sys*.dll");
+			sf.Search(@"C:\Users\aashmarin", "aa.aa");
+			//sf.Search("*.dll");
 
 	        //var s = new FileSearcher(SearchType.DotNetType);
 			//s.Search(@"C:\Windows", "foo");
