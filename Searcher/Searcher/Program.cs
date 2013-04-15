@@ -22,7 +22,8 @@ namespace Searcher
 			Application.Run(form);
 
 	        var sf = new FileSearcher();
-			sf.Search(@"D:\photo", "2007-35-02_103534");
+			//sf.Search(@"D:\photo", "2007-35-02_103534");
+			sf.Search(@"C:\Windows\system32", "*sys*.dll");
 
 	        //var s = new FileSearcher(SearchType.DotNetType);
 			//s.Search(@"C:\Windows", "foo");
