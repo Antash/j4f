@@ -22,16 +22,7 @@ namespace SearcherCore
 
 		public void Search(string root, string pattern)
 		{
-			DirectoryInfo rootDir;
-			try
-			{
-				rootDir = new DirectoryInfo(root);
-			}
-			catch (Exception)
-			{
-				throw;
-			}
-			Search(rootDir, pattern);
+			Search(new DirectoryInfo(root), pattern);
 		}
 
 		public void Search(string pattern)
@@ -97,13 +88,13 @@ namespace SearcherCore
 					SearchInternal(dir, pattern, listFunc);
 				}
 			}
-			catch (UnauthorizedAccessException)
+			catch (UnauthorizedAccessException ex)
 			{
-
+				Console.WriteLine("Insufficient privileges: {0}", ex.ToString());
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				throw;
+				Console.WriteLine(ex.ToString());
 			}
 		}
 	}
