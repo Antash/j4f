@@ -10,8 +10,12 @@ namespace SearcherCore
 	{
 		private static readonly PluginManager PluginManager = new PluginManager();
 		private readonly IFileProcessor _proc;
+		private readonly IList<string> _visitedReparsePoints;
 
-		public FileSearcher() { }
+		public FileSearcher()
+		{
+ 			_visitedReparsePoints = new List<string>();
+		}
 
 		public FileSearcher(SearchType type)
 		{
@@ -85,16 +89,25 @@ namespace SearcherCore
 				}
 				foreach (var dir in root.EnumerateDirectories())
 				{
-					SearchInternal(dir, pattern, listFunc);
+					if (!_visitedReparsePoints.Contains(dir.FullName) &&
+						(File.GetAttributes(dir.FullName) & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
+					{
+						_visitedReparsePoints.Add(dir.FullName);
+						SearchInternal(dir, pattern, listFunc);
+					}
+					else
+					{
+						SearchInternal(dir, pattern, listFunc);
+					}
 				}
 			}
 			catch (UnauthorizedAccessException ex)
 			{
-				Console.WriteLine("Insufficient privileges: {0}", ex.ToString());
+			//	Console.WriteLine("Insufficient privileges: {0}", ex.ToString());
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.ToString());
+			//	Console.WriteLine(ex.ToString());
 			}
 		}
 	}
