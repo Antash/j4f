@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 
-namespace SearcherCore
+namespace SearcherExtensibility
 {
 	public enum SearchType
 	{
