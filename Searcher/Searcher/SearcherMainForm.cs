@@ -26,16 +26,16 @@ namespace Searcher
 
 		private void bSearch_Click(object sender, EventArgs e)
 		{
-			var sf = new FileSearcher();
-			sf.OnFileFound += sf_OnFileFound;
-			new Task(() => { sf.Search(@"C:\Users", tbSearchPattern.Text); }).Start();
+			//var sf = new FileSearcher();
+			//sf.OnFileFound += sf_OnFileFound;
+			//new Task(() => { sf.Search(@"C:\Users", tbSearchPattern.Text); }).Start();
 		}
 
-		void sf_OnFileFound(object sender, FileFoundArgs e)
-		{
-			lvResults.Invoke(new MethodInvoker(delegate()
-				{ lvResults.Items.Add(e.FileName); }));
-		}
+		//void sf_OnFileFound(object sender, FileFoundArgs e)
+		//{
+		//	//lvResults.Invoke(new MethodInvoker(delegate()
+		//	//	{ lvResults.Items.Add(e.FileName); }));
+		//}
 
 		private void tsbLoadPlugins_Click(object sender, EventArgs e)
 		{

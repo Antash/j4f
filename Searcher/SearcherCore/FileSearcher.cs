@@ -8,12 +8,12 @@ using System.Diagnostics;
 
 namespace SearcherCore
 {
-	public class FileFoundArgs : EventArgs
+	internal class FileFoundArgs : EventArgs
 	{
-		public string FileName { get; set; }
+		internal string FileName { get; set; }
 	}
 
-	public class FileSearcher
+	internal class FileSearcher
 	{
 		private readonly IFileProcessor _proc;
 		private readonly ManualResetEvent _eventLocker;
@@ -21,35 +21,35 @@ namespace SearcherCore
 		private readonly HashSet<string> _visitedPaths;
 		private readonly HashSet<string> _foundFiles;
 
-		public FileSearcher()
+		internal FileSearcher()
 		{
 			_visitedPaths = new HashSet<string>();
 			_foundFiles = new HashSet<string>();
 			_eventLocker = new ManualResetEvent(true);
 		}
 
-		public FileSearcher(IFileProcessor proc)
+		internal FileSearcher(IFileProcessor proc)
 			: this()
 		{
 			_proc = proc;
 		}
 
-		public void OnPauseClick()
+		internal void OnPauseClick()
 		{
 			_eventLocker.Reset();
 		}
 
-		public void OnResumeClick()
+		internal void OnResumeClick()
 		{
 			_eventLocker.Set();
 		}
 
 		#region File found event declaration
 
-		public delegate void OnFileFoundDelegate(object sender, FileFoundArgs e);
-		public event OnFileFoundDelegate OnFileFound;
+		internal delegate void OnFileFoundDelegate(object sender, FileFoundArgs e);
+		internal event OnFileFoundDelegate OnFileFound;
 
-		public void FileFound(string fileName)
+		internal void FileFound(string fileName)
 		{
 			if (OnFileFound != null)
 			{
@@ -61,12 +61,16 @@ namespace SearcherCore
 
 		#region Search overrides
 
-		public void Search(string root, string pattern)
+		internal void Search(SearchManager.FileSearchParam param)
+		{
+		}
+
+		private void Search(string root, string pattern)
 		{
 			Search(new DirectoryInfo(root), pattern);
 		}
 
-		public void Search(string pattern)
+		private void Search(string pattern)
 		{
 			var drives = DriveInfo.GetDrives();
 			foreach (var drive in drives)
@@ -75,7 +79,7 @@ namespace SearcherCore
 			}
 		}
 
-		public void Search(DriveType driveType, string pattern)
+		private void Search(DriveType driveType, string pattern)
 		{
 			var drives = DriveInfo.GetDrives().Where(d => d.DriveType == driveType);
 			foreach (var drive in drives)
