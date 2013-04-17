@@ -13,17 +13,19 @@ namespace Searcher
     {
         static void Main(string[] args)
         {
+			Console.WriteLine("Started!");
+
 			//TODO UI
 			//TODO search params
 			//TODO multiprocessing/threading
 
 	        var form = new SearcherMainForm();
 			Application.EnableVisualStyles();
-			//Application.Run(form);
+			Application.Run(form);
 
-	        var sf = new FileSearcher();
+	        //var sf = new FileSearcher();
 			//sf.Search(@"D:\photo", "2007-35-02_103534");
-			sf.Search(@"C:\Users\aashmarin", "aa.aa");
+			//sf.Search(@"C:\Users\aashmarin", "aa.aa");
 			//sf.Search(@"D:\foo", "aa.txt");
 			//sf.Search("*.dll");
 			//sf.Search(@"C:\Windows", "foo");
@@ -37,7 +39,7 @@ namespace Searcher
 			//s2.Search(@"C:\Users\Антон\Documents\Visual Studio 2012\Projects\j4f\Searcher\Searcher\bin\Debug", "book");
 
 			Console.WriteLine("Finished!");
-	        Console.ReadLine();
+	        //Console.ReadLine();
         }
     }
 }
