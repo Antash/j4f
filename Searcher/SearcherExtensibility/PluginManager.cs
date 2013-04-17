@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -15,26 +16,25 @@ namespace SearcherExtensibility
 		
 		public PluginManager()
 		{
-			LoadPlugins();
+			LoadPlugins(Path.GetDirectoryName(Assembly.GetAssembly(typeof(PluginManager)).Location));
 		}
 
-		private void LoadPlugins()
+		public void LoadPlugins(string path)
 		{
 			var catalog = new AggregateCatalog();
-			var currentPath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(PluginManager)).Location);
-			if (currentPath != null)
+			if (path != null)
 			{
-				catalog.Catalogs.Add(new DirectoryCatalog(currentPath));
+				catalog.Catalogs.Add(new DirectoryCatalog(path));
 			}
 			var container = new CompositionContainer(catalog);
 			try
-            {
-                container.ComposeParts(this);
-            }
-            catch (CompositionException ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
+			{
+				container.ComposeParts(this);
+			}
+			catch (CompositionException ex)
+			{
+				Debug.WriteLine(ex.ToString());
+			}
 		}
 
 		public IFileProcessor GetProcessor(SearchType type)
