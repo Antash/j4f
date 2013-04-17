@@ -23,10 +23,10 @@ namespace Searcher
 
 	        var sf = new FileSearcher();
 			//sf.Search(@"D:\photo", "2007-35-02_103534");
-			//sf.Search(@"C:\Users\aashmarin", "aa.aa");
+			sf.Search(@"C:\Users\aashmarin", "aa.aa");
 			//sf.Search(@"D:\foo", "aa.txt");
 			//sf.Search("*.dll");
-			sf.Search(@"C:\Windows", "foo");
+			//sf.Search(@"C:\Windows", "foo");
 
 	        //var s = new FileSearcher(SearchType.DotNetType);
 			//s.Search(@"C:\Windows", "foo");
