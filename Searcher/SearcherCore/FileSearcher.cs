@@ -12,6 +12,7 @@ namespace SearcherCore
 	{
 		private static readonly PluginManager PluginManager = new PluginManager();
 		private readonly IFileProcessor _proc;
+
 		private readonly HashSet<string> _visitedPaths;
 		private readonly HashSet<string> _foundFiles;
 
@@ -86,21 +87,24 @@ namespace SearcherCore
 			{
 				foreach (var file in listFunc(root, pattern))
 				{
-					//TODO process found file
 					var fileName = file.FullName;
-					var fileStamp = file.Name + file.CreationTime;
+					// Suppose short filename and creation timestamp concztenation is unique
+					var fileStamp = file.Name + file.CreationTime.Ticks;
 					if ((_proc == null || _proc.IsSuitable(fileName, pattern)) &&
 						!_foundFiles.Contains(fileStamp))
 					{
 						_foundFiles.Add(fileStamp);
+						//TODO process found file
 						Console.WriteLine("File found: {0}", fileName);
 					}
 				}
 				foreach (var dir in root.EnumerateDirectories())
 				{
-					var dirStamp = dir.Name + dir.CreationTime;
+					// Suppose short filename and creation timestamp concztenation is unique
+					var dirStamp = dir.Name + dir.CreationTime.Ticks;
 					if (!_visitedPaths.Contains(dirStamp))
 					{
+						// Prevent step into rephase points more than once
 						if ((File.GetAttributes(dir.FullName) & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
 							_visitedPaths.Add(dirStamp);
 
