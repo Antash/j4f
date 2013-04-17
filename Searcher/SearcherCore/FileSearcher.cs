@@ -15,8 +15,9 @@ namespace SearcherCore
 
 	public class FileSearcher
 	{
-		private static readonly PluginManager PluginManager = new PluginManager();
+		private static readonly PluginManager _pluginManager = new PluginManager();
 		private readonly IFileProcessor _proc;
+		private readonly SearchType _type;
 
 		private readonly HashSet<string> _visitedPaths;
 		private readonly HashSet<string> _foundFiles;
@@ -28,8 +29,20 @@ namespace SearcherCore
 		}
 
 		public FileSearcher(SearchType type)
+			: base()
 		{
-			_proc = PluginManager.GetProcessor(type);
+			_type = type;
+			_proc = _pluginManager.GetProcessor(type);
+		}
+
+		public static int LoadPlugins(string path)
+		{
+			return _pluginManager.LoadPlugins(path);
+		}
+
+		public static IEnumerable<SearchType> GetPluginList()
+		{
+			return _pluginManager.GetPluginList();
 		}
 
 		#region File found event declaration

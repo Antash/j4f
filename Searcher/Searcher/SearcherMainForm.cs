@@ -22,13 +22,37 @@ namespace Searcher
 		{
 			var sf = new FileSearcher();
 			sf.OnFileFound += sf_OnFileFound;
-			new Task(() => { sf.Search(@"C:\Users", textBox1.Text); }).Start();
+			new Task(() => { sf.Search(@"C:\Users", tbSearchPattern.Text); }).Start();
 		}
 
 		void sf_OnFileFound(object sender, FileFoundArgs e)
 		{
-			listView1.Invoke(new MethodInvoker(delegate()
-				{ listView1.Items.Add(e.FileName); }));
+			lvResults.Invoke(new MethodInvoker(delegate()
+				{ lvResults.Items.Add(e.FileName); }));
+		}
+
+		private void tsbLoadPlugins_Click(object sender, EventArgs e)
+		{
+			var pluginSelector = new FolderBrowserDialog();
+			pluginSelector.SelectedPath = Application.StartupPath;
+			if (pluginSelector.ShowDialog() == DialogResult.OK)
+			{
+				var loadedPlug = FileSearcher.LoadPlugins(pluginSelector.SelectedPath);
+				if (loadedPlug == 0)
+				{
+					MessageBox.Show("No plugins loaded!");
+				}
+				else
+				{
+					MessageBox.Show(String.Format("{0} plugins loaded!", loadedPlug));
+					FileSearcher.GetPluginList().ForEach(pt => tscbSelPl.Items.Add(pt));
+				}
+			}
+		}
+
+		private void tscbSelPl_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
