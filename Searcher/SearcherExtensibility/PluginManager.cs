@@ -38,12 +38,12 @@ namespace SearcherExtensibility
 			return Processors.Count();
 		}
 
-		public IEnumerable<SearchType> GetPluginList()
+		public IEnumerable<PluginType> GetPluginList()
 		{
 			return from t in Processors.Select(p => p.Metadata.ProcessorType) select t;
 		}
 
-		public IFileProcessor GetProcessor(SearchType type)
+		public IFileProcessor GetProcessor(PluginType type)
 		{
 			var fProc = Processors.Where(p => p.Metadata.ProcessorType.Equals(type)).Select(l => l.Value).FirstOrDefault();
 			//if (fProc == null)

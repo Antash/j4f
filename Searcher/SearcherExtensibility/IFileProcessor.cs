@@ -4,9 +4,8 @@ using System.ComponentModel.Composition;
 
 namespace SearcherExtensibility
 {
-	public enum SearchType
+	public enum PluginType
 	{
-		File,
 		XmlTag,
 		DotNetType
 	}
@@ -19,19 +18,19 @@ namespace SearcherExtensibility
 
 	public interface IFileProcessorMetadata
 	{
-		SearchType ProcessorType { get; }
+		PluginType ProcessorType { get; }
 	}
 
 	[MetadataAttribute]
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 	public class FileProcessorMetadataAttribute : ExportAttribute, IFileProcessorMetadata
 	{
-		public FileProcessorMetadataAttribute(SearchType type)
+		public FileProcessorMetadataAttribute(PluginType type)
 			: base(typeof(IFileProcessor))
 		{
 			ProcessorType = type;
 		}
 
-		public SearchType ProcessorType { get; set; }
+		public PluginType ProcessorType { get; set; }
 	}
 }
