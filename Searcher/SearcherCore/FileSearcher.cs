@@ -8,6 +8,11 @@ using System.Diagnostics;
 
 namespace SearcherCore
 {
+	public class FileFoundArgs : EventArgs
+	{
+		public string FileName { get; set; }
+	}
+
 	public class FileSearcher
 	{
 		private static readonly PluginManager PluginManager = new PluginManager();
@@ -26,6 +31,21 @@ namespace SearcherCore
 		{
 			_proc = PluginManager.GetProcessor(type);
 		}
+
+		#region File found event declaration
+
+		public delegate void OnFileFoundDelegate(object sender, FileFoundArgs e);
+		public event OnFileFoundDelegate OnFileFound;
+
+		public void FileFound(string fileName)
+		{
+			if (OnFileFound != null)
+			{
+				OnFileFound(this, new FileFoundArgs() { FileName = fileName });
+			}
+		}
+
+		#endregion
 
 		#region Search public overrides
 
@@ -87,15 +107,14 @@ namespace SearcherCore
 			{
 				foreach (var file in listFunc(root, pattern))
 				{
-					var fileName = file.FullName;
 					// Suppose short filename and creation timestamp concztenation is unique
 					var fileStamp = file.Name + file.CreationTime.Ticks;
-					if ((_proc == null || _proc.IsSuitable(fileName, pattern)) &&
+					if ((_proc == null || _proc.IsSuitable(file.FullName, pattern)) &&
 						!_foundFiles.Contains(fileStamp))
 					{
 						_foundFiles.Add(fileStamp);
-						//TODO process found file
-						Console.WriteLine("File found: {0}", fileName);
+						FileFound(file.FullName);
+						Console.WriteLine("File found: {0}", file.FullName);
 					}
 				}
 				foreach (var dir in root.EnumerateDirectories())
