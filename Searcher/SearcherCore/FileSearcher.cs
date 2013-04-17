@@ -34,12 +34,12 @@ namespace SearcherCore
 			_proc = proc;
 		}
 
-		internal void OnPauseClick()
+		internal void PauseSearch()
 		{
 			_eventLocker.Reset();
 		}
 
-		internal void OnResumeClick()
+		internal void ResumeSearch()
 		{
 			_eventLocker.Set();
 		}
