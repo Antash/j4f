@@ -15,10 +15,6 @@ namespace Searcher
         {
 			Console.WriteLine("Started!");
 
-			//TODO UI
-			//TODO search params
-			//TODO multiprocessing/threading
-
 	        var form = new SearcherMainForm();
 			Application.EnableVisualStyles();
 			Application.Run(form);
