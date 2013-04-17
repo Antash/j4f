@@ -3,6 +3,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using SearcherExtensibility;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace SearcherCore
 {
@@ -11,10 +13,12 @@ namespace SearcherCore
 		private static readonly PluginManager PluginManager = new PluginManager();
 		private readonly IFileProcessor _proc;
 		private readonly HashSet<string> _visitedPaths;
+		private readonly HashSet<string> _foundFiles;
 
 		public FileSearcher()
 		{
 			_visitedPaths = new HashSet<string>();
+			_foundFiles = new HashSet<string>();
 		}
 
 		public FileSearcher(SearchType type)
@@ -84,8 +88,13 @@ namespace SearcherCore
 				{
 					//TODO process found file
 					var fileName = file.FullName;
-					if (_proc == null || _proc.IsSuitable(fileName, pattern))
+					var fileStamp = file.Name + file.CreationTime;
+					if ((_proc == null || _proc.IsSuitable(fileName, pattern)) &&
+						!_foundFiles.Contains(fileStamp))
+					{
+						_foundFiles.Add(fileStamp);
 						Console.WriteLine("File found: {0}", fileName);
+					}
 				}
 				foreach (var dir in root.EnumerateDirectories())
 				{
@@ -99,13 +108,13 @@ namespace SearcherCore
 					}
 				}
 			}
-			catch (UnauthorizedAccessException ex)
+			catch (UnauthorizedAccessException)
 			{
-			//	Console.WriteLine("Insufficient privileges: {0}", ex.ToString());
+				Debug.WriteLine("Insufficient privileges: {0}", root.FullName);
 			}
 			catch (Exception ex)
 			{
-			//	Console.WriteLine(ex.ToString());
+				Debug.WriteLine("{0} : {1}", root.FullName, ex.ToString());
 			}
 		}
 	}
