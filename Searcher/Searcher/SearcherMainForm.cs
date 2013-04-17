@@ -39,23 +39,23 @@ namespace Searcher
 
 		private void tsbLoadPlugins_Click(object sender, EventArgs e)
 		{
-			var pluginSelector = new FolderBrowserDialog();
-			pluginSelector.SelectedPath = Application.StartupPath;
-			if (pluginSelector.ShowDialog() == DialogResult.OK)
-			{
-				var loadedPlug = FileSearcher.LoadPlugins(pluginSelector.SelectedPath);
-				if (loadedPlug == 0)
-				{
-					MessageBox.Show("No plugins loaded!");
-				}
-				else
-				{
-					MessageBox.Show(String.Format("{0} plugins loaded!", loadedPlug));
-					loadedPlugins.AddRange(FileSearcher.GetPluginList());
-					tscbSelPl.ComboBox.DataSource = null;
-					tscbSelPl.ComboBox.DataSource = loadedPlugins;
-				}
-			}
+			//var pluginSelector = new FolderBrowserDialog();
+			//pluginSelector.SelectedPath = Application.StartupPath;
+			//if (pluginSelector.ShowDialog() == DialogResult.OK)
+			//{
+			//	var loadedPlug = SearchManager.LoadPlugins(pluginSelector.SelectedPath);
+			//	if (loadedPlug == 0)
+			//	{
+			//		MessageBox.Show("No plugins loaded!");
+			//	}
+			//	else
+			//	{
+			//		MessageBox.Show(String.Format("{0} plugins loaded!", loadedPlug));
+			//		loadedPlugins.AddRange(SearchManager.GetPluginList());
+			//		tscbSelPl.ComboBox.DataSource = null;
+			//		tscbSelPl.ComboBox.DataSource = loadedPlugins;
+			//	}
+			//}
 		}
 	}
 }

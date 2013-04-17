@@ -8,7 +8,7 @@ namespace NETSearcherPlug
 {
 	[FileProcessorMetadataAttribute(PluginType.DotNetType)]
 	public class NetAssemblyProcessor : IFileProcessor
-    {
+	{
 		public bool IsSuitable(string fileName, string param)
 		{
 			try
@@ -31,7 +31,7 @@ namespace NETSearcherPlug
 
 		public IEnumerable<string> FileExtentionPatterns
 		{
-			get { return new []{"*.dll", "*.exe"}; }
+			get { return new[] { "*.dll", "*.exe" }; }
 		}
-    }
+	}
 }

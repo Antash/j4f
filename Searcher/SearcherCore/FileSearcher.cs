@@ -15,7 +15,6 @@ namespace SearcherCore
 
 	public class FileSearcher
 	{
-		private static readonly PluginManager PluginMgr = new PluginManager();
 		private readonly IFileProcessor _proc;
 		private readonly ManualResetEvent _eventLocker;
 
@@ -29,20 +28,10 @@ namespace SearcherCore
 			_eventLocker = new ManualResetEvent(true);
 		}
 
-		public FileSearcher(PluginType type)
+		public FileSearcher(IFileProcessor proc)
 			: this()
 		{
-			_proc = PluginMgr.GetProcessor(type);
-		}
-
-		public static int LoadPlugins(string path)
-		{
-			return PluginMgr.LoadPlugins(path);
-		}
-
-		public static string[] GetPluginList()
-		{
-			return PluginMgr.GetPluginList().Select(p => p.ToString()).ToArray();
+			_proc = proc;
 		}
 
 		public void OnPauseClick()
@@ -70,7 +59,7 @@ namespace SearcherCore
 
 		#endregion
 
-		#region Search public overrides
+		#region Search overrides
 
 		public void Search(string root, string pattern)
 		{
@@ -95,7 +84,7 @@ namespace SearcherCore
 			}
 		}
 
-		public void Search(DirectoryInfo root, string pattern)
+		private void Search(DirectoryInfo root, string pattern)
 		{
 			if (_proc == null)
 			{
