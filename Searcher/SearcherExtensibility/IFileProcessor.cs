@@ -6,6 +6,7 @@ namespace SearcherExtensibility
 {
 	public enum PluginType
 	{
+		NoPlugin,
 		XmlTag,
 		DotNetType
 	}
