@@ -16,10 +16,10 @@ namespace SearcherExtensibility
 		
 		public PluginManager()
 		{
-			LoadPlugins(Path.GetDirectoryName(Assembly.GetAssembly(typeof(PluginManager)).Location));
+			//LoadPlugins(Path.GetDirectoryName(Assembly.GetAssembly(typeof(PluginManager)).Location));
 		}
 
-		public void LoadPlugins(string path)
+		public int LoadPlugins(string path)
 		{
 			var catalog = new AggregateCatalog();
 			if (path != null)
@@ -35,13 +35,19 @@ namespace SearcherExtensibility
 			{
 				Debug.WriteLine(ex.ToString());
 			}
+			return Processors.Count();
+		}
+
+		public IEnumerable<SearchType> GetPluginList()
+		{
+			return from t in Processors.Select(p => p.Metadata.ProcessorType) select t;
 		}
 
 		public IFileProcessor GetProcessor(SearchType type)
 		{
 			var fProc = Processors.Where(p => p.Metadata.ProcessorType.Equals(type)).Select(l => l.Value).FirstOrDefault();
-			if (fProc == null)
-				throw new DllNotFoundException(String.Format("Plugin for {0} was not loaded!", type));
+			//if (fProc == null)
+			//	throw new DllNotFoundException(String.Format("Plugin for {0} was not loaded!", type));
 			return fProc;
 		}
 	}
