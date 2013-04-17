@@ -13,7 +13,7 @@ namespace SearcherExtensibility
 	{
 		[ImportMany(typeof(IFileProcessor), AllowRecomposition = true)]
 		private IEnumerable<Lazy<IFileProcessor, IFileProcessorMetadata>> Processors { get; set; }
-		
+
 		public PluginManager()
 		{
 			//LoadPlugins(Path.GetDirectoryName(Assembly.GetAssembly(typeof(PluginManager)).Location));
@@ -46,8 +46,8 @@ namespace SearcherExtensibility
 		public IFileProcessor GetProcessor(PluginType type)
 		{
 			var fProc = Processors.Where(p => p.Metadata.ProcessorType.Equals(type)).Select(l => l.Value).FirstOrDefault();
-			//if (fProc == null)
-			//	throw new DllNotFoundException(String.Format("Plugin for {0} was not loaded!", type));
+			if (fProc == null && type != PluginType.NoPlugin)
+				throw new DllNotFoundException(String.Format("Plugin for {0} was not loaded!", type));
 			return fProc;
 		}
 	}
