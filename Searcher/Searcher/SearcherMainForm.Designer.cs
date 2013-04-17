@@ -35,15 +35,15 @@
 			this.lDir = new System.Windows.Forms.Label();
 			this.lSearchPattern = new System.Windows.Forms.Label();
 			this.dgwWorkers = new System.Windows.Forms.DataGridView();
-			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-			this.tsbLoadPlugins = new System.Windows.Forms.ToolStripButton();
-			this.tscbSelPl = new System.Windows.Forms.ToolStripComboBox();
-			this.tslSelPl = new System.Windows.Forms.ToolStripLabel();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.swinfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.control = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.tsbLoadPlugins = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.tslSelPl = new System.Windows.Forms.ToolStripLabel();
+			this.tscbSelPl = new System.Windows.Forms.ToolStripComboBox();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -114,6 +114,23 @@
 			this.dgwWorkers.Size = new System.Drawing.Size(424, 74);
 			this.dgwWorkers.TabIndex = 8;
 			// 
+			// swinfo
+			// 
+			this.swinfo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+			this.swinfo.Frozen = true;
+			this.swinfo.HeaderText = "Search worker";
+			this.swinfo.Name = "swinfo";
+			this.swinfo.ReadOnly = true;
+			this.swinfo.Width = 124;
+			// 
+			// control
+			// 
+			this.control.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+			this.control.HeaderText = "Control";
+			this.control.Name = "control";
+			this.control.ReadOnly = true;
+			this.control.Width = 59;
+			// 
 			// toolStrip1
 			// 
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -137,17 +154,21 @@
 			this.tsbLoadPlugins.Text = "Load plugins";
 			this.tsbLoadPlugins.Click += new System.EventHandler(this.tsbLoadPlugins_Click);
 			// 
-			// tscbSelPl
+			// toolStripSeparator1
 			// 
-			this.tscbSelPl.Name = "tscbSelPl";
-			this.tscbSelPl.Size = new System.Drawing.Size(121, 26);
-			this.tscbSelPl.SelectedIndexChanged += new System.EventHandler(this.tscbSelPl_SelectedIndexChanged);
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 26);
 			// 
 			// tslSelPl
 			// 
 			this.tslSelPl.Name = "tslSelPl";
 			this.tslSelPl.Size = new System.Drawing.Size(108, 23);
 			this.tslSelPl.Text = "Selected plugin:";
+			// 
+			// tscbSelPl
+			// 
+			this.tscbSelPl.Name = "tscbSelPl";
+			this.tscbSelPl.Size = new System.Drawing.Size(121, 26);
 			// 
 			// panel1
 			// 
@@ -160,11 +181,6 @@
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(424, 69);
 			this.panel1.TabIndex = 10;
-			// 
-			// toolStripSeparator1
-			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 26);
 			// 
 			// splitContainer1
 			// 
@@ -183,23 +199,6 @@
 			this.splitContainer1.Size = new System.Drawing.Size(424, 358);
 			this.splitContainer1.SplitterDistance = 74;
 			this.splitContainer1.TabIndex = 11;
-			// 
-			// swinfo
-			// 
-			this.swinfo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			this.swinfo.Frozen = true;
-			this.swinfo.HeaderText = "Search worker";
-			this.swinfo.Name = "swinfo";
-			this.swinfo.ReadOnly = true;
-			this.swinfo.Width = 124;
-			// 
-			// control
-			// 
-			this.control.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			this.control.HeaderText = "Control";
-			this.control.Name = "control";
-			this.control.ReadOnly = true;
-			this.control.Width = 59;
 			// 
 			// SearcherMainForm
 			// 

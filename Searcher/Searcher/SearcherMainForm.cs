@@ -13,9 +13,15 @@ namespace Searcher
 {
 	public partial class SearcherMainForm : Form
 	{
+		private List<string> loadedPlugins;
+
 		public SearcherMainForm()
 		{
 			InitializeComponent();
+
+			loadedPlugins = new List<string>();
+			loadedPlugins.Add("No Plugins");
+			tscbSelPl.ComboBox.DataSource = loadedPlugins;
 		}
 
 		private void bSearch_Click(object sender, EventArgs e)
@@ -45,14 +51,11 @@ namespace Searcher
 				else
 				{
 					MessageBox.Show(String.Format("{0} plugins loaded!", loadedPlug));
-					FileSearcher.GetPluginList().ForEach(pt => tscbSelPl.Items.Add(pt));
+					loadedPlugins.AddRange(FileSearcher.GetPluginList());
+					tscbSelPl.ComboBox.DataSource = null;
+					tscbSelPl.ComboBox.DataSource = loadedPlugins;
 				}
 			}
-		}
-
-		private void tscbSelPl_SelectedIndexChanged(object sender, EventArgs e)
-		{
-
 		}
 	}
 }
