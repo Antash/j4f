@@ -2,8 +2,8 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using SearcherExtensibility;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
 
 namespace SearcherCore
@@ -15,9 +15,9 @@ namespace SearcherCore
 
 	public class FileSearcher
 	{
-		private static readonly PluginManager _pluginManager = new PluginManager();
+		private static readonly PluginManager PluginMgr = new PluginManager();
 		private readonly IFileProcessor _proc;
-		private readonly PluginType _type;
+		private readonly ManualResetEvent _eventLocker;
 
 		private readonly HashSet<string> _visitedPaths;
 		private readonly HashSet<string> _foundFiles;
@@ -26,23 +26,33 @@ namespace SearcherCore
 		{
 			_visitedPaths = new HashSet<string>();
 			_foundFiles = new HashSet<string>();
+			_eventLocker = new ManualResetEvent(true);
 		}
 
 		public FileSearcher(PluginType type)
-			: base()
+			: this()
 		{
-			_type = type;
-			_proc = _pluginManager.GetProcessor(type);
+			_proc = PluginMgr.GetProcessor(type);
 		}
 
 		public static int LoadPlugins(string path)
 		{
-			return _pluginManager.LoadPlugins(path);
+			return PluginMgr.LoadPlugins(path);
 		}
 
 		public static string[] GetPluginList()
 		{
-			return _pluginManager.GetPluginList().Select(p => p.ToString()).ToArray();
+			return PluginMgr.GetPluginList().Select(p => p.ToString()).ToArray();
+		}
+
+		public void OnPauseClick()
+		{
+			_eventLocker.Reset();
+		}
+
+		public void OnResumeClick()
+		{
+			_eventLocker.Set();
 		}
 
 		#region File found event declaration
@@ -54,7 +64,7 @@ namespace SearcherCore
 		{
 			if (OnFileFound != null)
 			{
-				OnFileFound(this, new FileFoundArgs() { FileName = fileName });
+				OnFileFound(this, new FileFoundArgs { FileName = fileName });
 			}
 		}
 
@@ -118,6 +128,8 @@ namespace SearcherCore
 		{
 			try
 			{
+				// Wait if thread paused
+				_eventLocker.WaitOne();
 				foreach (var file in listFunc(root, pattern))
 				{
 					// Suppose short filename and creation timestamp concztenation is unique
@@ -150,7 +162,7 @@ namespace SearcherCore
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("{0} : {1}", root.FullName, ex.ToString());
+				Debug.WriteLine("{0} : {1}", root.FullName, ex);
 			}
 		}
 	}
