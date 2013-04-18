@@ -39,13 +39,13 @@ namespace Searcher
 		void _sm_OnFileFound(object sender, SearchManager.FileFoundArgs e)
 		{
 			lvResults.Invoke(new MethodInvoker(delegate() {
-				lvResults.Items.Add(e.FileName);
+				lvResults.Items.Add(e.SearcherId.ToString(), e.FileName, 0);
 			}));
 			var row = dgwWorkers.Rows.Cast<DataGridViewRow>()
 				.Where(r => (int) r.Cells[(int)GridIndexes.Id].Value == e.SearcherId).FirstOrDefault();
 			int a = (int)row.Cells[(int)GridIndexes.Fcount].Value;
 			dgwWorkers.Invoke(new MethodInvoker(delegate() {
-				row.Cells[(int)GridIndexes.Fcount].Value = a+1;
+				row.Cells[(int)GridIndexes.Fcount].Value = a + 1;
 			}));
 		}
 
@@ -121,22 +121,10 @@ namespace Searcher
 
 		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
 		{
-			_sm.TerminateSearch((int) e.Row.Cells[(int)GridIndexes.Id].Value);
-		}
-
-		private void SearcherMainForm_Load(object sender, EventArgs e)
-		{
-			SizeLastColumn(lvResults);
-		}
-
-		private void SizeLastColumn(ListView lv)
-		{
-			lv.Columns[lv.Columns.Count - 1].Width = -2;
-		}
-
-		private void lvResults_Resize(object sender, EventArgs e)
-		{
-			SizeLastColumn((ListView)sender);
+			int wid = (int)e.Row.Cells[(int)GridIndexes.Id].Value;
+			while (lvResults.Items.IndexOfKey(wid.ToString()) >= 0)
+				lvResults.Items.RemoveByKey(wid.ToString());
+			_sm.TerminateSearch(wid);
 		}
 	}
 }

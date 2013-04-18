@@ -28,12 +28,21 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SearcherMainForm));
 			this.bSearch = new System.Windows.Forms.Button();
 			this.lvResults = new System.Windows.Forms.ListView();
+			this.file = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tbSearchPattern = new System.Windows.Forms.TextBox();
 			this.lSearchPattern = new System.Windows.Forms.Label();
 			this.dgwWorkers = new System.Windows.Forms.DataGridView();
+			this.WorkerIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.swinfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.control = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.tsbLoadPlugins = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -48,12 +57,6 @@
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.fbdPlugin = new System.Windows.Forms.FolderBrowserDialog();
 			this.fbdSearch = new System.Windows.Forms.FolderBrowserDialog();
-			this.WorkerIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.swinfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.control = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -78,7 +81,7 @@
 			// lvResults
 			// 
 			this.lvResults.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
+            this.file});
 			this.lvResults.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lvResults.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
 			this.lvResults.Location = new System.Drawing.Point(0, 0);
@@ -87,7 +90,10 @@
 			this.lvResults.TabIndex = 1;
 			this.lvResults.UseCompatibleStateImageBehavior = false;
 			this.lvResults.View = System.Windows.Forms.View.Details;
-			this.lvResults.Resize += new System.EventHandler(this.lvResults_Resize);
+			// 
+			// file
+			// 
+			this.file.Width = 500;
 			// 
 			// tbSearchPattern
 			// 
@@ -111,6 +117,14 @@
 			// 
 			this.dgwWorkers.AllowUserToAddRows = false;
 			this.dgwWorkers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dgwWorkers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			this.dgwWorkers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dgwWorkers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.WorkerIndex,
@@ -118,17 +132,68 @@
             this.Count,
             this.Status,
             this.control});
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.dgwWorkers.DefaultCellStyle = dataGridViewCellStyle5;
 			this.dgwWorkers.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dgwWorkers.Location = new System.Drawing.Point(3, 91);
-			this.dgwWorkers.MultiSelect = false;
 			this.dgwWorkers.Name = "dgwWorkers";
 			this.dgwWorkers.ReadOnly = true;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dgwWorkers.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
 			this.dgwWorkers.RowTemplate.Height = 24;
 			this.dgwWorkers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.dgwWorkers.Size = new System.Drawing.Size(604, 110);
 			this.dgwWorkers.TabIndex = 8;
 			this.dgwWorkers.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwWorkers_CellClick);
 			this.dgwWorkers.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgwWorkers_UserDeletingRow);
+			// 
+			// WorkerIndex
+			// 
+			this.WorkerIndex.HeaderText = "WorkerIndex";
+			this.WorkerIndex.Name = "WorkerIndex";
+			this.WorkerIndex.ReadOnly = true;
+			this.WorkerIndex.Visible = false;
+			this.WorkerIndex.Width = 112;
+			// 
+			// swinfo
+			// 
+			this.swinfo.HeaderText = "Search worker";
+			this.swinfo.Name = "swinfo";
+			this.swinfo.ReadOnly = true;
+			this.swinfo.Width = 124;
+			// 
+			// Count
+			// 
+			this.Count.HeaderText = "File count";
+			this.Count.Name = "Count";
+			this.Count.ReadOnly = true;
+			this.Count.Width = 94;
+			// 
+			// Status
+			// 
+			this.Status.HeaderText = "Status";
+			this.Status.Name = "Status";
+			this.Status.ReadOnly = true;
+			this.Status.Width = 73;
+			// 
+			// control
+			// 
+			this.control.HeaderText = "Stop";
+			this.control.Name = "control";
+			this.control.ReadOnly = true;
+			this.control.Width = 43;
 			// 
 			// toolStrip1
 			// 
@@ -259,42 +324,6 @@
 			this.fbdSearch.RootFolder = System.Environment.SpecialFolder.MyComputer;
 			this.fbdSearch.ShowNewFolderButton = false;
 			// 
-			// WorkerIndex
-			// 
-			this.WorkerIndex.HeaderText = "WorkerIndex";
-			this.WorkerIndex.Name = "WorkerIndex";
-			this.WorkerIndex.ReadOnly = true;
-			this.WorkerIndex.Visible = false;
-			this.WorkerIndex.Width = 112;
-			// 
-			// swinfo
-			// 
-			this.swinfo.HeaderText = "Search worker";
-			this.swinfo.Name = "swinfo";
-			this.swinfo.ReadOnly = true;
-			this.swinfo.Width = 124;
-			// 
-			// Count
-			// 
-			this.Count.HeaderText = "File count";
-			this.Count.Name = "Count";
-			this.Count.ReadOnly = true;
-			this.Count.Width = 94;
-			// 
-			// Status
-			// 
-			this.Status.HeaderText = "Status";
-			this.Status.Name = "Status";
-			this.Status.ReadOnly = true;
-			this.Status.Width = 73;
-			// 
-			// control
-			// 
-			this.control.HeaderText = "Stop";
-			this.control.Name = "control";
-			this.control.ReadOnly = true;
-			this.control.Width = 43;
-			// 
 			// SearcherMainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -304,7 +333,6 @@
 			this.Controls.Add(this.toolStrip1);
 			this.Name = "SearcherMainForm";
 			this.Text = "SearcherMainForm";
-			this.Load += new System.EventHandler(this.SearcherMainForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).EndInit();
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
@@ -346,6 +374,6 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn Count;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Status;
 		private System.Windows.Forms.DataGridViewButtonColumn control;
-		private System.Windows.Forms.ColumnHeader columnHeader1;
+		private System.Windows.Forms.ColumnHeader file;
 	}
 }
