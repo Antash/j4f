@@ -15,6 +15,13 @@ namespace Searcher
 	{
 		private SearchManager _sm;
 
+		private enum GridIndexes
+		{
+ 			Id = 0,
+			Stop = 4,
+			Status = 3,
+		}
+
 		public SearcherMainForm(SearchManager manager)
 		{
 			InitializeComponent();
@@ -32,9 +39,9 @@ namespace Searcher
 			if (args == null)
 				return;
 			var row = dgwWorkers.Rows.Cast<DataGridViewRow>()
-				.Where(r => r.Cells[0].Value.ToString() == args.WorkerId).FirstOrDefault();
+				.Where(r => r.Cells[(int) GridIndexes.Id].Value.ToString() == args.WorkerId).FirstOrDefault();
 			if (row != null)
-				row.Cells[3].Value = "Stopped";
+				row.Cells[(int) GridIndexes.Status].Value = "Stopped";
 		}
 
 		void _sm_OnSearchStarted(object sender, EventArgs e)
@@ -83,7 +90,7 @@ namespace Searcher
 		{
 			if (e.ColumnIndex == 4)
 			{
-				_sm.TerminateSearch(dgwWorkers.Rows[e.RowIndex].Cells[0].Value.ToString());
+				_sm.TerminateSearch(dgwWorkers.Rows[e.RowIndex].Cells[(int) GridIndexes.Id].Value.ToString());
 			}
 			else
 			{
@@ -98,7 +105,7 @@ namespace Searcher
 
 		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
 		{
-			_sm.TerminateSearch(e.Row.Cells[0].Value.ToString());
+			_sm.TerminateSearch(e.Row.Cells[(int) GridIndexes.Id].Value.ToString());
 		}
 	}
 }
