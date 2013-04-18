@@ -40,7 +40,9 @@ namespace SearcherExtensibility
 
 		public IEnumerable<PluginType> GetPluginList()
 		{
-			return from t in Processors.Select(p => p.Metadata.ProcessorType) select t;
+			return Processors != null ?
+				from t in Processors.Select(p => p.Metadata.ProcessorType) select t :
+				Enumerable.Empty<PluginType>();
 		}
 
 		public IFileProcessor GetProcessor(PluginType type)
