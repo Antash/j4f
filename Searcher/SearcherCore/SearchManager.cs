@@ -10,6 +10,31 @@ namespace SearcherCore
 {
 	public class SearchManager
 	{
+		#region File found event declaration
+
+		public class FileFoundArgs : EventArgs
+		{
+			public int SearcherId { get; set; }
+			public string FileName { get; set; }
+		}
+
+		public delegate void OnFileFoundDelegate(object sender, FileFoundArgs e);
+		public event OnFileFoundDelegate OnFileFound;
+
+		private void FileFound(int id, string fileName)
+		{
+			if (OnFileFound != null)
+			{
+				OnFileFound(this, new FileFoundArgs
+				{
+					FileName = fileName,
+					SearcherId = id
+				});
+			}
+		}
+
+		#endregion
+
 		#region Nested types
 
 		public class FileSearchParam
@@ -129,6 +154,7 @@ namespace SearcherCore
 
 		private void searcher_OnFileFound(object sender, FileSearcher.FileFoundArgs e)
 		{
+			FileFound(e.SearcherId, e.FileName);
 			FoundFiles.Add(e.FileName);
 		}
 

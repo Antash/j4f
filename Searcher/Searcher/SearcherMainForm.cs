@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SearcherCore;
@@ -20,6 +21,7 @@ namespace Searcher
  			Id = 0,
 			Stop = 4,
 			Status = 3,
+			Fcount = 2
 		}
 
 		public SearcherMainForm(SearchManager manager)
@@ -29,8 +31,22 @@ namespace Searcher
 			_sm = manager;
 			_sm.OnSearchStarted += _sm_OnSearchStarted;
 			_sm.OnSearchFinished += _sm_OnSearchFinished;
+			_sm.OnFileFound += _sm_OnFileFound;
 
 			tscbSelPl.ComboBox.DataSource = _sm.PluginList;
+		}
+
+		void _sm_OnFileFound(object sender, SearchManager.FileFoundArgs e)
+		{
+			lvResults.Invoke(new MethodInvoker(delegate() {
+				lvResults.Items.Add(e.FileName);
+			}));
+			var row = dgwWorkers.Rows.Cast<DataGridViewRow>()
+				.Where(r => (int) r.Cells[(int)GridIndexes.Id].Value == e.SearcherId).FirstOrDefault();
+			int a = (int)row.Cells[(int)GridIndexes.Fcount].Value;
+			dgwWorkers.Invoke(new MethodInvoker(delegate() {
+				row.Cells[(int)GridIndexes.Fcount].Value = a+1;
+			}));
 		}
 
 		void _sm_OnSearchFinished(object sender, EventArgs e)
@@ -88,7 +104,7 @@ namespace Searcher
 
 		private void dgwWorkers_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (e.ColumnIndex == 4)
+			if (e.ColumnIndex == (int) GridIndexes.Stop)
 			{
 				_sm.TerminateSearch((int) dgwWorkers.Rows[e.RowIndex].Cells[(int) GridIndexes.Id].Value);
 			}
@@ -106,6 +122,21 @@ namespace Searcher
 		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
 		{
 			_sm.TerminateSearch((int) e.Row.Cells[(int)GridIndexes.Id].Value);
+		}
+
+		private void SearcherMainForm_Load(object sender, EventArgs e)
+		{
+			SizeLastColumn(lvResults);
+		}
+
+		private void SizeLastColumn(ListView lv)
+		{
+			lv.Columns[lv.Columns.Count - 1].Width = -2;
+		}
+
+		private void lvResults_Resize(object sender, EventArgs e)
+		{
+			SizeLastColumn((ListView)sender);
 		}
 	}
 }

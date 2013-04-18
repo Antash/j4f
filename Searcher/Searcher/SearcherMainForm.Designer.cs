@@ -53,6 +53,7 @@
 			this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.control = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -76,13 +77,17 @@
 			// 
 			// lvResults
 			// 
+			this.lvResults.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
 			this.lvResults.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lvResults.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
 			this.lvResults.Location = new System.Drawing.Point(0, 0);
 			this.lvResults.Name = "lvResults";
 			this.lvResults.Size = new System.Drawing.Size(610, 192);
 			this.lvResults.TabIndex = 1;
 			this.lvResults.UseCompatibleStateImageBehavior = false;
-			this.lvResults.View = System.Windows.Forms.View.List;
+			this.lvResults.View = System.Windows.Forms.View.Details;
+			this.lvResults.Resize += new System.EventHandler(this.lvResults_Resize);
 			// 
 			// tbSearchPattern
 			// 
@@ -299,6 +304,7 @@
 			this.Controls.Add(this.toolStrip1);
 			this.Name = "SearcherMainForm";
 			this.Text = "SearcherMainForm";
+			this.Load += new System.EventHandler(this.SearcherMainForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).EndInit();
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
@@ -340,5 +346,6 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn Count;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Status;
 		private System.Windows.Forms.DataGridViewButtonColumn control;
+		private System.Windows.Forms.ColumnHeader columnHeader1;
 	}
 }
