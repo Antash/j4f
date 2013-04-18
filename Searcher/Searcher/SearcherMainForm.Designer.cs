@@ -48,6 +48,8 @@
 			this.fbdSearch = new System.Windows.Forms.FolderBrowserDialog();
 			this.swinfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.control = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.tsbHelp = new System.Windows.Forms.ToolStripButton();
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -121,7 +123,9 @@
             this.tsbLoadPlugins,
             this.toolStripSeparator1,
             this.tslSelPl,
-            this.tscbSelPl});
+            this.tscbSelPl,
+            this.toolStripSeparator2,
+            this.tsbHelp});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(610, 26);
@@ -216,9 +220,16 @@
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Search parameters";
 			// 
+			// fbdPlugin
+			// 
+			this.fbdPlugin.Description = "Select folder with search plugins";
+			this.fbdPlugin.ShowNewFolderButton = false;
+			// 
 			// fbdSearch
 			// 
+			this.fbdSearch.Description = "Select search folder";
 			this.fbdSearch.RootFolder = System.Environment.SpecialFolder.MyComputer;
+			this.fbdSearch.ShowNewFolderButton = false;
 			// 
 			// swinfo
 			// 
@@ -234,6 +245,21 @@
 			this.control.Name = "control";
 			this.control.ReadOnly = true;
 			this.control.Width = 43;
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
+			// 
+			// tsbHelp
+			// 
+			this.tsbHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.tsbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsbHelp.Image")));
+			this.tsbHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.tsbHelp.Name = "tsbHelp";
+			this.tsbHelp.Size = new System.Drawing.Size(40, 23);
+			this.tsbHelp.Text = "Help";
+			this.tsbHelp.Click += new System.EventHandler(this.tsbHelp_Click);
 			// 
 			// SearcherMainForm
 			// 
@@ -280,5 +306,7 @@
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn swinfo;
 		private System.Windows.Forms.DataGridViewButtonColumn control;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+		private System.Windows.Forms.ToolStripButton tsbHelp;
 	}
 }
