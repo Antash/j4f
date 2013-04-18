@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -12,30 +15,27 @@ namespace SearcherCore
 	{
 		#region File found event declaration
 
-		public class FileFoundArgs : EventArgs
-		{
-			public int SearcherId { get; set; }
-			public string FileName { get; set; }
-		}
+		public event Action OnFileFound;
 
-		public delegate void OnFileFoundDelegate(object sender, FileFoundArgs e);
-		public event OnFileFoundDelegate OnFileFound;
-
-		private void FileFound(int id, string fileName)
+		private void FileFound()
 		{
 			if (OnFileFound != null)
 			{
-				OnFileFound(this, new FileFoundArgs
-				{
-					FileName = fileName,
-					SearcherId = id
-				});
+				OnFileFound();
 			}
 		}
 
 		#endregion
 
 		#region Nested types
+
+		public enum WorkerTabInd
+		{
+			Id = 0,
+			Desc,
+			Fcount,
+			Status,
+		}
 
 		public class FileSearchParam
 		{
@@ -45,9 +45,9 @@ namespace SearcherCore
 
 			public override string ToString()
 			{
-				return string.Format("Searching '{0}' in '{1}' using {2}", 
-					SearchPattern, 
-					string.IsNullOrEmpty(RootDir) ? "everyware" : RootDir, 
+				return string.Format("Searching '{0}' in '{1}' using {2}",
+					SearchPattern,
+					string.IsNullOrEmpty(RootDir) ? "everyware" : RootDir,
 					(PluginType)PlugType);
 			}
 
@@ -61,72 +61,46 @@ namespace SearcherCore
 			public long? SizeTo { get; set; }
 		}
 
+		public class SearchWorker 
+		{
+			public int Id { get; set; }
+			public string Parameter { get; set; }
+			public int FilesFound { get; set; }
+			public string Status { get; set; }
+		}
+
 		#endregion
 
 		private readonly PluginManager _pluginMgr = new PluginManager();
-		private IDictionary<int, CancellationTokenSource> workerTokenSources { get; set; }
-		private int _currWorkerId = 0;
+		private IDictionary<int, CancellationTokenSource> WorkerTokenSources { get; set; }
+		private int _currWorkerId;
 
-		public IList<string> FoundFiles { get; set; }
+		public DataTable FoundFiles { get; private set; }
+		public BindingList<SearchWorker> SearchWorkers { get; private set; }
+		public BindingList<string> PluginList { get; private set; }
 
 		public SearchManager()
 		{
-			workerTokenSources = new Dictionary<int, CancellationTokenSource>();
-			FoundFiles = new List<string>();
+			WorkerTokenSources = new Dictionary<int, CancellationTokenSource>();
+
+			FoundFiles = new DataTable();
+			FoundFiles.Columns.Add("wid", typeof(int));
+			FoundFiles.Columns.Add("fname", typeof(string));
+
+			SearchWorkers = new BindingList<SearchWorker>();
+			PluginList = new BindingList<string> {PluginType.NoPlugin.ToString()};
 		}
 
 		public int LoadPlugins(string path)
 		{
-			return _pluginMgr.LoadPlugins(path);
-		}
-
-		#region Manager events declaration
-
-		public class SearchStartEventArgs : EventArgs
-		{
-			public string Details { get; set; }
-			public int WorkerId { get; set; }
-		}
-
-		public class SearchStopEventArgs : EventArgs
-		{
-			public int WorkerId { get; set; }
-		}
-
-		public delegate void SearchDelegate(object sender, EventArgs e);
-		public event SearchDelegate OnSearchStarted;
-		public event SearchDelegate OnSearchFinished;
-
-		private void SearchStart(int workerId, string workerDetails)
-		{
-			if (OnSearchStarted != null)
+			var npl = _pluginMgr.LoadPlugins(path);
+			PluginList.Clear();
+			PluginList.Add(PluginType.NoPlugin.ToString());
+			foreach (var pl in _pluginMgr.GetPluginList())
 			{
-				OnSearchStarted(this, new SearchStartEventArgs() { 
-					Details = workerDetails,
-					WorkerId = workerId
-				});
+				PluginList.Add(pl.ToString());
 			}
-		}
-
-		private void SearchFinish(int workerId)
-		{
-			if (OnSearchFinished != null)
-			{
-				OnSearchFinished(this, new SearchStopEventArgs() { WorkerId = workerId });
-			}
-		}
-
-		#endregion
-
-		public IList<string> PluginList
-		{
-			get
-			{
-				return _pluginMgr.GetPluginList().Concat(new[] { PluginType.NoPlugin })
-						.OrderBy(p => p)
-						.Select(p => p.ToString())
-						.ToList();
-			}
+			return npl;
 		}
 
 		public async void StartSearch(FileSearchParam param)
@@ -137,25 +111,40 @@ namespace SearcherCore
 			var searcher = CreateSearcher(token, (PluginType)param.PlugType);
 			searcher.OnFileFound += searcher_OnFileFound;
 
-			workerTokenSources.Add(searcher.Id, workerTokenSource);
-
-			SearchStart(searcher.Id, param.ToString());
-			await Task.Factory.StartNew(() => searcher.Search(param));
-			SearchFinish(searcher.Id);
-
-			workerTokenSources.Remove(searcher.Id);
+			SearchWorkers.Add(new SearchWorker()
+				{
+					Id = searcher.Id, 
+					FilesFound = 0, 
+					Parameter = param.ToString(), 
+					Status = "Pending"
+				});
+			WorkerTokenSources.Add(searcher.Id, workerTokenSource);
+			try
+			{
+				await Task.Factory.StartNew(() => searcher.Search(param));
+			}
+			catch (Exception)
+			{
+				// handle task cancelation
+				Debug.WriteLine("Search canseled: {0}", searcher.Id);
+			}
+			finally
+			{
+				WorkerTokenSources.Remove(searcher.Id);
+			}
 		}
 
 		public void TerminateSearch(int workerId)
 		{
-			if (workerTokenSources.ContainsKey(workerId))
-				workerTokenSources[workerId].Cancel();
+			if (WorkerTokenSources.ContainsKey(workerId))
+				WorkerTokenSources[workerId].Cancel();
 		}
 
 		private void searcher_OnFileFound(object sender, FileSearcher.FileFoundArgs e)
 		{
-			FileFound(e.SearcherId, e.FileName);
-			FoundFiles.Add(e.FileName);
+			FoundFiles.Rows.Add(e.SearcherId, e.FileName);
+			SearchWorkers.Single(w => w.Id == e.SearcherId).FilesFound++;
+			FileFound();
 		}
 
 		private FileSearcher CreateSearcher(CancellationToken ct, PluginType type)
