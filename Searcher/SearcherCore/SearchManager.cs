@@ -12,17 +12,17 @@ namespace SearcherCore
 {
 	public class SearchManager
 	{
-		#region File found event declaration
+		#region Invalidate UI event declaration
 
 		public event Action OnInvalidate;
 		private long _lastInvalidate;
 		private const long InvalidateMinPeriod = 1000000;
 
-		private void Invalidate()
+		private void Invalidate(bool force = false)
 		{
-			if (OnInvalidate != null && Stopwatch.GetTimestamp() - _lastInvalidate > InvalidateMinPeriod)
+			if (OnInvalidate != null && (Stopwatch.GetTimestamp() - _lastInvalidate > InvalidateMinPeriod || force))
 			{
-				_lastInvalidate = Stopwatch.GetTimestamp();;
+				_lastInvalidate = Stopwatch.GetTimestamp();
 				OnInvalidate();
 			}
 		}
@@ -122,7 +122,7 @@ namespace SearcherCore
 			{
 				WorkerTokenSources.Remove(searcher.Id);
 				SearchWorkers.Single(w => w.Id == searcher.Id).Status = "Stopped";
-				Invalidate();
+				Invalidate(true);
 			}
 		}
 
@@ -131,8 +131,6 @@ namespace SearcherCore
 			if (WorkerTokenSources.ContainsKey(workerId))
 			{
 				WorkerTokenSources[workerId].Cancel();
-				SearchWorkers.Single(w => w.Id == workerId).Status = "Stopped";
-				Invalidate();
 			}
 		}
 

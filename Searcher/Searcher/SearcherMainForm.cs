@@ -40,7 +40,7 @@ namespace Searcher
 
 		private void bSearch_Click(object sender, EventArgs e)
 		{
-			_sm.StartSearch(new SearchManager.FileSearchParam()
+			_sm.StartSearch(new SearchManager.FileSearchParam
 			{
 				RootDir = tbRootDir.Text,
 				SearchPattern = tbSearchPattern.Text,
@@ -70,7 +70,7 @@ namespace Searcher
 
 		private void dgwWorkers_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (e.ColumnIndex == 0)
+			if (e.ColumnIndex == 0 && e.RowIndex != -1)
 			{
 				var worker = _sm.SearchWorkers.SingleOrDefault(w =>
 					w.Id == (int) dgwWorkers.Rows[e.RowIndex].Cells[1].Value);
@@ -79,9 +79,9 @@ namespace Searcher
 			}
 			else
 			{
-				//if (e.RowIndex > 0)
-				//	_sm.FoundFiles.DefaultView.RowFilter = string.Format("wid = {0}",
-				//		(int) dgwWorkers.Rows[e.RowIndex].Cells[1].Value);
+				if (e.RowIndex != -1)
+					_sm.FoundFiles.DefaultView.RowFilter = string.Format("wid = {0}",
+						(int) dgwWorkers.Rows[e.RowIndex].Cells[1].Value);
 			}
 		}
 
