@@ -15,11 +15,11 @@ namespace Searcher
 	{
 		private SearchManager _sm;
 
-		public SearcherMainForm()
+		public SearcherMainForm(SearchManager manager)
 		{
 			InitializeComponent();
 
-			_sm = new SearchManager();
+			_sm = manager;
 			_sm.OnSearchStarted += _sm_OnSearchStarted;
 			_sm.OnSearchFinished += _sm_OnSearchFinished;
 
