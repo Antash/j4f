@@ -112,15 +112,13 @@ namespace SearcherCore
 			var searcher = CreateSearcher(token, (PluginType)param.PlugType);
 			searcher.OnFileFound += searcher_OnFileFound;
 
-			var wid = _currWorkerId;
+			workerTokenSources.Add(searcher.Id, workerTokenSource);
 
-			workerTokenSources.Add(wid, workerTokenSource);
-
-			SearchStart(wid, param.ToString());
+			SearchStart(searcher.Id, param.ToString());
 			await Task.Factory.StartNew(() => searcher.Search(param));
-			SearchFinish(wid);
+			SearchFinish(searcher.Id);
 
-			workerTokenSources.Remove(wid);
+			workerTokenSources.Remove(searcher.Id);
 		}
 
 		public void TerminateSearch(int workerId)
@@ -136,8 +134,7 @@ namespace SearcherCore
 
 		private FileSearcher CreateSearcher(CancellationToken ct, PluginType type)
 		{
-			_currWorkerId++;
-			return new FileSearcher(ct, _pluginMgr.GetProcessor(type));
+			return new FileSearcher(_currWorkerId++, ct, _pluginMgr.GetProcessor(type));
 		}
 	}
 }

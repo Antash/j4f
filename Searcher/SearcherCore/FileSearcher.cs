@@ -22,18 +22,21 @@ namespace SearcherCore
 
 		private CancellationToken _ct;
 
-		internal FileSearcher(CancellationToken ct)
+		internal FileSearcher(int id, CancellationToken ct)
 		{
+			Id = id;
 			_ct = ct;
 			_visitedPaths = new HashSet<string>();
 			_foundFiles = new HashSet<string>();
 		}
 
-		internal FileSearcher(CancellationToken ct, IFileProcessor proc)
-			: this(ct)
+		internal FileSearcher(int id, CancellationToken ct, IFileProcessor proc)
+			: this(id, ct)
 		{
 			_proc = proc;
 		}
+
+		internal int Id { get; private set; }
 
 		#region File found event declaration
 
