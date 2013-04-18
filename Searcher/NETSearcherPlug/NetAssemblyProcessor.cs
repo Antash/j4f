@@ -10,7 +10,7 @@ namespace NETSearcherPlug
 	[FileProcessorMetadataAttribute(PluginType.DotNetType)]
 	public class NetAssemblyProcessor : IFileProcessor
 	{
-		public bool IsSuitable(string fileName, string param)
+		public bool ProcessFile(string fileName, string param)
 		{
 			try
 			{
