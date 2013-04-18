@@ -11,6 +11,16 @@ namespace SearcherCore
 	{
 		public class FileSearchParam
 		{
+			public FileSearchParam()
+			{
+				
+			}
+
+			public override string ToString()
+			{
+				return string.Format("Searching {0} in {1} using {2}", SearchPattern, RootDir, (PluginType)PlugType);
+			}
+
 			public int PlugType { get; set; }
 			public string RootDir { get; set; }
 			public string SearchPattern { get; set; }
@@ -21,6 +31,13 @@ namespace SearcherCore
 			public long? SizeTo { get; set; }
 		}
 
+		public SearchManager()
+		{
+			SearchWorkers = new List<FileSearcher>();
+			StartedSearchProcesses = new List<string>();
+			FoundFiles = new List<string>();
+		}
+
 		private readonly PluginManager _pluginMgr = new PluginManager();
 
 		public int LoadPlugins(string path)
@@ -28,28 +45,52 @@ namespace SearcherCore
 			return _pluginMgr.LoadPlugins(path);
 		}
 
-		public string[] PluginList
+		public IList<string> PluginList
 		{
 			get
 			{
 				return _pluginMgr.GetPluginList().Concat(new[] { PluginType.NoPlugin })
 						.OrderBy(p => p)
-						.Select(p => p.ToString()).ToArray();
+						.Select(p => p.ToString())
+						.ToList();
 			}
 		}
 
-		public string[] FoundFiles { get; set; }
+		public IList<string> StartedSearchProcesses { get; set; }
+
+		private IList<FileSearcher> SearchWorkers { get; set; }
+
+		public IList<string> FoundFiles { get; set; }
 
 		public async void StartSearch(FileSearchParam param)
 		{
 			var searcher = CreateSearcher((PluginType)param.PlugType);
 			searcher.OnFileFound += searcher_OnFileFound;
-			await searcher.Search(param);
-			//new Task(() => ).Start();
+			
+			SearchWorkers.Add(searcher);
+			StartedSearchProcesses.Add(param.ToString());
+
+			await Task.Factory.StartNew(()=> searcher.Search(param));
+
+			StartedSearchProcesses.Remove(param.ToString());
+			SearchWorkers.Remove(searcher);
+		}
+
+		public void PauseResumeSearch(int workerIndex)
+		{
+			if (SearchWorkers[workerIndex].IsRunning)
+			{
+				SearchWorkers[workerIndex].PauseSearch();
+			}
+			else
+			{
+				SearchWorkers[workerIndex].ResumeSearch();
+			}
 		}
 
 		private void searcher_OnFileFound(object sender, FileFoundArgs e)
 		{
+			FoundFiles.Add(e.FileName);
 		}
 
 		private FileSearcher CreateSearcher(PluginType type)

@@ -45,9 +45,13 @@ namespace SearcherExtensibility
 
 		public IFileProcessor GetProcessor(PluginType type)
 		{
+			if (Processors == null)
+				return null;
+
 			var fProc = Processors.Where(p => p.Metadata.ProcessorType.Equals(type)).Select(l => l.Value).FirstOrDefault();
 			if (fProc == null && type != PluginType.NoPlugin)
 				throw new DllNotFoundException(String.Format("Plugin for {0} was not loaded!", type));
+
 			return fProc;
 		}
 	}

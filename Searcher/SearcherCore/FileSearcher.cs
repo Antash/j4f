@@ -35,14 +35,18 @@ namespace SearcherCore
 			_proc = proc;
 		}
 
+		internal bool IsRunning { get; private set; }
+
 		internal void PauseSearch()
 		{
 			_eventLocker.Reset();
+			IsRunning = false;
 		}
 
 		internal void ResumeSearch()
 		{
 			_eventLocker.Set();
+			IsRunning = true;
 		}
 
 		#region File found event declaration
@@ -62,10 +66,10 @@ namespace SearcherCore
 
 		#region Search overrides
 
-		internal Task Search(SearchManager.FileSearchParam param)
+		internal void Search(SearchManager.FileSearchParam param)
 		{
+			IsRunning = true;
 			Search(param.RootDir, param.SearchPattern);
-			return null;
 		}
 
 		private void Search(string root, string pattern)
