@@ -34,10 +34,6 @@
 			this.tbSearchPattern = new System.Windows.Forms.TextBox();
 			this.lSearchPattern = new System.Windows.Forms.Label();
 			this.dgwWorkers = new System.Windows.Forms.DataGridView();
-			this.WorkerIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.swinfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.control = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.tsbLoadPlugins = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -52,6 +48,11 @@
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.fbdPlugin = new System.Windows.Forms.FolderBrowserDialog();
 			this.fbdSearch = new System.Windows.Forms.FolderBrowserDialog();
+			this.WorkerIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.swinfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.control = new System.Windows.Forms.DataGridViewButtonColumn();
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -110,6 +111,7 @@
             this.WorkerIndex,
             this.swinfo,
             this.Count,
+            this.Status,
             this.control});
 			this.dgwWorkers.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dgwWorkers.Location = new System.Drawing.Point(3, 91);
@@ -122,35 +124,6 @@
 			this.dgwWorkers.TabIndex = 8;
 			this.dgwWorkers.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwWorkers_CellClick);
 			this.dgwWorkers.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgwWorkers_UserDeletingRow);
-			// 
-			// WorkerIndex
-			// 
-			this.WorkerIndex.HeaderText = "WorkerIndex";
-			this.WorkerIndex.Name = "WorkerIndex";
-			this.WorkerIndex.ReadOnly = true;
-			this.WorkerIndex.Visible = false;
-			this.WorkerIndex.Width = 112;
-			// 
-			// swinfo
-			// 
-			this.swinfo.HeaderText = "Search worker";
-			this.swinfo.Name = "swinfo";
-			this.swinfo.ReadOnly = true;
-			this.swinfo.Width = 124;
-			// 
-			// Count
-			// 
-			this.Count.HeaderText = "File count";
-			this.Count.Name = "Count";
-			this.Count.ReadOnly = true;
-			this.Count.Width = 94;
-			// 
-			// control
-			// 
-			this.control.HeaderText = "Stop";
-			this.control.Name = "control";
-			this.control.ReadOnly = true;
-			this.control.Width = 43;
 			// 
 			// toolStrip1
 			// 
@@ -281,6 +254,42 @@
 			this.fbdSearch.RootFolder = System.Environment.SpecialFolder.MyComputer;
 			this.fbdSearch.ShowNewFolderButton = false;
 			// 
+			// WorkerIndex
+			// 
+			this.WorkerIndex.HeaderText = "WorkerIndex";
+			this.WorkerIndex.Name = "WorkerIndex";
+			this.WorkerIndex.ReadOnly = true;
+			this.WorkerIndex.Visible = false;
+			this.WorkerIndex.Width = 112;
+			// 
+			// swinfo
+			// 
+			this.swinfo.HeaderText = "Search worker";
+			this.swinfo.Name = "swinfo";
+			this.swinfo.ReadOnly = true;
+			this.swinfo.Width = 124;
+			// 
+			// Count
+			// 
+			this.Count.HeaderText = "File count";
+			this.Count.Name = "Count";
+			this.Count.ReadOnly = true;
+			this.Count.Width = 94;
+			// 
+			// Status
+			// 
+			this.Status.HeaderText = "Status";
+			this.Status.Name = "Status";
+			this.Status.ReadOnly = true;
+			this.Status.Width = 73;
+			// 
+			// control
+			// 
+			this.control.HeaderText = "Stop";
+			this.control.Name = "control";
+			this.control.ReadOnly = true;
+			this.control.Width = 43;
+			// 
 			// SearcherMainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -329,6 +338,7 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn WorkerIndex;
 		private System.Windows.Forms.DataGridViewTextBoxColumn swinfo;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Count;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Status;
 		private System.Windows.Forms.DataGridViewButtonColumn control;
 	}
 }

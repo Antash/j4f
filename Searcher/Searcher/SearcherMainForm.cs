@@ -28,7 +28,13 @@ namespace Searcher
 
 		void _sm_OnSearchFinished(object sender, EventArgs e)
 		{
-			//dgwWorkers.Rows.((e as SearchManager.SearchStopEventArgs).Index);
+			var args = (e as SearchManager.SearchStopEventArgs);
+			if (args == null)
+				return;
+			var row = dgwWorkers.Rows.Cast<DataGridViewRow>()
+				.Where(r => r.Cells[0].Value.ToString() == args.WorkerId).FirstOrDefault();
+			if (row != null)
+				row.Cells[3].Value = "Stopped";
 		}
 
 		void _sm_OnSearchStarted(object sender, EventArgs e)
@@ -36,7 +42,7 @@ namespace Searcher
 			var args = (e as SearchManager.SearchStartEventArgs);
 			if (args == null)
 				return;
-			dgwWorkers.Rows.Add(args.WorkerIndex, args.Details, 0, "Stop");
+			dgwWorkers.Rows.Add(args.WorkerId, args.Details, 0, "Running", "Stop");
 		}
 
 		private void bSearch_Click(object sender, EventArgs e)
@@ -75,9 +81,9 @@ namespace Searcher
 
 		private void dgwWorkers_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (e.ColumnIndex == 3)
+			if (e.ColumnIndex == 4)
 			{
-				_sm.TerminateSearch((int) dgwWorkers.Rows[e.RowIndex].Cells[0].Value);
+				_sm.TerminateSearch(dgwWorkers.Rows[e.RowIndex].Cells[0].Value.ToString());
 			}
 			else
 			{
@@ -92,7 +98,7 @@ namespace Searcher
 
 		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
 		{
-			_sm.TerminateSearch((int) e.Row.Cells[0].Value);
+			_sm.TerminateSearch(e.Row.Cells[0].Value.ToString());
 		}
 	}
 }
