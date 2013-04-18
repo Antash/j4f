@@ -34,11 +34,17 @@
 			this.tbSearchPattern = new System.Windows.Forms.TextBox();
 			this.lSearchPattern = new System.Windows.Forms.Label();
 			this.dgwWorkers = new System.Windows.Forms.DataGridView();
+			this.WorkerIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.swinfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.control = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.tsbLoadPlugins = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.tslSelPl = new System.Windows.Forms.ToolStripLabel();
 			this.tscbSelPl = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.tsbHelp = new System.Windows.Forms.ToolStripButton();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.bSelDir = new System.Windows.Forms.Button();
 			this.tbRootDir = new System.Windows.Forms.TextBox();
@@ -46,10 +52,6 @@
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.fbdPlugin = new System.Windows.Forms.FolderBrowserDialog();
 			this.fbdSearch = new System.Windows.Forms.FolderBrowserDialog();
-			this.swinfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.control = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			this.tsbHelp = new System.Windows.Forms.ToolStripButton();
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -102,20 +104,53 @@
 			// dgwWorkers
 			// 
 			this.dgwWorkers.AllowUserToAddRows = false;
-			this.dgwWorkers.AllowUserToDeleteRows = false;
 			this.dgwWorkers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
 			this.dgwWorkers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dgwWorkers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.WorkerIndex,
             this.swinfo,
+            this.Count,
             this.control});
 			this.dgwWorkers.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dgwWorkers.Location = new System.Drawing.Point(3, 91);
+			this.dgwWorkers.MultiSelect = false;
 			this.dgwWorkers.Name = "dgwWorkers";
 			this.dgwWorkers.ReadOnly = true;
 			this.dgwWorkers.RowTemplate.Height = 24;
+			this.dgwWorkers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.dgwWorkers.Size = new System.Drawing.Size(604, 110);
 			this.dgwWorkers.TabIndex = 8;
 			this.dgwWorkers.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwWorkers_CellClick);
+			this.dgwWorkers.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgwWorkers_UserDeletingRow);
+			// 
+			// WorkerIndex
+			// 
+			this.WorkerIndex.HeaderText = "WorkerIndex";
+			this.WorkerIndex.Name = "WorkerIndex";
+			this.WorkerIndex.ReadOnly = true;
+			this.WorkerIndex.Visible = false;
+			this.WorkerIndex.Width = 112;
+			// 
+			// swinfo
+			// 
+			this.swinfo.HeaderText = "Search worker";
+			this.swinfo.Name = "swinfo";
+			this.swinfo.ReadOnly = true;
+			this.swinfo.Width = 124;
+			// 
+			// Count
+			// 
+			this.Count.HeaderText = "File count";
+			this.Count.Name = "Count";
+			this.Count.ReadOnly = true;
+			this.Count.Width = 94;
+			// 
+			// control
+			// 
+			this.control.HeaderText = "Stop";
+			this.control.Name = "control";
+			this.control.ReadOnly = true;
+			this.control.Width = 43;
 			// 
 			// toolStrip1
 			// 
@@ -157,6 +192,21 @@
 			// 
 			this.tscbSelPl.Name = "tscbSelPl";
 			this.tscbSelPl.Size = new System.Drawing.Size(121, 26);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
+			// 
+			// tsbHelp
+			// 
+			this.tsbHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.tsbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsbHelp.Image")));
+			this.tsbHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.tsbHelp.Name = "tsbHelp";
+			this.tsbHelp.Size = new System.Drawing.Size(40, 23);
+			this.tsbHelp.Text = "Help";
+			this.tsbHelp.Click += new System.EventHandler(this.tsbHelp_Click);
 			// 
 			// panel1
 			// 
@@ -231,36 +281,6 @@
 			this.fbdSearch.RootFolder = System.Environment.SpecialFolder.MyComputer;
 			this.fbdSearch.ShowNewFolderButton = false;
 			// 
-			// swinfo
-			// 
-			this.swinfo.Frozen = true;
-			this.swinfo.HeaderText = "Search worker";
-			this.swinfo.Name = "swinfo";
-			this.swinfo.ReadOnly = true;
-			this.swinfo.Width = 124;
-			// 
-			// control
-			// 
-			this.control.HeaderText = "Stop";
-			this.control.Name = "control";
-			this.control.ReadOnly = true;
-			this.control.Width = 43;
-			// 
-			// toolStripSeparator2
-			// 
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
-			// 
-			// tsbHelp
-			// 
-			this.tsbHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.tsbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsbHelp.Image")));
-			this.tsbHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.tsbHelp.Name = "tsbHelp";
-			this.tsbHelp.Size = new System.Drawing.Size(40, 23);
-			this.tsbHelp.Text = "Help";
-			this.tsbHelp.Click += new System.EventHandler(this.tsbHelp_Click);
-			// 
 			// SearcherMainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -304,9 +324,11 @@
 		private System.Windows.Forms.FolderBrowserDialog fbdPlugin;
 		private System.Windows.Forms.FolderBrowserDialog fbdSearch;
 		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn swinfo;
-		private System.Windows.Forms.DataGridViewButtonColumn control;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripButton tsbHelp;
+		private System.Windows.Forms.DataGridViewTextBoxColumn WorkerIndex;
+		private System.Windows.Forms.DataGridViewTextBoxColumn swinfo;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Count;
+		private System.Windows.Forms.DataGridViewButtonColumn control;
 	}
 }
