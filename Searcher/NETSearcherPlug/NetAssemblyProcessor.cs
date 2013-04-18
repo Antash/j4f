@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using SearcherExtensibility;
@@ -24,7 +25,7 @@ namespace NETSearcherPlug
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.ToString());
+				Debug.WriteLine(ex.ToString());
 				return false;
 			}
 		}
