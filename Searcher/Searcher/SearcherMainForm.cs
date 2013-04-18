@@ -10,6 +10,7 @@ namespace Searcher
 	public partial class SearcherMainForm : Form
 	{
 		private readonly SearchManager _sm;
+		private BindingSource bs;
 
 		public SearcherMainForm(SearchManager manager)
 		{
@@ -18,7 +19,10 @@ namespace Searcher
 			_sm = manager;
 			_sm.OnInvalidate += _sm_OnInvalidate;
 
-			dgwResult.DataSource = _sm.FoundFiles;
+			bs = new BindingSource();
+			bs.DataSource = _sm.FoundFiles;
+			//dgwResult.DataSource = _sm.FoundFiles;
+			dgwResult.DataSource = bs;
 			dgwResult.Columns[0].Visible = false;
 
 			dgwWorkers.DataSource = _sm.SearchWorkers;
@@ -32,9 +36,11 @@ namespace Searcher
 		{
 			dgwResult.Invoke(new MethodInvoker(() =>
 				{
+					bs.ResumeBinding();
 					dgwWorkers.InvalidateColumn(3);
 					dgwWorkers.InvalidateColumn(4);
 					dgwResult.InvalidateColumn(1);
+					bs.SuspendBinding();
 				}));
 		}
 
@@ -110,6 +116,11 @@ namespace Searcher
 						}
 				};
 			expl.Start();
+		}
+
+		private void dgwResult_DataError(object sender, DataGridViewDataErrorEventArgs e)
+		{
+			Debug.WriteLine(e.ToString());
 		}
 	}
 }
