@@ -15,7 +15,7 @@ namespace Searcher
 			Application.Run(form);
 
 			Console.WriteLine("Finished!");
-	        //Console.ReadLine();
+	        Console.ReadLine();
         }
     }
 }

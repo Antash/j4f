@@ -77,5 +77,10 @@ namespace Searcher
 				_sm.TerminateSearch(e.RowIndex);
 			}
 		}
+
+		private void tsbHelp_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
