@@ -39,13 +39,13 @@ namespace SearcherCore
 		#endregion
 
 		private readonly PluginManager _pluginMgr = new PluginManager();
-		private IList<CancellationTokenSource> workerTokenSources { get; set; }
+		private IDictionary<string, CancellationTokenSource> workerTokenSources { get; set; }
 
 		public IList<string> FoundFiles { get; set; }
 
 		public SearchManager()
 		{
-			workerTokenSources = new List<CancellationTokenSource>();
+			workerTokenSources = new Dictionary<string, CancellationTokenSource>();
 			FoundFiles = new List<string>();
 		}
 
@@ -59,34 +59,34 @@ namespace SearcherCore
 		public class SearchStartEventArgs : EventArgs
 		{
 			public string Details { get; set; }
-			public int WorkerIndex { get; set; }
+			public string WorkerId { get; set; }
 		}
 
 		public class SearchStopEventArgs : EventArgs
 		{
-			public int Index { get; set; }
+			public string WorkerId { get; set; }
 		}
 
 		public delegate void SearchDelegate(object sender, EventArgs e);
 		public event SearchDelegate OnSearchStarted;
 		public event SearchDelegate OnSearchFinished;
 
-		private void SearchStart(int workerIndex, string workerDetails)
+		private void SearchStart(string workerId, string workerDetails)
 		{
 			if (OnSearchStarted != null)
 			{
 				OnSearchStarted(this, new SearchStartEventArgs() { 
 					Details = workerDetails,
-					WorkerIndex = workerIndex
+					WorkerId = workerId
 				});
 			}
 		}
 
-		private void SearchFinish(int workerIndex)
+		private void SearchFinish(string workerId)
 		{
 			if (OnSearchFinished != null)
 			{
-				OnSearchFinished(this, new SearchStopEventArgs() { Index = workerIndex });
+				OnSearchFinished(this, new SearchStopEventArgs() { WorkerId = workerId });
 			}
 		}
 
@@ -111,20 +111,20 @@ namespace SearcherCore
 			var searcher = CreateSearcher(token, (PluginType)param.PlugType);
 			searcher.OnFileFound += searcher_OnFileFound;
 
-			workerTokenSources.Add(workerTokenSource);
-			var workerIndex = workerTokenSources.IndexOf(workerTokenSource);
+			var workerId = Guid.NewGuid().ToString();
+			workerTokenSources.Add(workerId, workerTokenSource);
 
-			SearchStart(workerIndex, param.ToString());
+			SearchStart(workerId, param.ToString());
 			await Task.Factory.StartNew(() => searcher.Search(param));
-			SearchFinish(workerIndex);
+			SearchFinish(workerId);
 
-			workerTokenSources.Remove(workerTokenSource);
+			workerTokenSources.Remove(workerId);
 		}
 
-		public void TerminateSearch(int workerIndex)
+		public void TerminateSearch(string workerId)
 		{
-			if (workerTokenSources.Count > workerIndex)
-				workerTokenSources[workerIndex].Cancel();
+			if (workerTokenSources.ContainsKey(workerId))
+				workerTokenSources[workerId].Cancel();
 		}
 
 		private void searcher_OnFileFound(object sender, FileFoundArgs e)
