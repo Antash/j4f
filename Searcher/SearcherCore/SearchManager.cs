@@ -14,12 +14,11 @@ namespace SearcherCore
 		{
 			public FileSearchParam()
 			{
-
 			}
 
 			public override string ToString()
 			{
-				return string.Format("Searching {0} in {1} using {2}", SearchPattern, RootDir, (PluginType)PlugType);
+				return string.Format("Searching '{0}' in '{1}' using {2}", SearchPattern, RootDir, (PluginType)PlugType);
 			}
 
 			public int PlugType { get; set; }
@@ -45,6 +44,40 @@ namespace SearcherCore
 		{
 			return _pluginMgr.LoadPlugins(path);
 		}
+
+		#region Manager events declaration
+
+		public class SearchStartEventArgs : EventArgs
+		{
+			public string Details { get; set; }
+		}
+
+		public class SearchStopEventArgs : EventArgs
+		{
+			public int Index { get; set; }
+		}
+
+		public delegate void SearchDelegate(object sender, EventArgs e);
+		public event SearchDelegate OnSearchStarted;
+		public event SearchDelegate OnSearchFinished;
+
+		private void SearchStart(int workerIndex)
+		{
+			if (OnSearchStarted != null)
+			{
+				OnSearchStarted(this, new SearchStartEventArgs() { Details = StartedSearchProcesses[workerIndex] });
+			}
+		}
+
+		private void SearchFinish(int workerIndex)
+		{
+			if (OnSearchFinished != null)
+			{
+				OnSearchFinished(this, new SearchStopEventArgs() { Index = workerIndex });
+			}
+		}
+
+		#endregion
 
 		public IList<string> PluginList
 		{
@@ -73,8 +106,11 @@ namespace SearcherCore
 
 			workerTokenSources.Add(workerTokenSource);
 			StartedSearchProcesses.Add(param.ToString());
+			var workerIndex = workerTokenSources.IndexOf(workerTokenSource);
 
+			SearchStart(workerIndex);
 			await Task.Factory.StartNew(() => searcher.Search(param));
+			SearchFinish(workerIndex);
 
 			StartedSearchProcesses.Remove(param.ToString());
 			workerTokenSources.Remove(workerTokenSource);

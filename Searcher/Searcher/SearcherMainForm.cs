@@ -20,6 +20,20 @@ namespace Searcher
 			InitializeComponent();
 
 			_sm = new SearchManager();
+			_sm.OnSearchStarted += _sm_OnSearchStarted;
+			_sm.OnSearchFinished += _sm_OnSearchFinished;
+
+			tscbSelPl.ComboBox.DataSource = _sm.PluginList;
+		}
+
+		void _sm_OnSearchFinished(object sender, EventArgs e)
+		{
+			dgwWorkers.Rows.RemoveAt((e as SearchManager.SearchStopEventArgs).Index);
+		}
+
+		void _sm_OnSearchStarted(object sender, EventArgs e)
+		{
+			dgwWorkers.Rows.Add((e as SearchManager.SearchStartEventArgs).Details, "Stop");
 		}
 
 		private void bSearch_Click(object sender, EventArgs e)
@@ -53,6 +67,14 @@ namespace Searcher
 			if (fbdSearch.ShowDialog() == DialogResult.OK)
 			{
 				tbRootDir.Text = fbdSearch.SelectedPath;
+			}
+		}
+
+		private void dgwWorkers_CellClick(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.ColumnIndex == 1)
+			{
+				_sm.TerminateSearch(e.RowIndex);
 			}
 		}
 	}

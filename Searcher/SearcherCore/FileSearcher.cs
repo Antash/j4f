@@ -47,7 +47,7 @@ namespace SearcherCore
 		internal delegate void OnFileFoundDelegate(object sender, FileFoundArgs e);
 		internal event OnFileFoundDelegate OnFileFound;
 
-		internal void FileFound(string fileName)
+		private void FileFound(string fileName)
 		{
 			if (OnFileFound != null)
 			{
