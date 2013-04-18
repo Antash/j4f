@@ -20,7 +20,7 @@ namespace Searcher
 
 		private enum GridIndexes
 		{
- 			Id = 0,
+			Id = 0,
 			Stop = 4,
 			Status = 3,
 			Fcount = 2
@@ -40,13 +40,15 @@ namespace Searcher
 
 		void _sm_OnFileFound(object sender, SearchManager.FileFoundArgs e)
 		{
-			lvResults.Invoke(new MethodInvoker(delegate() {
-				lvResults.Items.Add(e.SearcherId.ToString(), e.FileName, 0);
+			dgwResult.Invoke(new MethodInvoker(delegate()
+			{
+				dgwResult.Rows.Add(e.SearcherId.ToString(), e.FileName);
 			}));
 			var row = dgwWorkers.Rows.Cast<DataGridViewRow>()
-				.Where(r => (int) r.Cells[(int)GridIndexes.Id].Value == e.SearcherId).FirstOrDefault();
+				.Where(r => (int)r.Cells[(int)GridIndexes.Id].Value == e.SearcherId).FirstOrDefault();
 			int a = (int)row.Cells[(int)GridIndexes.Fcount].Value;
-			dgwWorkers.Invoke(new MethodInvoker(delegate() {
+			dgwWorkers.Invoke(new MethodInvoker(delegate()
+			{
 				row.Cells[(int)GridIndexes.Fcount].Value = a + 1;
 			}));
 		}
@@ -57,9 +59,9 @@ namespace Searcher
 			if (args == null)
 				return;
 			var row = dgwWorkers.Rows.Cast<DataGridViewRow>()
-				.Where(r => (int) r.Cells[(int)GridIndexes.Id].Value == args.WorkerId).FirstOrDefault();
+				.Where(r => (int)r.Cells[(int)GridIndexes.Id].Value == args.WorkerId).FirstOrDefault();
 			if (row != null)
-				row.Cells[(int) GridIndexes.Status].Value = "Stopped";
+				row.Cells[(int)GridIndexes.Status].Value = "Stopped";
 		}
 
 		void _sm_OnSearchStarted(object sender, EventArgs e)
@@ -72,7 +74,8 @@ namespace Searcher
 
 		private void bSearch_Click(object sender, EventArgs e)
 		{
-			_sm.StartSearch(new SearchManager.FileSearchParam() {
+			_sm.StartSearch(new SearchManager.FileSearchParam()
+			{
 				RootDir = tbRootDir.Text,
 				SearchPattern = tbSearchPattern.Text,
 				PlugType = tscbSelPl.SelectedIndex
@@ -106,13 +109,13 @@ namespace Searcher
 
 		private void dgwWorkers_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (e.ColumnIndex == (int) GridIndexes.Stop)
+			if (e.ColumnIndex == (int)GridIndexes.Stop)
 			{
-				_sm.TerminateSearch((int) dgwWorkers.Rows[e.RowIndex].Cells[(int) GridIndexes.Id].Value);
+				_sm.TerminateSearch((int)dgwWorkers.Rows[e.RowIndex].Cells[(int)GridIndexes.Id].Value);
 			}
 			else
 			{
- 				//TODO filter results in the list
+				//TODO filter results in the list
 			}
 		}
 
@@ -124,22 +127,27 @@ namespace Searcher
 		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
 		{
 			int wid = (int)e.Row.Cells[(int)GridIndexes.Id].Value;
-			while (lvResults.Items.IndexOfKey(wid.ToString()) >= 0)
-				lvResults.Items.RemoveByKey(wid.ToString());
+			foreach(var row in dgwWorkers.Rows.Cast<DataGridViewRow>()
+				.Where(r => (int)r.Cells[(int)GridIndexes.Id].Value == wid))
+			{
+				dgwResult.Rows.Remove(row);
+			}
 			_sm.TerminateSearch(wid);
 		}
 
 		private void lvResults_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
-			ListViewHitTestInfo hit = lvResults.HitTest(e.Location);
-			if (hit.Item != null)
-			{
-				var expl = new Process();
-				expl.StartInfo.UseShellExecute = true;
-				expl.StartInfo.FileName = @"explorer";
-				expl.StartInfo.Arguments = Path.GetDirectoryName(hit.Item.Text);
-				expl.Start();
-			}
+
+		}
+
+		private void dgwResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			var expl = new Process();
+			expl.StartInfo.UseShellExecute = true;
+			expl.StartInfo.FileName = @"explorer";
+			expl.StartInfo.Arguments = Path.GetDirectoryName(
+				dgwResult.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+			expl.Start();
 		}
 	}
 }
