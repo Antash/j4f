@@ -34,7 +34,6 @@ namespace SearcherCore
 		public SearchManager()
 		{
 			workerTokenSources = new List<CancellationTokenSource>();
-			StartedSearchProcesses = new List<string>();
 			FoundFiles = new List<string>();
 		}
 
@@ -61,11 +60,11 @@ namespace SearcherCore
 		public event SearchDelegate OnSearchStarted;
 		public event SearchDelegate OnSearchFinished;
 
-		private void SearchStart(int workerIndex)
+		private void SearchStart(string workerDetails)
 		{
 			if (OnSearchStarted != null)
 			{
-				OnSearchStarted(this, new SearchStartEventArgs() { Details = StartedSearchProcesses[workerIndex] });
+				OnSearchStarted(this, new SearchStartEventArgs() { Details = workerDetails });
 			}
 		}
 
@@ -90,8 +89,6 @@ namespace SearcherCore
 			}
 		}
 
-		public IList<string> StartedSearchProcesses { get; set; }
-
 		private IList<CancellationTokenSource> workerTokenSources { get; set; }
 
 		public IList<string> FoundFiles { get; set; }
@@ -105,14 +102,12 @@ namespace SearcherCore
 			searcher.OnFileFound += searcher_OnFileFound;
 
 			workerTokenSources.Add(workerTokenSource);
-			StartedSearchProcesses.Add(param.ToString());
 			var workerIndex = workerTokenSources.IndexOf(workerTokenSource);
 
-			SearchStart(workerIndex);
+			SearchStart(param.ToString());
 			await Task.Factory.StartNew(() => searcher.Search(param));
 			SearchFinish(workerIndex);
 
-			StartedSearchProcesses.Remove(param.ToString());
 			workerTokenSources.Remove(workerTokenSource);
 		}
 
