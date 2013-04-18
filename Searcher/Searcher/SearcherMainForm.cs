@@ -28,12 +28,15 @@ namespace Searcher
 
 		void _sm_OnSearchFinished(object sender, EventArgs e)
 		{
-			dgwWorkers.Rows.RemoveAt((e as SearchManager.SearchStopEventArgs).Index);
+			//dgwWorkers.Rows.((e as SearchManager.SearchStopEventArgs).Index);
 		}
 
 		void _sm_OnSearchStarted(object sender, EventArgs e)
 		{
-			dgwWorkers.Rows.Add((e as SearchManager.SearchStartEventArgs).Details, "Stop");
+			var args = (e as SearchManager.SearchStartEventArgs);
+			if (args == null)
+				return;
+			dgwWorkers.Rows.Add(args.WorkerIndex, args.Details, 0, "Stop");
 		}
 
 		private void bSearch_Click(object sender, EventArgs e)
@@ -72,9 +75,9 @@ namespace Searcher
 
 		private void dgwWorkers_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (e.ColumnIndex == 1)
+			if (e.ColumnIndex == 3)
 			{
-				_sm.TerminateSearch(e.RowIndex);
+				_sm.TerminateSearch((int) dgwWorkers.Rows[e.RowIndex].Cells[0].Value);
 			}
 			else
 			{
@@ -85,6 +88,11 @@ namespace Searcher
 		private void tsbHelp_Click(object sender, EventArgs e)
 		{
 			//TODO show readme
+		}
+
+		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+		{
+			_sm.TerminateSearch((int) e.Row.Cells[0].Value);
 		}
 	}
 }

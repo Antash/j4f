@@ -59,6 +59,7 @@ namespace SearcherCore
 		public class SearchStartEventArgs : EventArgs
 		{
 			public string Details { get; set; }
+			public int WorkerIndex { get; set; }
 		}
 
 		public class SearchStopEventArgs : EventArgs
@@ -70,11 +71,14 @@ namespace SearcherCore
 		public event SearchDelegate OnSearchStarted;
 		public event SearchDelegate OnSearchFinished;
 
-		private void SearchStart(string workerDetails)
+		private void SearchStart(int workerIndex, string workerDetails)
 		{
 			if (OnSearchStarted != null)
 			{
-				OnSearchStarted(this, new SearchStartEventArgs() { Details = workerDetails });
+				OnSearchStarted(this, new SearchStartEventArgs() { 
+					Details = workerDetails,
+					WorkerIndex = workerIndex
+				});
 			}
 		}
 
@@ -110,7 +114,7 @@ namespace SearcherCore
 			workerTokenSources.Add(workerTokenSource);
 			var workerIndex = workerTokenSources.IndexOf(workerTokenSource);
 
-			SearchStart(param.ToString());
+			SearchStart(workerIndex, param.ToString());
 			await Task.Factory.StartNew(() => searcher.Search(param));
 			SearchFinish(workerIndex);
 
@@ -119,7 +123,8 @@ namespace SearcherCore
 
 		public void TerminateSearch(int workerIndex)
 		{
-			workerTokenSources[workerIndex].Cancel();
+			if (workerTokenSources.Count > workerIndex)
+				workerTokenSources[workerIndex].Cancel();
 		}
 
 		private void searcher_OnFileFound(object sender, FileFoundArgs e)
