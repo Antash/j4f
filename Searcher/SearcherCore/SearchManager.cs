@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using SearcherExtensibility;
 
@@ -13,7 +14,7 @@ namespace SearcherCore
 		{
 			public FileSearchParam()
 			{
-				
+
 			}
 
 			public override string ToString()
@@ -33,7 +34,7 @@ namespace SearcherCore
 
 		public SearchManager()
 		{
-			SearchWorkers = new List<FileSearcher>();
+			workerTokenSources = new List<CancellationTokenSource>();
 			StartedSearchProcesses = new List<string>();
 			FoundFiles = new List<string>();
 		}
@@ -58,34 +59,30 @@ namespace SearcherCore
 
 		public IList<string> StartedSearchProcesses { get; set; }
 
-		private IList<FileSearcher> SearchWorkers { get; set; }
+		private IList<CancellationTokenSource> workerTokenSources { get; set; }
 
 		public IList<string> FoundFiles { get; set; }
 
 		public async void StartSearch(FileSearchParam param)
 		{
-			var searcher = CreateSearcher((PluginType)param.PlugType);
+			var workerTokenSource = new CancellationTokenSource();
+			var token = workerTokenSource.Token;
+
+			var searcher = CreateSearcher(token, (PluginType)param.PlugType);
 			searcher.OnFileFound += searcher_OnFileFound;
-			
-			SearchWorkers.Add(searcher);
+
+			workerTokenSources.Add(workerTokenSource);
 			StartedSearchProcesses.Add(param.ToString());
 
-			await Task.Factory.StartNew(()=> searcher.Search(param));
+			await Task.Factory.StartNew(() => searcher.Search(param));
 
 			StartedSearchProcesses.Remove(param.ToString());
-			SearchWorkers.Remove(searcher);
+			workerTokenSources.Remove(workerTokenSource);
 		}
 
-		public void PauseResumeSearch(int workerIndex)
+		public void TerminateSearch(int workerIndex)
 		{
-			if (SearchWorkers[workerIndex].IsRunning)
-			{
-				SearchWorkers[workerIndex].PauseSearch();
-			}
-			else
-			{
-				SearchWorkers[workerIndex].ResumeSearch();
-			}
+			workerTokenSources[workerIndex].Cancel();
 		}
 
 		private void searcher_OnFileFound(object sender, FileFoundArgs e)
@@ -93,9 +90,9 @@ namespace SearcherCore
 			FoundFiles.Add(e.FileName);
 		}
 
-		private FileSearcher CreateSearcher(PluginType type)
+		private FileSearcher CreateSearcher(CancellationToken ct, PluginType type)
 		{
-			return new FileSearcher(_pluginMgr.GetProcessor(type));
+			return new FileSearcher(ct, _pluginMgr.GetProcessor(type));
 		}
 	}
 }

@@ -21,31 +21,25 @@ namespace SearcherCore
 		private readonly HashSet<string> _visitedPaths;
 		private readonly HashSet<string> _foundFiles;
 
-		internal FileSearcher()
+		private CancellationToken _ct;
+
+		internal FileSearcher(CancellationToken ct)
 		{
+			_ct = ct;
 			_visitedPaths = new HashSet<string>();
 			_foundFiles = new HashSet<string>();
 			_eventLocker = new ManualResetEvent(true);
 		}
 
-		internal FileSearcher(IFileProcessor proc)
-			: this()
+		internal FileSearcher(CancellationToken ct, IFileProcessor proc)
+			: this(ct)
 		{
 			_proc = proc;
 		}
 
-		internal bool IsRunning { get; private set; }
-
-		internal void PauseSearch()
+		internal void TerminateSearch()
 		{
 			_eventLocker.Reset();
-			IsRunning = false;
-		}
-
-		internal void ResumeSearch()
-		{
-			_eventLocker.Set();
-			IsRunning = true;
 		}
 
 		#region File found event declaration
@@ -67,30 +61,17 @@ namespace SearcherCore
 
 		internal void Search(SearchManager.FileSearchParam param)
 		{
-			IsRunning = true;
-			Search(param.RootDir, param.SearchPattern);
-		}
-
-		private void Search(string root, string pattern)
-		{
-			Search(new DirectoryInfo(root), pattern);
-		}
-
-		private void Search(string pattern)
-		{
-			var drives = DriveInfo.GetDrives();
-			foreach (var drive in drives)
+			if (string.IsNullOrEmpty(param.RootDir))
 			{
-				Search(drive.RootDirectory, pattern);
+				var drives = DriveInfo.GetDrives().Where(d => d.DriveType == DriveType.Fixed);
+				foreach (var drive in drives)
+				{
+					Search(drive.RootDirectory, param.SearchPattern);
+				}
 			}
-		}
-
-		private void Search(DriveType driveType, string pattern)
-		{
-			var drives = DriveInfo.GetDrives().Where(d => d.DriveType == driveType);
-			foreach (var drive in drives)
+			else
 			{
-				Search(drive.RootDirectory, pattern);
+				Search(new DirectoryInfo(param.RootDir), param.SearchPattern);
 			}
 		}
 
@@ -125,6 +106,11 @@ namespace SearcherCore
 
 		private void SearchInternal(DirectoryInfo root, string pattern, Func<DirectoryInfo, string, IEnumerable<FileInfo>> listFunc)
 		{
+			if (_ct.IsCancellationRequested)
+			{
+				Debug.WriteLine("Search canseled");
+				_ct.ThrowIfCancellationRequested();
+			}
 			try
 			{
 				// Wait if thread paused

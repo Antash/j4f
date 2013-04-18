@@ -44,6 +44,8 @@
 			this.tscbSelPl = new System.Windows.Forms.ToolStripComboBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.tbRootDir = new System.Windows.Forms.TextBox();
+			this.bSelDir = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -68,7 +70,7 @@
 			this.lvResults.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lvResults.Location = new System.Drawing.Point(0, 0);
 			this.lvResults.Name = "lvResults";
-			this.lvResults.Size = new System.Drawing.Size(424, 280);
+			this.lvResults.Size = new System.Drawing.Size(599, 280);
 			this.lvResults.TabIndex = 1;
 			this.lvResults.UseCompatibleStateImageBehavior = false;
 			this.lvResults.View = System.Windows.Forms.View.List;
@@ -85,9 +87,9 @@
 			this.lDir.AutoSize = true;
 			this.lDir.Location = new System.Drawing.Point(12, 40);
 			this.lDir.Name = "lDir";
-			this.lDir.Size = new System.Drawing.Size(24, 17);
+			this.lDir.Size = new System.Drawing.Size(82, 17);
 			this.lDir.TabIndex = 5;
-			this.lDir.Text = "dir";
+			this.lDir.Text = "In directory:";
 			// 
 			// lSearchPattern
 			// 
@@ -111,7 +113,7 @@
 			this.dgwWorkers.Name = "dgwWorkers";
 			this.dgwWorkers.ReadOnly = true;
 			this.dgwWorkers.RowTemplate.Height = 24;
-			this.dgwWorkers.Size = new System.Drawing.Size(424, 74);
+			this.dgwWorkers.Size = new System.Drawing.Size(599, 74);
 			this.dgwWorkers.TabIndex = 8;
 			// 
 			// swinfo
@@ -140,7 +142,7 @@
             this.tscbSelPl});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(424, 26);
+			this.toolStrip1.Size = new System.Drawing.Size(599, 26);
 			this.toolStrip1.TabIndex = 9;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -172,6 +174,8 @@
 			// 
 			// panel1
 			// 
+			this.panel1.Controls.Add(this.bSelDir);
+			this.panel1.Controls.Add(this.tbRootDir);
 			this.panel1.Controls.Add(this.lSearchPattern);
 			this.panel1.Controls.Add(this.bSearch);
 			this.panel1.Controls.Add(this.tbSearchPattern);
@@ -179,7 +183,7 @@
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point(0, 26);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(424, 69);
+			this.panel1.Size = new System.Drawing.Size(599, 69);
 			this.panel1.TabIndex = 10;
 			// 
 			// splitContainer1
@@ -196,15 +200,31 @@
 			// splitContainer1.Panel2
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.lvResults);
-			this.splitContainer1.Size = new System.Drawing.Size(424, 358);
+			this.splitContainer1.Size = new System.Drawing.Size(599, 358);
 			this.splitContainer1.SplitterDistance = 74;
 			this.splitContainer1.TabIndex = 11;
+			// 
+			// tbRootDir
+			// 
+			this.tbRootDir.Location = new System.Drawing.Point(96, 37);
+			this.tbRootDir.Name = "tbRootDir";
+			this.tbRootDir.Size = new System.Drawing.Size(237, 22);
+			this.tbRootDir.TabIndex = 7;
+			// 
+			// bSelDir
+			// 
+			this.bSelDir.Location = new System.Drawing.Point(339, 37);
+			this.bSelDir.Name = "bSelDir";
+			this.bSelDir.Size = new System.Drawing.Size(75, 23);
+			this.bSelDir.TabIndex = 8;
+			this.bSelDir.Text = "Select";
+			this.bSelDir.UseVisualStyleBackColor = true;
 			// 
 			// SearcherMainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(424, 453);
+			this.ClientSize = new System.Drawing.Size(599, 453);
 			this.Controls.Add(this.splitContainer1);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.toolStrip1);
@@ -241,5 +261,7 @@
 		private System.Windows.Forms.SplitContainer splitContainer1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn swinfo;
 		private System.Windows.Forms.DataGridViewButtonColumn control;
+		private System.Windows.Forms.Button bSelDir;
+		private System.Windows.Forms.TextBox tbRootDir;
 	}
 }
