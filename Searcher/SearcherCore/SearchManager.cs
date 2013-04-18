@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SearcherExtensibility;
@@ -15,13 +14,16 @@ namespace SearcherCore
 	{
 		#region File found event declaration
 
-		public event Action OnFileFound;
+		public event Action OnInvalidate;
+		private long _lastInvalidate;
+		private const long InvalidateMinPeriod = 1000000;
 
-		private void FileFound()
+		private void Invalidate()
 		{
-			if (OnFileFound != null)
+			if (OnInvalidate != null && Stopwatch.GetTimestamp() - _lastInvalidate > InvalidateMinPeriod)
 			{
-				OnFileFound();
+				_lastInvalidate = Stopwatch.GetTimestamp();;
+				OnInvalidate();
 			}
 		}
 
@@ -29,20 +31,8 @@ namespace SearcherCore
 
 		#region Nested types
 
-		public enum WorkerTabInd
-		{
-			Id = 0,
-			Desc,
-			Fcount,
-			Status,
-		}
-
 		public class FileSearchParam
 		{
-			public FileSearchParam()
-			{
-			}
-
 			public override string ToString()
 			{
 				return string.Format("Searching '{0}' in '{1}' using {2}",
@@ -111,12 +101,12 @@ namespace SearcherCore
 			var searcher = CreateSearcher(token, (PluginType)param.PlugType);
 			searcher.OnFileFound += searcher_OnFileFound;
 
-			SearchWorkers.Add(new SearchWorker()
+			SearchWorkers.Add(new SearchWorker
 				{
 					Id = searcher.Id, 
 					FilesFound = 0, 
 					Parameter = param.ToString(), 
-					Status = "Pending"
+					Status = "Running"
 				});
 			WorkerTokenSources.Add(searcher.Id, workerTokenSource);
 			try
@@ -131,20 +121,34 @@ namespace SearcherCore
 			finally
 			{
 				WorkerTokenSources.Remove(searcher.Id);
+				SearchWorkers.Single(w => w.Id == searcher.Id).Status = "Stopped";
+				Invalidate();
 			}
 		}
 
 		public void TerminateSearch(int workerId)
 		{
 			if (WorkerTokenSources.ContainsKey(workerId))
+			{
 				WorkerTokenSources[workerId].Cancel();
+				SearchWorkers.Single(w => w.Id == workerId).Status = "Stopped";
+				Invalidate();
+			}
+		}
+
+		public void ClearResult(int workerId)
+		{
+			foreach (var row in FoundFiles.Select(string.Format("wid = {0}", workerId)))
+			{
+				FoundFiles.Rows.Remove(row);
+			}
 		}
 
 		private void searcher_OnFileFound(object sender, FileSearcher.FileFoundArgs e)
 		{
 			FoundFiles.Rows.Add(e.SearcherId, e.FileName);
 			SearchWorkers.Single(w => w.Id == e.SearcherId).FilesFound++;
-			FileFound();
+			Invalidate();
 		}
 
 		private FileSearcher CreateSearcher(CancellationToken ct, PluginType type)
