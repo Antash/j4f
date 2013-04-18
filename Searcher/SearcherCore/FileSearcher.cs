@@ -77,6 +77,9 @@ namespace SearcherCore
 		{
 			if (_proc == null)
 			{
+				// search for any if pattern empty
+				if (string.IsNullOrWhiteSpace(pattern))
+					pattern += "*";
 				// search ignoring extention if any specified
 				if (!pattern.Contains('.'))
 					pattern += ".*";
@@ -100,17 +103,23 @@ namespace SearcherCore
 			return root.EnumerateFiles(pattern);
 		}
 
-		private void SearchInternal(DirectoryInfo root, string pattern, Func<DirectoryInfo, string, IEnumerable<FileInfo>> listFunc)
+		private void StopCheck()
 		{
 			if (_ct.IsCancellationRequested)
 			{
 				Debug.WriteLine("Search canseled");
 				_ct.ThrowIfCancellationRequested();
 			}
+		}
+
+		private void SearchInternal(DirectoryInfo root, string pattern, Func<DirectoryInfo, string, IEnumerable<FileInfo>> listFunc)
+		{
+			StopCheck();
 			try
 			{
 				foreach (var file in listFunc(root, pattern))
 				{
+					StopCheck();
 					// Suppose short filename and creation timestamp concztenation is unique
 					var fileStamp = file.Name + file.CreationTime.Ticks;
 					if ((_proc == null || _proc.ProcessFile(file.FullName, pattern)) &&
@@ -123,6 +132,7 @@ namespace SearcherCore
 				}
 				foreach (var dir in root.EnumerateDirectories())
 				{
+					StopCheck();
 					// Suppose short filename and creation timestamp concztenation is unique
 					var dirStamp = dir.Name + dir.CreationTime.Ticks;
 					if (!_visitedPaths.Contains(dirStamp))

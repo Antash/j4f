@@ -28,9 +28,9 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SearcherMainForm));
 			this.bSearch = new System.Windows.Forms.Button();
 			this.tbSearchPattern = new System.Windows.Forms.TextBox();
@@ -56,8 +56,6 @@
 			this.dgwResult = new System.Windows.Forms.DataGridView();
 			this.fbdPlugin = new System.Windows.Forms.FolderBrowserDialog();
 			this.fbdSearch = new System.Windows.Forms.FolderBrowserDialog();
-			this.wid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Filename = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -102,14 +100,14 @@
 			// 
 			this.dgwWorkers.AllowUserToAddRows = false;
 			this.dgwWorkers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
-			dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dgwWorkers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
+			dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dgwWorkers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle16;
 			this.dgwWorkers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dgwWorkers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.WorkerIndex,
@@ -117,26 +115,26 @@
             this.Count,
             this.Status,
             this.control});
-			dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.dgwWorkers.DefaultCellStyle = dataGridViewCellStyle14;
+			dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.dgwWorkers.DefaultCellStyle = dataGridViewCellStyle17;
 			this.dgwWorkers.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dgwWorkers.Location = new System.Drawing.Point(3, 91);
 			this.dgwWorkers.Name = "dgwWorkers";
 			this.dgwWorkers.ReadOnly = true;
-			dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dgwWorkers.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
+			dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle18.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dgwWorkers.RowHeadersDefaultCellStyle = dataGridViewCellStyle18;
 			this.dgwWorkers.RowTemplate.Height = 24;
 			this.dgwWorkers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.dgwWorkers.Size = new System.Drawing.Size(604, 110);
@@ -305,9 +303,6 @@
 			this.dgwResult.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 			this.dgwResult.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dgwResult.ColumnHeadersVisible = false;
-			this.dgwResult.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.wid,
-            this.Filename});
 			this.dgwResult.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dgwResult.Location = new System.Drawing.Point(0, 0);
 			this.dgwResult.Name = "dgwResult";
@@ -327,18 +322,6 @@
 			this.fbdSearch.Description = "Select search folder";
 			this.fbdSearch.RootFolder = System.Environment.SpecialFolder.MyComputer;
 			this.fbdSearch.ShowNewFolderButton = false;
-			// 
-			// wid
-			// 
-			this.wid.HeaderText = "wid";
-			this.wid.Name = "wid";
-			this.wid.Visible = false;
-			// 
-			// Filename
-			// 
-			this.Filename.HeaderText = "Filename";
-			this.Filename.Name = "Filename";
-			this.Filename.ReadOnly = true;
 			// 
 			// SearcherMainForm
 			// 
@@ -391,7 +374,5 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn Status;
 		private System.Windows.Forms.DataGridViewButtonColumn control;
 		private System.Windows.Forms.DataGridView dgwResult;
-		private System.Windows.Forms.DataGridViewTextBoxColumn wid;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Filename;
 	}
 }

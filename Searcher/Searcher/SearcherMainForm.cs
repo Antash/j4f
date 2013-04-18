@@ -17,6 +17,7 @@ namespace Searcher
 	public partial class SearcherMainForm : Form
 	{
 		private SearchManager _sm;
+		private DataTable _fileTab;
 
 		private enum GridIndexes
 		{
@@ -30,6 +31,12 @@ namespace Searcher
 		{
 			InitializeComponent();
 
+			_fileTab = new DataTable();
+			_fileTab.Columns.Add("wid", typeof(int));
+			_fileTab.Columns.Add("fname", typeof(string));
+			dgwResult.DataSource = _fileTab;
+			dgwResult.Columns[0].Visible = false;
+
 			_sm = manager;
 			_sm.OnSearchStarted += _sm_OnSearchStarted;
 			_sm.OnSearchFinished += _sm_OnSearchFinished;
@@ -42,7 +49,7 @@ namespace Searcher
 		{
 			dgwResult.Invoke(new MethodInvoker(delegate()
 			{
-				dgwResult.Rows.Add(e.SearcherId.ToString(), e.FileName);
+				_fileTab.Rows.Add(e.SearcherId, e.FileName);
 			}));
 			var row = dgwWorkers.Rows.Cast<DataGridViewRow>()
 				.Where(r => (int)r.Cells[(int)GridIndexes.Id].Value == e.SearcherId).FirstOrDefault();
@@ -115,7 +122,8 @@ namespace Searcher
 			}
 			else
 			{
-				//TODO filter results in the list
+				_fileTab.DefaultView.RowFilter = string.Format("wid = {0}", 
+					(int)dgwWorkers.Rows[e.RowIndex].Cells[(int)GridIndexes.Id].Value);
 			}
 		}
 
@@ -127,17 +135,11 @@ namespace Searcher
 		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
 		{
 			int wid = (int)e.Row.Cells[(int)GridIndexes.Id].Value;
-			foreach(var row in dgwWorkers.Rows.Cast<DataGridViewRow>()
-				.Where(r => (int)r.Cells[(int)GridIndexes.Id].Value == wid))
+			foreach(var row in _fileTab.Select(string.Format("wid = {0}", wid)))
 			{
-				dgwResult.Rows.Remove(row);
+				_fileTab.Rows.Remove(row);
 			}
 			_sm.TerminateSearch(wid);
-		}
-
-		private void lvResults_MouseDoubleClick(object sender, MouseEventArgs e)
-		{
-
 		}
 
 		private void dgwResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
