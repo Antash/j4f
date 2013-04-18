@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -125,6 +127,19 @@ namespace Searcher
 			while (lvResults.Items.IndexOfKey(wid.ToString()) >= 0)
 				lvResults.Items.RemoveByKey(wid.ToString());
 			_sm.TerminateSearch(wid);
+		}
+
+		private void lvResults_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			ListViewHitTestInfo hit = lvResults.HitTest(e.Location);
+			if (hit.Item != null)
+			{
+				var expl = new Process();
+				expl.StartInfo.UseShellExecute = true;
+				expl.StartInfo.FileName = @"explorer";
+				expl.StartInfo.Arguments = Path.GetDirectoryName(hit.Item.Text);
+				expl.Start();
+			}
 		}
 	}
 }
