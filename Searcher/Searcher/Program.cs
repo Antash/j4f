@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using SearcherCore;
 
 namespace Searcher
 {
@@ -10,7 +11,7 @@ namespace Searcher
         {
 			Console.WriteLine("Started!");
 
-	        var form = new SearcherMainForm();
+	        var form = new SearcherMainForm(new SearchManager());
 			Application.EnableVisualStyles();
 			Application.Run(form);
 

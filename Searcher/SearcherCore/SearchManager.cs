@@ -20,7 +20,10 @@ namespace SearcherCore
 
 			public override string ToString()
 			{
-				return string.Format("Searching '{0}' in '{1}' using {2}", SearchPattern, RootDir, (PluginType)PlugType);
+				return string.Format("Searching '{0}' in '{1}' using {2}", 
+					SearchPattern, 
+					string.IsNullOrEmpty(RootDir) ? "everyware" : RootDir, 
+					(PluginType)PlugType);
 			}
 
 			public int PlugType { get; set; }
