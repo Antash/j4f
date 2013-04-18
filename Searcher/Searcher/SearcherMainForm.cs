@@ -76,11 +76,15 @@ namespace Searcher
 			{
 				_sm.TerminateSearch(e.RowIndex);
 			}
+			else
+			{
+ 				//TODO filter results in the list
+			}
 		}
 
 		private void tsbHelp_Click(object sender, EventArgs e)
 		{
-
+			//TODO show readme
 		}
 	}
 }
