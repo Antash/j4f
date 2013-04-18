@@ -39,13 +39,14 @@ namespace SearcherCore
 		#endregion
 
 		private readonly PluginManager _pluginMgr = new PluginManager();
-		private IDictionary<string, CancellationTokenSource> workerTokenSources { get; set; }
+		private IDictionary<int, CancellationTokenSource> workerTokenSources { get; set; }
+		private int _currWorkerId = 0;
 
 		public IList<string> FoundFiles { get; set; }
 
 		public SearchManager()
 		{
-			workerTokenSources = new Dictionary<string, CancellationTokenSource>();
+			workerTokenSources = new Dictionary<int, CancellationTokenSource>();
 			FoundFiles = new List<string>();
 		}
 
@@ -59,19 +60,19 @@ namespace SearcherCore
 		public class SearchStartEventArgs : EventArgs
 		{
 			public string Details { get; set; }
-			public string WorkerId { get; set; }
+			public int WorkerId { get; set; }
 		}
 
 		public class SearchStopEventArgs : EventArgs
 		{
-			public string WorkerId { get; set; }
+			public int WorkerId { get; set; }
 		}
 
 		public delegate void SearchDelegate(object sender, EventArgs e);
 		public event SearchDelegate OnSearchStarted;
 		public event SearchDelegate OnSearchFinished;
 
-		private void SearchStart(string workerId, string workerDetails)
+		private void SearchStart(int workerId, string workerDetails)
 		{
 			if (OnSearchStarted != null)
 			{
@@ -82,7 +83,7 @@ namespace SearcherCore
 			}
 		}
 
-		private void SearchFinish(string workerId)
+		private void SearchFinish(int workerId)
 		{
 			if (OnSearchFinished != null)
 			{
@@ -111,17 +112,18 @@ namespace SearcherCore
 			var searcher = CreateSearcher(token, (PluginType)param.PlugType);
 			searcher.OnFileFound += searcher_OnFileFound;
 
-			var workerId = Guid.NewGuid().ToString();
-			workerTokenSources.Add(workerId, workerTokenSource);
+			var wid = _currWorkerId;
 
-			SearchStart(workerId, param.ToString());
+			workerTokenSources.Add(wid, workerTokenSource);
+
+			SearchStart(wid, param.ToString());
 			await Task.Factory.StartNew(() => searcher.Search(param));
-			SearchFinish(workerId);
+			SearchFinish(wid);
 
-			workerTokenSources.Remove(workerId);
+			workerTokenSources.Remove(wid);
 		}
 
-		public void TerminateSearch(string workerId)
+		public void TerminateSearch(int workerId)
 		{
 			if (workerTokenSources.ContainsKey(workerId))
 				workerTokenSources[workerId].Cancel();
@@ -134,6 +136,7 @@ namespace SearcherCore
 
 		private FileSearcher CreateSearcher(CancellationToken ct, PluginType type)
 		{
+			_currWorkerId++;
 			return new FileSearcher(ct, _pluginMgr.GetProcessor(type));
 		}
 	}
