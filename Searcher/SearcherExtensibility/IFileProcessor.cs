@@ -13,7 +13,7 @@ namespace SearcherExtensibility
 
 	public interface IFileProcessor
 	{
-		bool IsSuitable(string fileName, string param);
+		bool ProcessFile(string fileName, string param);
 		IEnumerable<string> FileExtentionPatterns { get; }
 	}
 

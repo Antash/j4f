@@ -106,7 +106,7 @@ namespace SearcherCore
 				{
 					// Suppose short filename and creation timestamp concztenation is unique
 					var fileStamp = file.Name + file.CreationTime.Ticks;
-					if ((_proc == null || _proc.IsSuitable(file.FullName, pattern)) &&
+					if ((_proc == null || _proc.ProcessFile(file.FullName, pattern)) &&
 						!_foundFiles.Contains(fileStamp))
 					{
 						_foundFiles.Add(fileStamp);

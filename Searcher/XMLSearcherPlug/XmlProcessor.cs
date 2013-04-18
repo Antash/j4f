@@ -9,7 +9,7 @@ namespace XMLSearcherPlug
 	[FileProcessorMetadataAttribute(PluginType.XmlTag)]
 	public class XmlProcessor : IFileProcessor
 	{
-		public bool IsSuitable(string fileName, string param)
+		public bool ProcessFile(string fileName, string param)
 		{
 			var doc = new XmlDocument();
 			try
