@@ -15,9 +15,13 @@ namespace Searcher
 	{
 		private List<string> loadedPlugins;
 
+		private SearchManager m;
+
 		public SearcherMainForm()
 		{
 			InitializeComponent();
+
+			m = new SearchManager();
 
 			loadedPlugins = new List<string>();
 			loadedPlugins.Add("No Plugins");
@@ -26,6 +30,7 @@ namespace Searcher
 
 		private void bSearch_Click(object sender, EventArgs e)
 		{
+			m.StartSearch(new SearchManager.FileSearchParam() {RootDir = @"D:\", SearchPattern = tbSearchPattern.Text});
 			//var sf = new FileSearcher();
 			//sf.OnFileFound += sf_OnFileFound;
 			//new Task(() => { sf.Search(@"C:\Users", tbSearchPattern.Text); }).Start();
@@ -39,23 +44,24 @@ namespace Searcher
 
 		private void tsbLoadPlugins_Click(object sender, EventArgs e)
 		{
-			//var pluginSelector = new FolderBrowserDialog();
-			//pluginSelector.SelectedPath = Application.StartupPath;
-			//if (pluginSelector.ShowDialog() == DialogResult.OK)
-			//{
-			//	var loadedPlug = SearchManager.LoadPlugins(pluginSelector.SelectedPath);
-			//	if (loadedPlug == 0)
-			//	{
-			//		MessageBox.Show("No plugins loaded!");
-			//	}
-			//	else
-			//	{
-			//		MessageBox.Show(String.Format("{0} plugins loaded!", loadedPlug));
-			//		loadedPlugins.AddRange(SearchManager.GetPluginList());
-			//		tscbSelPl.ComboBox.DataSource = null;
-			//		tscbSelPl.ComboBox.DataSource = loadedPlugins;
-			//	}
-			//}
+			
+			var pluginSelector = new FolderBrowserDialog {SelectedPath = Application.StartupPath};
+			if (pluginSelector.ShowDialog() == DialogResult.OK)
+			{
+				m.LoadPlugins(pluginSelector.SelectedPath);
+				//	var loadedPlug = SearchManager.LoadPlugins(pluginSelector.SelectedPath);
+				//	if (loadedPlug == 0)
+				//	{
+				//		MessageBox.Show("No plugins loaded!");
+				//	}
+				//	else
+				//	{
+				//		MessageBox.Show(String.Format("{0} plugins loaded!", loadedPlug));
+				//		loadedPlugins.AddRange(SearchManager.GetPluginList());
+				//		tscbSelPl.ComboBox.DataSource = null;
+				//		tscbSelPl.ComboBox.DataSource = loadedPlugins;
+				//	}
+			}
 		}
 	}
 }
