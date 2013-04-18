@@ -127,7 +127,7 @@ namespace SearcherCore
 				workerTokenSources[workerId].Cancel();
 		}
 
-		private void searcher_OnFileFound(object sender, FileFoundArgs e)
+		private void searcher_OnFileFound(object sender, FileSearcher.FileFoundArgs e)
 		{
 			FoundFiles.Add(e.FileName);
 		}

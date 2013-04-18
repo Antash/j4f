@@ -8,11 +8,6 @@ using System.Diagnostics;
 
 namespace SearcherCore
 {
-	internal class FileFoundArgs : EventArgs
-	{
-		internal string FileName { get; set; }
-	}
-
 	internal class FileSearcher
 	{
 		private readonly IFileProcessor _proc;
@@ -40,6 +35,12 @@ namespace SearcherCore
 
 		#region File found event declaration
 
+		internal class FileFoundArgs : EventArgs
+		{
+			internal int SearcherId { get; set; }
+			internal string FileName { get; set; }
+		}
+
 		internal delegate void OnFileFoundDelegate(object sender, FileFoundArgs e);
 		internal event OnFileFoundDelegate OnFileFound;
 
@@ -47,7 +48,10 @@ namespace SearcherCore
 		{
 			if (OnFileFound != null)
 			{
-				OnFileFound(this, new FileFoundArgs { FileName = fileName });
+				OnFileFound(this, new FileFoundArgs { 
+					FileName = fileName,
+					SearcherId = Id
+				});
 			}
 		}
 
