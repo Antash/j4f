@@ -10,6 +10,8 @@ namespace SearcherCore
 {
 	public class SearchManager
 	{
+		#region Nested types
+
 		public class FileSearchParam
 		{
 			public FileSearchParam()
@@ -31,13 +33,18 @@ namespace SearcherCore
 			public long? SizeTo { get; set; }
 		}
 
+		#endregion
+
+		private readonly PluginManager _pluginMgr = new PluginManager();
+		private IList<CancellationTokenSource> workerTokenSources { get; set; }
+
+		public IList<string> FoundFiles { get; set; }
+
 		public SearchManager()
 		{
 			workerTokenSources = new List<CancellationTokenSource>();
 			FoundFiles = new List<string>();
 		}
-
-		private readonly PluginManager _pluginMgr = new PluginManager();
 
 		public int LoadPlugins(string path)
 		{
@@ -88,10 +95,6 @@ namespace SearcherCore
 						.ToList();
 			}
 		}
-
-		private IList<CancellationTokenSource> workerTokenSources { get; set; }
-
-		public IList<string> FoundFiles { get; set; }
 
 		public async void StartSearch(FileSearchParam param)
 		{

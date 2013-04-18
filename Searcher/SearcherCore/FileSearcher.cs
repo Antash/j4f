@@ -16,7 +16,6 @@ namespace SearcherCore
 	internal class FileSearcher
 	{
 		private readonly IFileProcessor _proc;
-		private readonly ManualResetEvent _eventLocker;
 
 		private readonly HashSet<string> _visitedPaths;
 		private readonly HashSet<string> _foundFiles;
@@ -28,18 +27,12 @@ namespace SearcherCore
 			_ct = ct;
 			_visitedPaths = new HashSet<string>();
 			_foundFiles = new HashSet<string>();
-			_eventLocker = new ManualResetEvent(true);
 		}
 
 		internal FileSearcher(CancellationToken ct, IFileProcessor proc)
 			: this(ct)
 		{
 			_proc = proc;
-		}
-
-		internal void TerminateSearch()
-		{
-			_eventLocker.Reset();
 		}
 
 		#region File found event declaration
@@ -109,8 +102,6 @@ namespace SearcherCore
 			}
 			try
 			{
-				// Wait if thread paused
-				_eventLocker.WaitOne();
 				foreach (var file in listFunc(root, pattern))
 				{
 					// Suppose short filename and creation timestamp concztenation is unique
