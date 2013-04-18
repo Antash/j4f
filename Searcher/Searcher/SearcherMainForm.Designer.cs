@@ -36,6 +36,7 @@
 			this.tbSearchPattern = new System.Windows.Forms.TextBox();
 			this.lSearchPattern = new System.Windows.Forms.Label();
 			this.dgwWorkers = new System.Windows.Forms.DataGridView();
+			this.control = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.tsbLoadPlugins = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -51,7 +52,6 @@
 			this.dgwResult = new System.Windows.Forms.DataGridView();
 			this.fbdPlugin = new System.Windows.Forms.FolderBrowserDialog();
 			this.fbdSearch = new System.Windows.Forms.FolderBrowserDialog();
-			this.control = new System.Windows.Forms.DataGridViewButtonColumn();
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -133,6 +133,16 @@
 			this.dgwWorkers.TabIndex = 8;
 			this.dgwWorkers.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwWorkers_CellClick);
 			this.dgwWorkers.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgwWorkers_UserDeletingRow);
+			// 
+			// control
+			// 
+			this.control.HeaderText = "Stop";
+			this.control.Name = "control";
+			this.control.ReadOnly = true;
+			this.control.Text = "Stop";
+			this.control.ToolTipText = "Stop search worker";
+			this.control.UseColumnTextForButtonValue = true;
+			this.control.Width = 43;
 			// 
 			// toolStrip1
 			// 
@@ -278,16 +288,6 @@
 			this.fbdSearch.Description = "Select search folder";
 			this.fbdSearch.RootFolder = System.Environment.SpecialFolder.MyComputer;
 			this.fbdSearch.ShowNewFolderButton = false;
-			// 
-			// control
-			// 
-			this.control.HeaderText = "Stop";
-			this.control.Name = "control";
-			this.control.ReadOnly = true;
-			this.control.Text = "Stop";
-			this.control.ToolTipText = "Stop search worker";
-			this.control.UseColumnTextForButtonValue = true;
-			this.control.Width = 43;
 			// 
 			// SearcherMainForm
 			// 

@@ -5,8 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using SearcherCore;
 
-using WorkTabInd = SearcherCore.SearchManager.WorkerTabInd;
-
 namespace Searcher
 {
 	public partial class SearcherMainForm : Form
@@ -18,7 +16,7 @@ namespace Searcher
 			InitializeComponent();
 
 			_sm = manager;
-			_sm.OnFileFound += _sm_OnFileFound;
+			_sm.OnInvalidate += _sm_OnInvalidate;
 
 			dgwResult.DataSource = _sm.FoundFiles;
 			dgwResult.Columns[0].Visible = false;
@@ -30,11 +28,12 @@ namespace Searcher
 			tscbSelPl.ComboBox.DataSource = _sm.PluginList;
 		}
 
-		void _sm_OnFileFound()
+		void _sm_OnInvalidate()
 		{
 			dgwResult.Invoke(new MethodInvoker(() =>
 				{
 					dgwWorkers.InvalidateColumn(3);
+					dgwWorkers.InvalidateColumn(4);
 					dgwResult.InvalidateColumn(1);
 				}));
 		}
@@ -80,9 +79,9 @@ namespace Searcher
 			}
 			else
 			{
-				if (e.RowIndex > 0)
-					_sm.FoundFiles.DefaultView.RowFilter = string.Format("wid = {0}",
-						(int)dgwWorkers.Rows[e.RowIndex].Cells[(int)WorkTabInd.Id].Value);
+				//if (e.RowIndex > 0)
+				//	_sm.FoundFiles.DefaultView.RowFilter = string.Format("wid = {0}",
+				//		(int) dgwWorkers.Rows[e.RowIndex].Cells[1].Value);
 			}
 		}
 
@@ -94,11 +93,8 @@ namespace Searcher
 		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
 		{
 			var wid = (int)e.Row.Cells[1].Value;
-			foreach(var row in _sm.FoundFiles.Select(string.Format("wid = {0}", wid)))
-			{
-				_sm.FoundFiles.Rows.Remove(row);
-			}
 			_sm.TerminateSearch(wid);
+			_sm.ClearResult(wid);
 		}
 
 		private void dgwResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
