@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using SearcherExtensibility;
 using System.Diagnostics;
 
@@ -61,8 +62,10 @@ namespace SearcherCore
 
 		#region Search overrides
 
-		internal void Search(SearchManager.FileSearchParam param)
+		internal Task Search(SearchManager.FileSearchParam param)
 		{
+			Search(param.RootDir, param.SearchPattern);
+			return null;
 		}
 
 		private void Search(string root, string pattern)

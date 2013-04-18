@@ -21,34 +21,40 @@ namespace SearcherCore
 			public long? SizeTo { get; set; }
 		}
 
-		private static readonly PluginManager PluginMgr = new PluginManager();
+		private readonly PluginManager _pluginMgr = new PluginManager();
 
-		public static int LoadPlugins(string path)
+		public int LoadPlugins(string path)
 		{
-			return PluginMgr.LoadPlugins(path);
+			return _pluginMgr.LoadPlugins(path);
 		}
 
-		public static string[] GetPluginList()
+		public string[] PluginList
 		{
-			return PluginMgr.GetPluginList().Concat(new [] { PluginType.NoPlugin })
-				.OrderBy(p => p)
-				.Select(p => p.ToString()).ToArray();
+			get
+			{
+				return _pluginMgr.GetPluginList().Concat(new[] { PluginType.NoPlugin })
+						.OrderBy(p => p)
+						.Select(p => p.ToString()).ToArray();
+			}
 		}
 
-		public void StartSearch(FileSearchParam param)
+		public string[] FoundFiles { get; set; }
+
+		public async void StartSearch(FileSearchParam param)
 		{
 			var searcher = CreateSearcher((PluginType)param.PlugType);
 			searcher.OnFileFound += searcher_OnFileFound;
-			new Task(() => searcher.Search(param)).Start();
+			await searcher.Search(param);
+			//new Task(() => ).Start();
 		}
 
 		private void searcher_OnFileFound(object sender, FileFoundArgs e)
 		{
 		}
 
-		private static FileSearcher CreateSearcher(PluginType type)
+		private FileSearcher CreateSearcher(PluginType type)
 		{
-			return new FileSearcher(PluginMgr.GetProcessor(type));
+			return new FileSearcher(_pluginMgr.GetProcessor(type));
 		}
 	}
 }
