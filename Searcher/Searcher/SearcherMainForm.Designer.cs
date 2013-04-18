@@ -32,7 +32,6 @@
 			this.bSearch = new System.Windows.Forms.Button();
 			this.lvResults = new System.Windows.Forms.ListView();
 			this.tbSearchPattern = new System.Windows.Forms.TextBox();
-			this.lDir = new System.Windows.Forms.Label();
 			this.lSearchPattern = new System.Windows.Forms.Label();
 			this.dgwWorkers = new System.Windows.Forms.DataGridView();
 			this.swinfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -43,9 +42,12 @@
 			this.tslSelPl = new System.Windows.Forms.ToolStripLabel();
 			this.tscbSelPl = new System.Windows.Forms.ToolStripComboBox();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-			this.tbRootDir = new System.Windows.Forms.TextBox();
 			this.bSelDir = new System.Windows.Forms.Button();
+			this.tbRootDir = new System.Windows.Forms.TextBox();
+			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.fbdPlugin = new System.Windows.Forms.FolderBrowserDialog();
+			this.fbdSearch = new System.Windows.Forms.FolderBrowserDialog();
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -53,13 +55,15 @@
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// bSearch
 			// 
-			this.bSearch.Location = new System.Drawing.Point(339, 8);
+			this.bSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.bSearch.Location = new System.Drawing.Point(309, 8);
 			this.bSearch.Name = "bSearch";
-			this.bSearch.Size = new System.Drawing.Size(75, 23);
+			this.bSearch.Size = new System.Drawing.Size(75, 51);
 			this.bSearch.TabIndex = 0;
 			this.bSearch.Text = "Find!";
 			this.bSearch.UseVisualStyleBackColor = true;
@@ -70,31 +74,24 @@
 			this.lvResults.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lvResults.Location = new System.Drawing.Point(0, 0);
 			this.lvResults.Name = "lvResults";
-			this.lvResults.Size = new System.Drawing.Size(599, 280);
+			this.lvResults.Size = new System.Drawing.Size(610, 238);
 			this.lvResults.TabIndex = 1;
 			this.lvResults.UseCompatibleStateImageBehavior = false;
 			this.lvResults.View = System.Windows.Forms.View.List;
 			// 
 			// tbSearchPattern
 			// 
-			this.tbSearchPattern.Location = new System.Drawing.Point(96, 8);
+			this.tbSearchPattern.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tbSearchPattern.Location = new System.Drawing.Point(90, 8);
 			this.tbSearchPattern.Name = "tbSearchPattern";
-			this.tbSearchPattern.Size = new System.Drawing.Size(237, 22);
+			this.tbSearchPattern.Size = new System.Drawing.Size(213, 22);
 			this.tbSearchPattern.TabIndex = 2;
-			// 
-			// lDir
-			// 
-			this.lDir.AutoSize = true;
-			this.lDir.Location = new System.Drawing.Point(12, 40);
-			this.lDir.Name = "lDir";
-			this.lDir.Size = new System.Drawing.Size(82, 17);
-			this.lDir.TabIndex = 5;
-			this.lDir.Text = "In directory:";
 			// 
 			// lSearchPattern
 			// 
 			this.lSearchPattern.AutoSize = true;
-			this.lSearchPattern.Location = new System.Drawing.Point(12, 11);
+			this.lSearchPattern.Location = new System.Drawing.Point(6, 11);
 			this.lSearchPattern.Name = "lSearchPattern";
 			this.lSearchPattern.Size = new System.Drawing.Size(78, 17);
 			this.lSearchPattern.TabIndex = 6;
@@ -108,12 +105,12 @@
 			this.dgwWorkers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.swinfo,
             this.control});
-			this.dgwWorkers.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dgwWorkers.Location = new System.Drawing.Point(0, 0);
+			this.dgwWorkers.Dock = System.Windows.Forms.DockStyle.Right;
+			this.dgwWorkers.Location = new System.Drawing.Point(393, 18);
 			this.dgwWorkers.Name = "dgwWorkers";
 			this.dgwWorkers.ReadOnly = true;
 			this.dgwWorkers.RowTemplate.Height = 24;
-			this.dgwWorkers.Size = new System.Drawing.Size(599, 74);
+			this.dgwWorkers.Size = new System.Drawing.Size(214, 137);
 			this.dgwWorkers.TabIndex = 8;
 			// 
 			// swinfo
@@ -128,10 +125,10 @@
 			// control
 			// 
 			this.control.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			this.control.HeaderText = "Control";
+			this.control.HeaderText = "Stop";
 			this.control.Name = "control";
 			this.control.ReadOnly = true;
-			this.control.Width = 59;
+			this.control.Width = 43;
 			// 
 			// toolStrip1
 			// 
@@ -142,7 +139,7 @@
             this.tscbSelPl});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(599, 26);
+			this.toolStrip1.Size = new System.Drawing.Size(610, 26);
 			this.toolStrip1.TabIndex = 9;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -179,54 +176,71 @@
 			this.panel1.Controls.Add(this.lSearchPattern);
 			this.panel1.Controls.Add(this.bSearch);
 			this.panel1.Controls.Add(this.tbSearchPattern);
-			this.panel1.Controls.Add(this.lDir);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panel1.Location = new System.Drawing.Point(0, 26);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel1.Location = new System.Drawing.Point(3, 18);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(599, 69);
+			this.panel1.Size = new System.Drawing.Size(390, 137);
 			this.panel1.TabIndex = 10;
+			// 
+			// bSelDir
+			// 
+			this.bSelDir.Location = new System.Drawing.Point(9, 37);
+			this.bSelDir.Name = "bSelDir";
+			this.bSelDir.Size = new System.Drawing.Size(75, 23);
+			this.bSelDir.TabIndex = 8;
+			this.bSelDir.Text = "Select dir";
+			this.bSelDir.UseVisualStyleBackColor = true;
+			this.bSelDir.Click += new System.EventHandler(this.bSelDir_Click);
+			// 
+			// tbRootDir
+			// 
+			this.tbRootDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tbRootDir.Location = new System.Drawing.Point(90, 37);
+			this.tbRootDir.Name = "tbRootDir";
+			this.tbRootDir.Size = new System.Drawing.Size(213, 22);
+			this.tbRootDir.TabIndex = 7;
 			// 
 			// splitContainer1
 			// 
 			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer1.Location = new System.Drawing.Point(0, 95);
+			this.splitContainer1.Location = new System.Drawing.Point(0, 26);
 			this.splitContainer1.Name = "splitContainer1";
 			this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
 			// splitContainer1.Panel1
 			// 
-			this.splitContainer1.Panel1.Controls.Add(this.dgwWorkers);
+			this.splitContainer1.Panel1.Controls.Add(this.groupBox1);
 			// 
 			// splitContainer1.Panel2
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.lvResults);
-			this.splitContainer1.Size = new System.Drawing.Size(599, 358);
-			this.splitContainer1.SplitterDistance = 74;
+			this.splitContainer1.Size = new System.Drawing.Size(610, 400);
+			this.splitContainer1.SplitterDistance = 158;
 			this.splitContainer1.TabIndex = 11;
 			// 
-			// tbRootDir
+			// groupBox1
 			// 
-			this.tbRootDir.Location = new System.Drawing.Point(96, 37);
-			this.tbRootDir.Name = "tbRootDir";
-			this.tbRootDir.Size = new System.Drawing.Size(237, 22);
-			this.tbRootDir.TabIndex = 7;
+			this.groupBox1.Controls.Add(this.panel1);
+			this.groupBox1.Controls.Add(this.dgwWorkers);
+			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.groupBox1.Location = new System.Drawing.Point(0, 0);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(610, 158);
+			this.groupBox1.TabIndex = 9;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Search parameters";
 			// 
-			// bSelDir
+			// fbdSearch
 			// 
-			this.bSelDir.Location = new System.Drawing.Point(339, 37);
-			this.bSelDir.Name = "bSelDir";
-			this.bSelDir.Size = new System.Drawing.Size(75, 23);
-			this.bSelDir.TabIndex = 8;
-			this.bSelDir.Text = "Select";
-			this.bSelDir.UseVisualStyleBackColor = true;
+			this.fbdSearch.RootFolder = System.Environment.SpecialFolder.MyComputer;
 			// 
 			// SearcherMainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(599, 453);
+			this.ClientSize = new System.Drawing.Size(610, 426);
 			this.Controls.Add(this.splitContainer1);
-			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.toolStrip1);
 			this.Name = "SearcherMainForm";
 			this.Text = "SearcherMainForm";
@@ -239,6 +253,7 @@
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -249,7 +264,6 @@
 		private System.Windows.Forms.Button bSearch;
 		private System.Windows.Forms.ListView lvResults;
 		private System.Windows.Forms.TextBox tbSearchPattern;
-		private System.Windows.Forms.Label lDir;
 		private System.Windows.Forms.Label lSearchPattern;
 		private System.Windows.Forms.DataGridView dgwWorkers;
 		private System.Windows.Forms.ToolStrip toolStrip1;
@@ -259,9 +273,12 @@
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.SplitContainer splitContainer1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn swinfo;
-		private System.Windows.Forms.DataGridViewButtonColumn control;
 		private System.Windows.Forms.Button bSelDir;
 		private System.Windows.Forms.TextBox tbRootDir;
+		private System.Windows.Forms.FolderBrowserDialog fbdPlugin;
+		private System.Windows.Forms.FolderBrowserDialog fbdSearch;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn swinfo;
+		private System.Windows.Forms.DataGridViewButtonColumn control;
 	}
 }

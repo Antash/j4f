@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Xml;
 using SearcherExtensibility;
 
@@ -23,7 +24,7 @@ namespace XMLSearcherPlug
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.ToString());
+				Debug.WriteLine(ex.ToString());
 				return false;
 			}
 		}

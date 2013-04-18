@@ -57,8 +57,6 @@ namespace SearcherCore
 
 		#endregion
 
-		#region Search overrides
-
 		internal void Search(SearchManager.FileSearchParam param)
 		{
 			if (string.IsNullOrEmpty(param.RootDir))
@@ -89,8 +87,6 @@ namespace SearcherCore
 				SearchInternal(root, pattern, ListFilesForPlugin);
 			}
 		}
-
-		#endregion
 
 		private IEnumerable<FileInfo> ListFilesForPlugin(DirectoryInfo root, string pattern)
 		{

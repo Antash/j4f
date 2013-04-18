@@ -13,54 +13,46 @@ namespace Searcher
 {
 	public partial class SearcherMainForm : Form
 	{
-		private List<string> loadedPlugins;
-
-		private SearchManager m;
+		private SearchManager _sm;
 
 		public SearcherMainForm()
 		{
 			InitializeComponent();
 
-			m = new SearchManager();
-
-			loadedPlugins = new List<string>();
-			loadedPlugins.Add("No Plugins");
-			tscbSelPl.ComboBox.DataSource = loadedPlugins;
+			_sm = new SearchManager();
 		}
 
 		private void bSearch_Click(object sender, EventArgs e)
 		{
-			m.StartSearch(new SearchManager.FileSearchParam() {RootDir = @"D:\", SearchPattern = tbSearchPattern.Text});
-			//var sf = new FileSearcher();
-			//sf.OnFileFound += sf_OnFileFound;
-			//new Task(() => { sf.Search(@"C:\Users", tbSearchPattern.Text); }).Start();
+			_sm.StartSearch(new SearchManager.FileSearchParam() {
+				RootDir = tbRootDir.Text,
+				SearchPattern = tbSearchPattern.Text,
+				PlugType = tscbSelPl.SelectedIndex
+			});
 		}
-
-		//void sf_OnFileFound(object sender, FileFoundArgs e)
-		//{
-		//	//lvResults.Invoke(new MethodInvoker(delegate()
-		//	//	{ lvResults.Items.Add(e.FileName); }));
-		//}
 
 		private void tsbLoadPlugins_Click(object sender, EventArgs e)
 		{
-			
-			var pluginSelector = new FolderBrowserDialog {SelectedPath = Application.StartupPath};
-			if (pluginSelector.ShowDialog() == DialogResult.OK)
+			fbdPlugin.SelectedPath = Application.StartupPath;
+			if (fbdPlugin.ShowDialog() == DialogResult.OK)
 			{
-				m.LoadPlugins(pluginSelector.SelectedPath);
-				//	var loadedPlug = SearchManager.LoadPlugins(pluginSelector.SelectedPath);
-				//	if (loadedPlug == 0)
-				//	{
-				//		MessageBox.Show("No plugins loaded!");
-				//	}
-				//	else
-				//	{
-				//		MessageBox.Show(String.Format("{0} plugins loaded!", loadedPlug));
-				//		loadedPlugins.AddRange(SearchManager.GetPluginList());
-				//		tscbSelPl.ComboBox.DataSource = null;
-				//		tscbSelPl.ComboBox.DataSource = loadedPlugins;
-				//	}
+				var loadedPlug = _sm.LoadPlugins(fbdPlugin.SelectedPath);
+				if (loadedPlug == 0)
+					MessageBox.Show("No plugins loaded!");
+				else
+				{
+					MessageBox.Show(String.Format("{0} plugins loaded!", loadedPlug));
+					tscbSelPl.ComboBox.DataSource = null;
+					tscbSelPl.ComboBox.DataSource = _sm.PluginList;
+				}
+			}
+		}
+
+		private void bSelDir_Click(object sender, EventArgs e)
+		{
+			if (fbdSearch.ShowDialog() == DialogResult.OK)
+			{
+				tbRootDir.Text = fbdSearch.SelectedPath;
 			}
 		}
 	}
