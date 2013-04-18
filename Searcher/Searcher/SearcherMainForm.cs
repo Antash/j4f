@@ -39,7 +39,7 @@ namespace Searcher
 			if (args == null)
 				return;
 			var row = dgwWorkers.Rows.Cast<DataGridViewRow>()
-				.Where(r => r.Cells[(int) GridIndexes.Id].Value.ToString() == args.WorkerId).FirstOrDefault();
+				.Where(r => (int) r.Cells[(int)GridIndexes.Id].Value == args.WorkerId).FirstOrDefault();
 			if (row != null)
 				row.Cells[(int) GridIndexes.Status].Value = "Stopped";
 		}
@@ -90,7 +90,7 @@ namespace Searcher
 		{
 			if (e.ColumnIndex == 4)
 			{
-				_sm.TerminateSearch(dgwWorkers.Rows[e.RowIndex].Cells[(int) GridIndexes.Id].Value.ToString());
+				_sm.TerminateSearch((int) dgwWorkers.Rows[e.RowIndex].Cells[(int) GridIndexes.Id].Value);
 			}
 			else
 			{
@@ -105,7 +105,7 @@ namespace Searcher
 
 		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
 		{
-			_sm.TerminateSearch(e.Row.Cells[(int) GridIndexes.Id].Value.ToString());
+			_sm.TerminateSearch((int) e.Row.Cells[(int)GridIndexes.Id].Value);
 		}
 	}
 }
