@@ -88,7 +88,8 @@ namespace Searcher
 
 		private void tsbHelp_Click(object sender, EventArgs e)
 		{
-			//TODO show readme
+			if (File.Exists("readme.txt"))
+				Process.Start("readme.txt");
 		}
 
 		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
@@ -111,11 +112,6 @@ namespace Searcher
 							Arguments = selectedDir
 						}
 				}.Start();
-		}
-
-		private void dgwResult_DataError(object sender, DataGridViewDataErrorEventArgs e)
-		{
-			Debug.WriteLine(e.ToString());
 		}
 	}
 }
