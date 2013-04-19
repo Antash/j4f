@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using SearcherExtensibility;
@@ -51,12 +52,46 @@ namespace SearcherCore
 			public long? SizeTo { get; set; }
 		}
 
-		public class SearchWorker
+		public class SearchWorker : INotifyPropertyChanged
 		{
 			public int Id { get; set; }
 			public string Parameter { get; set; }
-			public int FilesFound { get; set; }
-			public string Status { get; set; }
+
+			private int _filesFound;
+			public int FilesFound
+			{
+				get { return _filesFound; }
+				set
+				{
+					if (value != _filesFound)
+					{
+						_filesFound = value;
+						OnPropertyChanged();
+					}
+				}
+			}
+
+			private string _status;
+			public string Status
+			{
+				get { return _status; }
+				set
+				{
+					if (value != _status)
+					{
+						_status = value;
+						OnPropertyChanged();
+					}
+				}
+			}
+
+			public event PropertyChangedEventHandler PropertyChanged;
+
+			protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+			{
+				PropertyChangedEventHandler handler = PropertyChanged;
+				if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 
 		#endregion
@@ -124,7 +159,6 @@ namespace SearcherCore
 			{
 				WorkerTokenSources.Remove(searcher.Id);
 				SearchWorkers.Single(w => w.Id == searcher.Id).Status = "Stopped";
-				Invalidate(true);
 			}
 		}
 

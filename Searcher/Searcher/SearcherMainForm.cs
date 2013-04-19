@@ -33,8 +33,6 @@ namespace Searcher
 			if (InvokeRequired)
 				dgwResult.Invoke(new MethodInvoker(() =>
 					{
-						dgwWorkers.InvalidateColumn(3);
-						dgwWorkers.InvalidateColumn(4);
 						dgwResult.InvalidateColumn(1);
 					}));
 		}
