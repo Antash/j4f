@@ -12,23 +12,6 @@ namespace SearcherCore
 {
 	public class SearchManager
 	{
-		#region Invalidate UI event declaration
-
-		public event Action OnInvalidate;
-		private long _lastInvalidate;
-		private const long InvalidateMinPeriod = 1000000;
-
-		private void Invalidate(bool force = false)
-		{
-			if (OnInvalidate != null && (Stopwatch.GetTimestamp() - _lastInvalidate > InvalidateMinPeriod || force))
-			{
-				_lastInvalidate = Stopwatch.GetTimestamp();
-				OnInvalidate();
-			}
-		}
-
-		#endregion
-
 		#region Nested types
 
 		public class FileSearchParam
@@ -122,30 +105,30 @@ namespace SearcherCore
 			}
 		}
 
-		public void TerminateSearch(int workerId)
+		public void TerminateSearch(SearchWorker worker)
 		{
-			if (WorkerTokenSources.ContainsKey(workerId))
+			if (WorkerTokenSources.ContainsKey(worker.Id))
 			{
-				WorkerTokenSources[workerId].Cancel();
+				WorkerTokenSources[worker.Id].Cancel();
 			}
 		}
 
-		public void ClearResult(int workerId)
+		public void ClearResult(SearchWorker worker)
 		{
 			lock (SyncRoot)
 			{
-				foreach (var row in _foundFiles.Select(string.Format("wid = {0}", workerId)))
+				foreach (var row in _foundFiles.Select(string.Format("wid = {0}", worker.Id)))
 				{
 					_foundFiles.Rows.Remove(row);
 				}
 			}
 		}
 
-		public void ApplyFilter(int workerId)
+		public void ApplyFilter(SearchWorker worker)
 		{
 			lock (SyncRoot)
 			{
-				FoundFiles.RowFilter = string.Format("wid = {0}", workerId);
+				FoundFiles.RowFilter = string.Format("wid = {0}", worker.Id);
 			}
 		}
 
@@ -155,7 +138,6 @@ namespace SearcherCore
 			{
 				_foundFiles.Rows.Add(e.SearcherId, e.FileName);
 				SearchWorkers.Single(w => w.Id == e.SearcherId).FilesFound++;
-			//	Invalidate();
 			}
 		}
 
