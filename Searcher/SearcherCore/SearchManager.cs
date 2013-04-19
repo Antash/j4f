@@ -38,10 +38,10 @@ namespace SearcherCore
 				return string.Format("Searching '{0}' in '{1}' using {2}",
 					SearchPattern,
 					string.IsNullOrEmpty(RootDir) ? "everyware" : RootDir,
-					(PluginType)PlugType);
+					PlugName);
 			}
 
-			public int PlugType { get; set; }
+			public string PlugName { get; set; }
 			public string RootDir { get; set; }
 			public string SearchPattern { get; set; }
 			public bool IgnoreCase { get; set; }
@@ -59,6 +59,12 @@ namespace SearcherCore
 			public string Status { get; set; }
 		}
 
+		public class PluginInfo
+		{
+			public string Name { get; set; }
+			public string Info { get; set; }
+		}
+
 		#endregion
 
 		private readonly object _syncRoot;
@@ -68,7 +74,13 @@ namespace SearcherCore
 
 		public DataTable FoundFiles { get; private set; }
 		public BindingList<SearchWorker> SearchWorkers { get; private set; }
-		public BindingList<string> PluginList { get; private set; }
+		public BindingList<PluginInfo> PluginList { get; private set; }
+
+		private static readonly PluginInfo PDefault = new PluginInfo
+			{
+				Name = "File search",
+				Info = "Search files on local drive using wildcards: * ?"
+			};
 
 		public SearchManager()
 		{
@@ -80,17 +92,17 @@ namespace SearcherCore
 			FoundFiles.Columns.Add("fname", typeof(string));
 
 			SearchWorkers = new BindingList<SearchWorker>();
-			PluginList = new BindingList<string> { PluginType.NoPlugin.ToString() };
+			PluginList = new BindingList<PluginInfo> { PDefault };
 		}
 
 		public int LoadPlugins(string path)
 		{
 			var npl = _pluginMgr.LoadPlugins(path);
 			PluginList.Clear();
-			PluginList.Add(PluginType.NoPlugin.ToString());
-			foreach (var pl in _pluginMgr.GetPluginList().OrderBy(p => p))
+			PluginList.Add(PDefault);
+			foreach (var pl in _pluginMgr.GetPluginList())
 			{
-				PluginList.Add(pl.ToString());
+				PluginList.Add(new PluginInfo() {Name = pl});
 			}
 			return npl;
 		}
@@ -100,7 +112,7 @@ namespace SearcherCore
 			var workerTokenSource = new CancellationTokenSource();
 			var token = workerTokenSource.Token;
 
-			var searcher = CreateSearcher(token, (PluginType)param.PlugType);
+			var searcher = CreateSearcher(token, param.PlugName);
 			searcher.OnFileFound += searcher_OnFileFound;
 
 			SearchWorkers.Add(new SearchWorker
@@ -165,9 +177,9 @@ namespace SearcherCore
 			}
 		}
 
-		private FileSearcher CreateSearcher(CancellationToken ct, PluginType type)
+		private FileSearcher CreateSearcher(CancellationToken ct, string pluginName)
 		{
-			return new FileSearcher(_currWorkerId++, ct, _pluginMgr.GetProcessor(type));
+			return new FileSearcher(_currWorkerId++, ct, _pluginMgr.GetProcessor(pluginName));
 		}
 	}
 }

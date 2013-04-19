@@ -8,7 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2BFBDAF8-97A7-40D6-AD35-D7200FE4B78F}"
 	ProjectSection(SolutionItems) = preProject
 		readme.txt = readme.txt
-		task.txt = task.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NETSearcherPlug", "NETSearcherPlug\NETSearcherPlug.csproj", "{6CFF4195-A2D4-4CDC-8E2D-E90BAA8B97FD}"

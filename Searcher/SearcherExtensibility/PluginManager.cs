@@ -3,21 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace SearcherExtensibility
 {
 	public class PluginManager
 	{
-		[ImportMany(typeof(IFileProcessor), AllowRecomposition = true)]
-		private IEnumerable<Lazy<IFileProcessor, IFileProcessorMetadata>> Processors { get; set; }
-
-		public PluginManager()
-		{
-			//LoadPlugins(Path.GetDirectoryName(Assembly.GetAssembly(typeof(PluginManager)).Location));
-		}
+		[ImportMany(typeof (IFileProcessor), AllowRecomposition = true)]
+		private	IEnumerable<Lazy<IFileProcessor, IPluginMetadata>> _processors;
 
 		public int LoadPlugins(string path)
 		{
@@ -35,24 +28,24 @@ namespace SearcherExtensibility
 			{
 				Debug.WriteLine(ex.ToString());
 			}
-			return Processors.Count();
+			return _processors.Count();
 		}
 
-		public IEnumerable<PluginType> GetPluginList()
+		public IEnumerable<string> GetPluginList()
 		{
-			return Processors != null ?
-				from t in Processors.Select(p => p.Metadata.ProcessorType) select t :
-				Enumerable.Empty<PluginType>();
+			return _processors != null ?
+				from t in _processors.Select(p => p.Metadata.Name) select t :
+				Enumerable.Empty<string>();
 		}
 
-		public IFileProcessor GetProcessor(PluginType type)
+		public IFileProcessor GetProcessor(string pName)
 		{
-			if (Processors == null)
+			if (_processors == null)
 				return null;
 
-			var fProc = Processors.Where(p => p.Metadata.ProcessorType.Equals(type)).Select(l => l.Value).FirstOrDefault();
-			if (fProc == null && type != PluginType.NoPlugin)
-				throw new DllNotFoundException(String.Format("Plugin for {0} was not loaded!", type));
+			var fProc = _processors.Where(p => p.Metadata.Name.Equals(pName)).Select(l => l.Value).FirstOrDefault();
+			if (fProc == null)
+				throw new DllNotFoundException(String.Format("Plugin {0} was not loaded!", pName));
 
 			return fProc;
 		}
