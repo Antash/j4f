@@ -16,7 +16,7 @@ namespace XMLSearcherPlug
 		{
 			try
 			{
-				_regx = new Regex(string.Format(@"<^!\s*{0}", pat.Replace("*", @"\S*").Replace("?", @"\S?")),
+				_regx = new Regex(string.Format(@"<[^?!<>]{0}[\s>]", pat.Replace("*", @"\S*").Replace("?", @"\S?")),
 					RegexOptions.IgnoreCase);
 				return true;
 			}
