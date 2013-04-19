@@ -67,7 +67,7 @@ namespace SearcherCore
 
 		#endregion
 
-		private readonly object _syncRoot;
+		public readonly object SyncRoot;
 		private readonly PluginManager _pluginMgr = new PluginManager();
 		private IDictionary<int, CancellationTokenSource> WorkerTokenSources { get; set; }
 		private int _currWorkerId;
@@ -84,7 +84,7 @@ namespace SearcherCore
 
 		public SearchManager()
 		{
-			_syncRoot = new object();
+			SyncRoot = new object();
 			WorkerTokenSources = new Dictionary<int, CancellationTokenSource>();
 
 			FoundFiles = new DataTable();
@@ -150,18 +150,18 @@ namespace SearcherCore
 
 		public void ClearResult(int workerId)
 		{
-			lock (_syncRoot)
+			lock (SyncRoot)
 			{
-				foreach (var row in FoundFiles.Select(string.Format("wid = {0}", workerId)))
-				{
-					FoundFiles.Rows.Remove(row);
-				}
+					foreach (var row in FoundFiles.Select(string.Format("wid = {0}", workerId)))
+					{
+						FoundFiles.Rows.Remove(row);
+					}
 			}
 		}
 
 		public void ApplyFilter(int workerId)
 		{
-			lock (_syncRoot)
+			lock (SyncRoot)
 			{
 				FoundFiles.DefaultView.RowFilter = string.Format("wid = {0}", workerId);
 			}
@@ -169,7 +169,7 @@ namespace SearcherCore
 
 		private void searcher_OnFileFound(object sender, FileSearcher.FileFoundArgs e)
 		{
-			lock (_syncRoot)
+			lock (SyncRoot)
 			{
 				FoundFiles.Rows.Add(e.SearcherId, e.FileName);
 				SearchWorkers.Single(w => w.Id == e.SearcherId).FilesFound++;

@@ -71,15 +71,11 @@ namespace Searcher
 
 		private void dgwWorkers_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
-			var worker = dgwWorkers.Rows[e.RowIndex].DataBoundItem as SearchManager.SearchWorker;
+			int wId = (int)dgwWorkers.Rows[e.RowIndex].Cells[1].Value;
 			if (e.ColumnIndex == 0)
-			{
-				_sm.TerminateSearch(worker.Id);
-			}
+				_sm.TerminateSearch(wId);
 			else
-			{
-				_sm.ApplyFilter(worker.Id);
-			}
+				_sm.ApplyFilter(wId);
 		}
 
 		private void tsbHelp_Click(object sender, EventArgs e)
@@ -90,9 +86,9 @@ namespace Searcher
 
 		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
 		{
-			var worker = e.Row.DataBoundItem as SearchManager.SearchWorker;
-			_sm.TerminateSearch(worker.Id);
-			_sm.ClearResult(worker.Id);
+			int wId = (int)e.Row.Cells[1].Value;
+			_sm.TerminateSearch(wId);
+			_sm.ClearResult(wId);
 		}
 
 		private void dgwResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
