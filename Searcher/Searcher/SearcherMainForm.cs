@@ -81,17 +81,15 @@ namespace Searcher
 
 		private void dgwResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
-			var selectedDir = Path.GetDirectoryName(dgwResult.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
-			if (selectedDir != null && Directory.Exists(selectedDir))
-				new Process
-				{
-					StartInfo =
-						{
-							UseShellExecute = true,
-							FileName = @"explorer",
-							Arguments = selectedDir
-						}
-				}.Start();
+			new Process
+			{
+				StartInfo =
+					{
+						UseShellExecute = true,
+						FileName = @"explorer",
+						Arguments = string.Format("/select, \"{0}\"", dgwResult.Rows[e.RowIndex].Cells[e.ColumnIndex].Value)
+					}
+			}.Start();
 		}
 	}
 }
