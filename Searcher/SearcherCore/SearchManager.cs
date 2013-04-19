@@ -58,7 +58,9 @@ namespace SearcherCore
 		private IDictionary<int, CancellationTokenSource> WorkerTokenSources { get; set; }
 		private int _currWorkerId;
 
-		public DataTable FoundFiles { get; private set; }
+		private readonly DataTable _foundFiles;
+
+		public DataView FoundFiles { get; private set; }
 		public BindingList<SearchWorker> SearchWorkers { get; private set; }
 		public BindingList<string> PluginList { get; private set; }
 
@@ -67,10 +69,11 @@ namespace SearcherCore
 			SyncRoot = new object();
 			WorkerTokenSources = new Dictionary<int, CancellationTokenSource>();
 
-			FoundFiles = new DataTable();
-			FoundFiles.Columns.Add("wid", typeof(int));
-			FoundFiles.Columns.Add("fname", typeof(string));
+			_foundFiles = new DataTable();
+			_foundFiles.Columns.Add("wid", typeof(int));
+			_foundFiles.Columns.Add("fname", typeof(string));
 
+			FoundFiles = new DataView(_foundFiles);
 			SearchWorkers = new BindingList<SearchWorker>();
 			PluginList = new BindingList<string> { String.Empty };
 		}
@@ -106,6 +109,7 @@ namespace SearcherCore
 			try
 			{
 				await Task.Factory.StartNew(() => searcher.Search(param));
+				SearchWorkers.Single(w => w.Id == searcher.Id).Status = "Stopped";
 			}
 			catch (Exception)
 			{
@@ -115,7 +119,6 @@ namespace SearcherCore
 			finally
 			{
 				WorkerTokenSources.Remove(searcher.Id);
-				SearchWorkers.Single(w => w.Id == searcher.Id).Status = "Stopped";
 			}
 		}
 
@@ -131,10 +134,10 @@ namespace SearcherCore
 		{
 			lock (SyncRoot)
 			{
-					foreach (var row in FoundFiles.Select(string.Format("wid = {0}", workerId)))
-					{
-						FoundFiles.Rows.Remove(row);
-					}
+				foreach (var row in _foundFiles.Select(string.Format("wid = {0}", workerId)))
+				{
+					_foundFiles.Rows.Remove(row);
+				}
 			}
 		}
 
@@ -142,7 +145,7 @@ namespace SearcherCore
 		{
 			lock (SyncRoot)
 			{
-				FoundFiles.DefaultView.RowFilter = string.Format("wid = {0}", workerId);
+				FoundFiles.RowFilter = string.Format("wid = {0}", workerId);
 			}
 		}
 
@@ -150,9 +153,9 @@ namespace SearcherCore
 		{
 			lock (SyncRoot)
 			{
-				FoundFiles.Rows.Add(e.SearcherId, e.FileName);
+				_foundFiles.Rows.Add(e.SearcherId, e.FileName);
 				SearchWorkers.Single(w => w.Id == e.SearcherId).FilesFound++;
-				Invalidate();
+			//	Invalidate();
 			}
 		}
 
