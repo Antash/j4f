@@ -15,7 +15,6 @@ namespace Searcher
 			InitializeComponent();
 
 			_sm = manager;
-			_sm.OnInvalidate += _sm_OnInvalidate;
 
 			dgwResult.DataSource = _sm.FoundFiles;
 			dgwResult.Columns[0].Visible = false;
@@ -26,15 +25,6 @@ namespace Searcher
 
 			if (tscbSelPl.ComboBox != null)
 				tscbSelPl.ComboBox.DataSource = _sm.PluginList;
-		}
-
-		void _sm_OnInvalidate()
-		{
-			if (InvokeRequired)
-				dgwResult.Invoke(new MethodInvoker(() =>
-					{
-						dgwResult.InvalidateColumn(1);
-					}));
 		}
 
 		private void bSearch_Click(object sender, EventArgs e)
@@ -69,11 +59,11 @@ namespace Searcher
 
 		private void dgwWorkers_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
-			int wId = (int)dgwWorkers.Rows[e.RowIndex].Cells[1].Value;
+			var worker = (SearchWorker)dgwWorkers.Rows[e.RowIndex].DataBoundItem;
 			if (e.ColumnIndex == 0)
-				_sm.TerminateSearch(wId);
+				_sm.TerminateSearch(worker);
 			else
-				_sm.ApplyFilter(wId);
+				_sm.ApplyFilter(worker);
 		}
 
 		private void tsbHelp_Click(object sender, EventArgs e)
@@ -84,9 +74,9 @@ namespace Searcher
 
 		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
 		{
-			int wId = (int)e.Row.Cells[1].Value;
-			_sm.TerminateSearch(wId);
-			_sm.ClearResult(wId);
+			var worker = (SearchWorker)e.Row.DataBoundItem;
+			_sm.TerminateSearch(worker);
+			_sm.ClearResult(worker);
 		}
 
 		private void dgwResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
