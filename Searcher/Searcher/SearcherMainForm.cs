@@ -29,7 +29,7 @@ namespace Searcher
 
 		private void bSearch_Click(object sender, EventArgs e)
 		{
-			_sm.StartSearch(new SearchManager.FileSearchParam
+			_sm.StartSearch(new FileSearchParam
 			{
 				RootDir = tbRootDir.Text,
 				SearchPattern = tbSearchPattern.Text,

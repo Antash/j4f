@@ -12,31 +12,7 @@ namespace SearcherCore
 {
 	public class SearchManager
 	{
-		#region Nested types
-
-		public class FileSearchParam
-		{
-			public override string ToString()
-			{
-				return string.Format("Searching '{0}' in '{1}' using {2}",
-					SearchPattern,
-					string.IsNullOrEmpty(RootDir) ? "everyware" : RootDir,
-					PlugName);
-			}
-
-			public string PlugName { get; set; }
-			public string RootDir { get; set; }
-			public string SearchPattern { get; set; }
-			public bool IgnoreCase { get; set; }
-			public DateTime? CreationTimeFrom { get; set; }
-			public DateTime? CreationTimeTo { get; set; }
-			public long? SizeFrom { get; set; }
-			public long? SizeTo { get; set; }
-		}
-
-		#endregion
-
-		public readonly object SyncRoot;
+		private readonly object _syncRoot;
 		private readonly PluginManager _pluginMgr = new PluginManager();
 		private IDictionary<int, CancellationTokenSource> WorkerTokenSources { get; set; }
 		private int _currWorkerId;
@@ -49,7 +25,7 @@ namespace SearcherCore
 
 		public SearchManager()
 		{
-			SyncRoot = new object();
+			_syncRoot = new object();
 			WorkerTokenSources = new Dictionary<int, CancellationTokenSource>();
 
 			_foundFiles = new DataTable();
@@ -115,7 +91,7 @@ namespace SearcherCore
 
 		public void ClearResult(SearchWorker worker)
 		{
-			lock (SyncRoot)
+			lock (_syncRoot)
 			{
 				foreach (var row in _foundFiles.Select(string.Format("wid = {0}", worker.Id)))
 				{
@@ -126,7 +102,7 @@ namespace SearcherCore
 
 		public void ApplyFilter(SearchWorker worker)
 		{
-			lock (SyncRoot)
+			lock (_syncRoot)
 			{
 				FoundFiles.RowFilter = string.Format("wid = {0}", worker.Id);
 			}
@@ -134,7 +110,7 @@ namespace SearcherCore
 
 		private void searcher_OnFileFound(object sender, FileSearcher.FileFoundArgs e)
 		{
-			lock (SyncRoot)
+			lock (_syncRoot)
 			{
 				_foundFiles.Rows.Add(e.SearcherId, e.FileName);
 				SearchWorkers.Single(w => w.Id == e.SearcherId).FilesFound++;
