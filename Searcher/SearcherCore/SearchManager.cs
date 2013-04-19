@@ -68,15 +68,22 @@ namespace SearcherCore
 			try
 			{
 				await Task.Factory.StartNew(() => searcher.Search(param));
-				SearchWorkers.Single(w => w.Id == searcher.Id).Status = "Stopped";
 			}
-			catch (Exception)
+			catch (OperationCanceledException)
 			{
 				// handle task cancelation
 				Debug.WriteLine("Search canseled: {0}", searcher.Id);
 			}
+			catch (Exception ex)
+			{
+				// other exception occured
+				Debug.WriteLine(ex);
+			}
 			finally
 			{
+				var worker = SearchWorkers.SingleOrDefault(w => w.Id == searcher.Id);
+				if (worker != null)
+					worker.Status = "Stopped";
 				WorkerTokenSources.Remove(searcher.Id);
 			}
 		}
