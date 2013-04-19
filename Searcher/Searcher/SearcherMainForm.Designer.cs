@@ -182,6 +182,7 @@
 			// 
 			// tscbSelPl
 			// 
+			this.tscbSelPl.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.tscbSelPl.Name = "tscbSelPl";
 			this.tscbSelPl.Size = new System.Drawing.Size(121, 28);
 			// 
