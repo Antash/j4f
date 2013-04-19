@@ -88,7 +88,7 @@ namespace SearcherCore
 			var npl = _pluginMgr.LoadPlugins(path);
 			PluginList.Clear();
 			PluginList.Add(PluginType.NoPlugin.ToString());
-			foreach (var pl in _pluginMgr.GetPluginList())
+			foreach (var pl in _pluginMgr.GetPluginList().OrderBy(p => p))
 			{
 				PluginList.Add(pl.ToString());
 			}

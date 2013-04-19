@@ -279,7 +279,6 @@
 			this.dgwResult.Size = new System.Drawing.Size(610, 192);
 			this.dgwResult.TabIndex = 0;
 			this.dgwResult.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgwResult_CellMouseDoubleClick);
-			this.dgwResult.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgwResult_DataError);
 			// 
 			// fbdPlugin
 			// 
