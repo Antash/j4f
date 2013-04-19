@@ -46,9 +46,11 @@ namespace SearcherCore
 
 		private void FileFound(string fileName)
 		{
-			if (OnFileFound != null)
+			OnFileFoundDelegate handler = OnFileFound;
+			if (handler != null)
 			{
-				OnFileFound(this, new FileFoundArgs { 
+				handler(this, new FileFoundArgs
+				{ 
 					FileName = fileName,
 					SearcherId = Id
 				});
