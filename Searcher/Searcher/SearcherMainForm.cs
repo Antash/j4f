@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using SearcherCore;
 
@@ -25,7 +24,7 @@ namespace Searcher
 			dgwWorkers.Columns[0].DisplayIndex = dgwWorkers.Columns.Count - 1;
 			dgwWorkers.Columns[1].Visible = false;
 
-			if (tscbSelPl.ComboBox != null) 
+			if (tscbSelPl.ComboBox != null)
 				tscbSelPl.ComboBox.DataSource = _sm.PluginList;
 		}
 
@@ -70,19 +69,16 @@ namespace Searcher
 			}
 		}
 
-		private void dgwWorkers_CellClick(object sender, DataGridViewCellEventArgs e)
+		private void dgwWorkers_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (e.ColumnIndex == 0 && e.RowIndex != -1)
+			var worker = dgwWorkers.Rows[e.RowIndex].DataBoundItem as SearchManager.SearchWorker;
+			if (e.ColumnIndex == 0)
 			{
-				var worker = _sm.SearchWorkers.SingleOrDefault(w =>
-					w.Id == (int)dgwWorkers.Rows[e.RowIndex].Cells[1].Value);
-				if (worker != null)
-					_sm.TerminateSearch(worker.Id);
+				_sm.TerminateSearch(worker.Id);
 			}
 			else
 			{
-				if (e.RowIndex != -1)
-					_sm.ApplyFilter((int)dgwWorkers.Rows[e.RowIndex].Cells[1].Value);
+				_sm.ApplyFilter(worker.Id);
 			}
 		}
 
@@ -94,9 +90,9 @@ namespace Searcher
 
 		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
 		{
-			var wid = (int)e.Row.Cells[1].Value;
-			_sm.TerminateSearch(wid);
-			_sm.ClearResult(wid);
+			var worker = e.Row.DataBoundItem as SearchManager.SearchWorker;
+			_sm.TerminateSearch(worker.Id);
+			_sm.ClearResult(worker.Id);
 		}
 
 		private void dgwResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
