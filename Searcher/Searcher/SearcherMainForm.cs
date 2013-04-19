@@ -43,9 +43,7 @@ namespace Searcher
 			if (fbdPlugin.ShowDialog() == DialogResult.OK)
 			{
 				var loadedPlug = _sm.LoadPlugins(fbdPlugin.SelectedPath);
-				MessageBox.Show(loadedPlug == 0 ?
-					"No plugins loaded!" :
-					String.Format("{0} plugins loaded!", loadedPlug));
+				MessageBox.Show(string.Format("{0} plugins loaded", loadedPlug));
 			}
 		}
 
