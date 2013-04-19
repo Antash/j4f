@@ -59,7 +59,7 @@ namespace SearcherCore
 
 		#endregion
 
-		internal void Search(SearchManager.FileSearchParam param)
+		internal void Search(FileSearchParam param)
 		{
 			if (string.IsNullOrEmpty(param.RootDir))
 			{

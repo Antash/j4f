@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileSearcher.cs" />
+    <Compile Include="FileSearchParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchManager.cs" />
     <Compile Include="SearchWorker.cs" />
