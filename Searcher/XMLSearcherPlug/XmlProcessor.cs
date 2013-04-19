@@ -6,7 +6,7 @@ using SearcherExtensibility;
 
 namespace XMLSearcherPlug
 {
-	[FileProcessorMetadataAttribute(PluginType.XmlTag)]
+	[PluginMetadataAttribute("", "")]
 	public class XmlProcessor : IFileProcessor
 	{
 		public bool ProcessFile(string fileName, string param)

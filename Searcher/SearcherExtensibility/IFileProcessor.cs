@@ -4,34 +4,30 @@ using System.ComponentModel.Composition;
 
 namespace SearcherExtensibility
 {
-	public enum PluginType
-	{
-		NoPlugin = 0,
-		XmlTag,
-		DotNetType
-	}
-
 	public interface IFileProcessor
 	{
 		bool ProcessFile(string fileName, string param);
 		IEnumerable<string> FileExtentionPatterns { get; }
 	}
 
-	public interface IFileProcessorMetadata
+	public interface IPluginMetadata
 	{
-		PluginType ProcessorType { get; }
+		string Name { get; }
+		string Info { get; }
 	}
 
 	[MetadataAttribute]
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public class FileProcessorMetadataAttribute : ExportAttribute, IFileProcessorMetadata
+	public class PluginMetadataAttribute : ExportAttribute, IPluginMetadata
 	{
-		public FileProcessorMetadataAttribute(PluginType type)
+		public PluginMetadataAttribute(string name, string info)
 			: base(typeof(IFileProcessor))
 		{
-			ProcessorType = type;
+			Name = name;
+			Info = info;
 		}
 
-		public PluginType ProcessorType { get; set; }
+		public string Name { get; private set; }
+		public string Info { get; private set; }
 	}
 }
