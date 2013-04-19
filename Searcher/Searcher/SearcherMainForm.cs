@@ -10,7 +10,6 @@ namespace Searcher
 	public partial class SearcherMainForm : Form
 	{
 		private readonly SearchManager _sm;
-		private BindingSource bs;
 
 		public SearcherMainForm(SearchManager manager)
 		{
@@ -19,29 +18,26 @@ namespace Searcher
 			_sm = manager;
 			_sm.OnInvalidate += _sm_OnInvalidate;
 
-			bs = new BindingSource();
-			bs.DataSource = _sm.FoundFiles;
-			//dgwResult.DataSource = _sm.FoundFiles;
-			dgwResult.DataSource = bs;
+			dgwResult.DataSource = _sm.FoundFiles;
 			dgwResult.Columns[0].Visible = false;
 
 			dgwWorkers.DataSource = _sm.SearchWorkers;
 			dgwWorkers.Columns[0].DisplayIndex = dgwWorkers.Columns.Count - 1;
 			dgwWorkers.Columns[1].Visible = false;
 
-			tscbSelPl.ComboBox.DataSource = _sm.PluginList;
+			if (tscbSelPl.ComboBox != null) 
+				tscbSelPl.ComboBox.DataSource = _sm.PluginList;
 		}
 
 		void _sm_OnInvalidate()
 		{
-			dgwResult.Invoke(new MethodInvoker(() =>
-				{
-					bs.ResumeBinding();
-					dgwWorkers.InvalidateColumn(3);
-					dgwWorkers.InvalidateColumn(4);
-					dgwResult.InvalidateColumn(1);
-					bs.SuspendBinding();
-				}));
+			if (InvokeRequired)
+				dgwResult.Invoke(new MethodInvoker(() =>
+					{
+						dgwWorkers.InvalidateColumn(3);
+						dgwWorkers.InvalidateColumn(4);
+						dgwResult.InvalidateColumn(1);
+					}));
 		}
 
 		private void bSearch_Click(object sender, EventArgs e)
@@ -60,8 +56,8 @@ namespace Searcher
 			if (fbdPlugin.ShowDialog() == DialogResult.OK)
 			{
 				var loadedPlug = _sm.LoadPlugins(fbdPlugin.SelectedPath);
-				MessageBox.Show(loadedPlug == 0 ? 
-					"No plugins loaded!" : 
+				MessageBox.Show(loadedPlug == 0 ?
+					"No plugins loaded!" :
 					String.Format("{0} plugins loaded!", loadedPlug));
 			}
 		}
@@ -79,15 +75,14 @@ namespace Searcher
 			if (e.ColumnIndex == 0 && e.RowIndex != -1)
 			{
 				var worker = _sm.SearchWorkers.SingleOrDefault(w =>
-					w.Id == (int) dgwWorkers.Rows[e.RowIndex].Cells[1].Value);
+					w.Id == (int)dgwWorkers.Rows[e.RowIndex].Cells[1].Value);
 				if (worker != null)
 					_sm.TerminateSearch(worker.Id);
 			}
 			else
 			{
 				if (e.RowIndex != -1)
-					_sm.FoundFiles.DefaultView.RowFilter = string.Format("wid = {0}",
-						(int) dgwWorkers.Rows[e.RowIndex].Cells[1].Value);
+					_sm.ApplyFilter((int)dgwWorkers.Rows[e.RowIndex].Cells[1].Value);
 			}
 		}
 
@@ -105,17 +100,17 @@ namespace Searcher
 
 		private void dgwResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
-			var expl = new Process
+			var selectedDir = Path.GetDirectoryName(dgwResult.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+			if (selectedDir != null && Directory.Exists(selectedDir))
+				new Process
 				{
 					StartInfo =
 						{
 							UseShellExecute = true,
 							FileName = @"explorer",
-							Arguments = Path.GetDirectoryName(
-								dgwResult.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString())
+							Arguments = selectedDir
 						}
-				};
-			expl.Start();
+				}.Start();
 		}
 
 		private void dgwResult_DataError(object sender, DataGridViewDataErrorEventArgs e)

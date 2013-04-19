@@ -51,7 +51,7 @@ namespace SearcherCore
 			public long? SizeTo { get; set; }
 		}
 
-		public class SearchWorker 
+		public class SearchWorker
 		{
 			public int Id { get; set; }
 			public string Parameter { get; set; }
@@ -61,6 +61,7 @@ namespace SearcherCore
 
 		#endregion
 
+		private readonly object _syncRoot;
 		private readonly PluginManager _pluginMgr = new PluginManager();
 		private IDictionary<int, CancellationTokenSource> WorkerTokenSources { get; set; }
 		private int _currWorkerId;
@@ -71,6 +72,7 @@ namespace SearcherCore
 
 		public SearchManager()
 		{
+			_syncRoot = new object();
 			WorkerTokenSources = new Dictionary<int, CancellationTokenSource>();
 
 			FoundFiles = new DataTable();
@@ -78,7 +80,7 @@ namespace SearcherCore
 			FoundFiles.Columns.Add("fname", typeof(string));
 
 			SearchWorkers = new BindingList<SearchWorker>();
-			PluginList = new BindingList<string> {PluginType.NoPlugin.ToString()};
+			PluginList = new BindingList<string> { PluginType.NoPlugin.ToString() };
 		}
 
 		public int LoadPlugins(string path)
@@ -103,9 +105,9 @@ namespace SearcherCore
 
 			SearchWorkers.Add(new SearchWorker
 				{
-					Id = searcher.Id, 
-					FilesFound = 0, 
-					Parameter = param.ToString(), 
+					Id = searcher.Id,
+					FilesFound = 0,
+					Parameter = param.ToString(),
 					Status = "Running"
 				});
 			WorkerTokenSources.Add(searcher.Id, workerTokenSource);
@@ -136,17 +138,31 @@ namespace SearcherCore
 
 		public void ClearResult(int workerId)
 		{
-			foreach (var row in FoundFiles.Select(string.Format("wid = {0}", workerId)))
+			lock (_syncRoot)
 			{
-				FoundFiles.Rows.Remove(row);
+				foreach (var row in FoundFiles.Select(string.Format("wid = {0}", workerId)))
+				{
+					FoundFiles.Rows.Remove(row);
+				}
+			}
+		}
+
+		public void ApplyFilter(int workerId)
+		{
+			lock (_syncRoot)
+			{
+				FoundFiles.DefaultView.RowFilter = string.Format("wid = {0}", workerId);
 			}
 		}
 
 		private void searcher_OnFileFound(object sender, FileSearcher.FileFoundArgs e)
 		{
-			FoundFiles.Rows.Add(e.SearcherId, e.FileName);
-			SearchWorkers.Single(w => w.Id == e.SearcherId).FilesFound++;
-			Invalidate();
+			lock (_syncRoot)
+			{
+				FoundFiles.Rows.Add(e.SearcherId, e.FileName);
+				SearchWorkers.Single(w => w.Id == e.SearcherId).FilesFound++;
+				Invalidate();
+			}
 		}
 
 		private FileSearcher CreateSearcher(CancellationToken ct, PluginType type)
