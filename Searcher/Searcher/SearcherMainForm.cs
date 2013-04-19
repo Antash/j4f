@@ -57,6 +57,8 @@ namespace Searcher
 
 		private void dgwWorkers_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
+			if (e.RowIndex == -1)
+				return;
 			var worker = (SearchWorker)dgwWorkers.Rows[e.RowIndex].DataBoundItem;
 			if (e.ColumnIndex == 0)
 				_sm.TerminateSearch(worker);
