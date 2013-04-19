@@ -87,7 +87,7 @@ namespace SearcherCore
 					pattern += ".*";
 				SearchInternal(root, pattern, ListFiles);
 			}
-			else
+			else if (_proc.Init(pattern))
 			{
 				SearchInternal(root, pattern, ListFilesForPlugin);
 			}
@@ -124,7 +124,7 @@ namespace SearcherCore
 					StopCheck();
 					// Suppose short filename and creation timestamp concztenation is unique
 					var fileStamp = file.Name + file.CreationTime.Ticks;
-					if ((_proc == null || _proc.ProcessFile(file.FullName, pattern)) &&
+					if ((_proc == null || _proc.ProcessFile(file.FullName)) &&
 						!_foundFiles.Contains(fileStamp))
 					{
 						_foundFiles.Add(fileStamp);

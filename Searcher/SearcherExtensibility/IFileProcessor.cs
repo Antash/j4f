@@ -6,7 +6,8 @@ namespace SearcherExtensibility
 {
 	public interface IFileProcessor
 	{
-		bool ProcessFile(string fileName, string param);
+		bool Init(string pat);
+		bool ProcessFile(string fileName);
 		IEnumerable<string> FileExtentionPatterns { get; }
 	}
 
