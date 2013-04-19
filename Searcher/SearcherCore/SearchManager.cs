@@ -59,12 +59,6 @@ namespace SearcherCore
 			public string Status { get; set; }
 		}
 
-		public class PluginInfo
-		{
-			public string Name { get; set; }
-			public string Info { get; set; }
-		}
-
 		#endregion
 
 		public readonly object SyncRoot;
@@ -74,13 +68,7 @@ namespace SearcherCore
 
 		public DataTable FoundFiles { get; private set; }
 		public BindingList<SearchWorker> SearchWorkers { get; private set; }
-		public BindingList<PluginInfo> PluginList { get; private set; }
-
-		private static readonly PluginInfo PDefault = new PluginInfo
-			{
-				Name = "File search",
-				Info = "Search files on local drive using wildcards: * ?"
-			};
+		public BindingList<string> PluginList { get; private set; }
 
 		public SearchManager()
 		{
@@ -92,17 +80,17 @@ namespace SearcherCore
 			FoundFiles.Columns.Add("fname", typeof(string));
 
 			SearchWorkers = new BindingList<SearchWorker>();
-			PluginList = new BindingList<PluginInfo> { PDefault };
+			PluginList = new BindingList<string> { String.Empty };
 		}
 
 		public int LoadPlugins(string path)
 		{
 			var npl = _pluginMgr.LoadPlugins(path);
 			PluginList.Clear();
-			PluginList.Add(PDefault);
+			PluginList.Add(String.Empty);
 			foreach (var pl in _pluginMgr.GetPluginList())
 			{
-				PluginList.Add(new PluginInfo() {Name = pl});
+				PluginList.Add(pl);
 			}
 			return npl;
 		}

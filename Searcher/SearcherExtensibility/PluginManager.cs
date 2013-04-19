@@ -40,7 +40,7 @@ namespace SearcherExtensibility
 
 		public IFileProcessor GetProcessor(string pName)
 		{
-			if (_processors == null)
+			if (_processors == null || String.IsNullOrEmpty(pName))
 				return null;
 
 			var fProc = _processors.Where(p => p.Metadata.Name.Equals(pName)).Select(l => l.Value).FirstOrDefault();

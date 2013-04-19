@@ -45,7 +45,7 @@ namespace Searcher
 			{
 				RootDir = tbRootDir.Text,
 				SearchPattern = tbSearchPattern.Text,
-			//	PlugName = tscbSelPl.SelectedIndex
+				PlugName = tscbSelPl.SelectedItem.ToString()
 			});
 		}
 

@@ -13,21 +13,18 @@ namespace SearcherExtensibility
 	public interface IPluginMetadata
 	{
 		string Name { get; }
-		string Info { get; }
 	}
 
 	[MetadataAttribute]
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 	public class PluginMetadataAttribute : ExportAttribute, IPluginMetadata
 	{
-		public PluginMetadataAttribute(string name, string info)
+		public PluginMetadataAttribute(string name)
 			: base(typeof(IFileProcessor))
 		{
 			Name = name;
-			Info = info;
 		}
 
 		public string Name { get; private set; }
-		public string Info { get; private set; }
 	}
 }
