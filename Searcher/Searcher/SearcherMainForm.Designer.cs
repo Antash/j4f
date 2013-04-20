@@ -279,6 +279,7 @@
 			this.dgwResult.RowTemplate.Height = 24;
 			this.dgwResult.Size = new System.Drawing.Size(610, 192);
 			this.dgwResult.TabIndex = 0;
+			this.dgwResult.VirtualMode = true;
 			this.dgwResult.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgwResult_CellMouseDoubleClick);
 			// 
 			// fbdPlugin
