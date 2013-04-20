@@ -33,7 +33,7 @@ namespace SearcherCore
 
 		internal int Id { get; private set; }
 
-		#region File found event declaration
+		#region event declaration
 
 		internal class FileFoundArgs : EventArgs
 		{
@@ -57,6 +57,18 @@ namespace SearcherCore
 			}
 		}
 
+		internal delegate void OnSearchStartedDelegate(object sender, EventArgs e);
+		internal event OnSearchStartedDelegate OnSearchStarted;
+
+		private void SearchStarted()
+		{
+			OnSearchStartedDelegate handler = OnSearchStarted;
+			if (handler != null)
+			{
+				handler(this, new EventArgs());
+			}
+		}
+
 		#endregion
 
 		internal void Search(FileSearchParam param)
@@ -77,6 +89,7 @@ namespace SearcherCore
 
 		private void Search(DirectoryInfo root, string pattern)
 		{
+			SearchStarted();
 			if (_proc == null)
 			{
 				// search for any if pattern empty
