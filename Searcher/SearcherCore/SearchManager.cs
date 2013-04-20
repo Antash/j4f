@@ -30,6 +30,25 @@ namespace SearcherCore
 		public BindingList<SearchWorker> SearchWorkers { get; private set; }
 		public BindingList<string> PluginList { get; private set; }
 
+		#region event declaration
+
+		public event OnFileFoundDelegate OnFileFound;
+
+		private void FileFound(int workerId, string fileName)
+		{
+			OnFileFoundDelegate handler = OnFileFound;
+			if (handler != null)
+			{
+				handler(this, new FileFoundArgs
+				{
+					FileName = fileName,
+					SearcherId = workerId
+				});
+			}
+		}
+
+		#endregion
+
 		public SearchManager()
 		{
 			_syncRoot = new object();
@@ -131,7 +150,7 @@ namespace SearcherCore
 			}
 		}
 
-		private void searcher_OnFileFound(object sender, FileSearcher.FileFoundArgs e)
+		private void searcher_OnFileFound(object sender, FileFoundArgs e)
 		{
 			lock (_syncRoot)
 			{

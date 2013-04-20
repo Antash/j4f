@@ -2,6 +2,14 @@
 
 namespace SearcherCore
 {
+	public class FileFoundArgs : EventArgs
+	{
+		internal int SearcherId { get; set; }
+		internal string FileName { get; set; }
+	}
+
+	public delegate void OnFileFoundDelegate(object sender, FileFoundArgs e);
+
 	public class FileSearchParam
 	{
 		public override string ToString()
