@@ -66,6 +66,7 @@ namespace SearcherCore
 
 		internal void Search(FileSearchParam param)
 		{
+			SearchStarted();
 			if (string.IsNullOrEmpty(param.RootDir))
 			{
 				var drives = DriveInfo.GetDrives().Where(d => d.DriveType == DriveType.Fixed);
@@ -82,7 +83,6 @@ namespace SearcherCore
 
 		private void Search(DirectoryInfo root, string pattern)
 		{
-			SearchStarted();
 			if (_proc == null)
 			{
 				// search for any if pattern empty
