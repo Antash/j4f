@@ -4,8 +4,8 @@ namespace SearcherCore
 {
 	public class FileFoundArgs : EventArgs
 	{
-		internal int SearcherId { get; set; }
-		internal string FileName { get; set; }
+		public int SearcherId { get; set; }
+		public string FileName { get; set; }
 	}
 
 	public delegate void OnFileFoundDelegate(object sender, FileFoundArgs e);

@@ -154,8 +154,9 @@ namespace SearcherCore
 		{
 			lock (_syncRoot)
 			{
-				_foundFiles.Rows.Add(e.SearcherId, e.FileName);
+				//_foundFiles.Rows.Add(e.SearcherId, e.FileName);
 				SearchWorkers.Single(w => w.Id == e.SearcherId).FilesFound++;
+				FileFound(e.SearcherId, e.FileName);
 			}
 		}
 
