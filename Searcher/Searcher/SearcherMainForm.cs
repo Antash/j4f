@@ -12,7 +12,8 @@ namespace Searcher
 		private readonly SearchManager _sm;
 
 		private readonly IList<Tuple<int, string>> _foundFiles;
-		private const int GridRowsMargine = 10;
+		private const int GridRowsMargine = 20;
+		private int _lastVisibleResultRow;
 
 		public SearcherMainForm(SearchManager manager)
 		{
@@ -22,9 +23,6 @@ namespace Searcher
 
 			_sm = manager;
 			_sm.OnFileFound += _sm_OnFileFound;
-
-			//dgwResult.DataSource = _sm.FoundFiles;
-			//dgwResult.Columns[0].Visible = false;
 			
 			dgwResult.Columns.Add("fname", "fname");
 			dgwResult.CellValueNeeded += dgwResult_CellValueNeeded;
@@ -41,17 +39,17 @@ namespace Searcher
 		{
 			_foundFiles.Add(new Tuple<int, string>(e.SearcherId, e.FileName));
 
-			var visibleRowsCount = dgwResult.DisplayedRowCount(true);
-			var firstVisibleRowIndex = dgwResult.FirstDisplayedScrollingRowIndex;
-			var lastVisibleRowIndex = (firstVisibleRowIndex + visibleRowsCount) - 1;
-			if (dgwResult.RowCount < lastVisibleRowIndex + GridRowsMargine)
-				if (dgwResult.InvokeRequired)
-					dgwResult.Invoke((MethodInvoker)delegate { dgwResult.RowCount++; });
+			if (dgwResult.RowCount < _lastVisibleResultRow + GridRowsMargine && dgwResult.InvokeRequired)
+				dgwResult.Invoke((MethodInvoker)delegate
+					{
+						dgwResult.RowCount = _lastVisibleResultRow + GridRowsMargine;
+					});
 		}
 
 		void dgwResult_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
 		{
-			e.Value = _foundFiles[e.RowIndex].Item2;
+			if (_foundFiles.Count > e.RowIndex)
+				e.Value = _foundFiles[e.RowIndex].Item2;
 		}
 
 		private void bSearch_Click(object sender, EventArgs e)
@@ -89,18 +87,12 @@ namespace Searcher
 			var worker = (SearchWorker)dgwWorkers.Rows[e.RowIndex].DataBoundItem;
 			if (e.ColumnIndex == 0)
 				_sm.TerminateSearch(worker);
-			else
-			{
-				//_sm.ApplyFilter(worker);
-				//dgwResult.RowCount = _sm.FoundFiles.Table.Rows.Count;
-			}
 		}
 
 		private void dgwWorkers_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
 		{
 			var worker = (SearchWorker)e.Row.DataBoundItem;
 			_sm.TerminateSearch(worker);
-			//_sm.ClearResult(worker);
 		}
 
 		private void dgwResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -120,6 +112,31 @@ namespace Searcher
 		{
 			if (File.Exists("readme.txt"))
 				Process.Start("readme.txt");
+		}
+
+		private void dgwResult_Scroll(object sender, ScrollEventArgs e)
+		{
+			UpdateLastVisibleRow();
+		}
+
+		private void dgwResult_Resize(object sender, EventArgs e)
+		{
+			UpdateLastVisibleRow();
+		}
+
+		private void UpdateLastVisibleRow()
+		{
+			var visibleRowsCount = dgwResult.DisplayedRowCount(true);
+			var firstVisibleRowIndex = dgwResult.FirstDisplayedScrollingRowIndex;
+			_lastVisibleResultRow = (firstVisibleRowIndex + visibleRowsCount) - 1;
+		}
+
+		private void dgwWorkers_SelectionChanged(object sender, EventArgs e)
+		{
+			//dgwWorkers.SelectedRows
+			//dgwResult.Rows.
+				//_sm.ApplyFilter(worker);
+				//dgwResult.RowCount = _sm.FoundFiles.Table.Rows.Count;
 		}
 	}
 }

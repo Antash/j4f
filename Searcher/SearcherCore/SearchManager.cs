@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -24,9 +23,6 @@ namespace SearcherCore
 		private IDictionary<int, CancellationTokenSource> WorkerTokenSources { get; set; }
 		private int _currWorkerId;
 
-		private readonly DataTable _foundFiles;
-
-		public DataView FoundFiles { get; private set; }
 		public BindingList<SearchWorker> SearchWorkers { get; private set; }
 		public BindingList<string> PluginList { get; private set; }
 
@@ -53,12 +49,6 @@ namespace SearcherCore
 		{
 			_syncRoot = new object();
 			WorkerTokenSources = new Dictionary<int, CancellationTokenSource>();
-
-			_foundFiles = new DataTable();
-			_foundFiles.Columns.Add("wid", typeof(int));
-			_foundFiles.Columns.Add("fname", typeof(string));
-
-			FoundFiles = new DataView(_foundFiles);
 			SearchWorkers = new BindingList<SearchWorker>();
 			PluginList = new BindingList<string> { String.Empty };
 		}
@@ -123,30 +113,13 @@ namespace SearcherCore
 			}
 		}
 
-		public void ClearResult(SearchWorker worker)
-		{
-			lock (_syncRoot)
-			{
-				foreach (var row in _foundFiles.Select(string.Format("wid = {0}", worker.Id)))
-				{
-					_foundFiles.Rows.Remove(row);
-				}
-			}
-		}
-
-		public void ApplyFilter(SearchWorker worker)
-		{
-			lock (_syncRoot)
-			{
-				FoundFiles.RowFilter = string.Format("wid = {0}", worker.Id);
-			}
-		}
-
 		void searcher_OnSearchStarted(object sender, EventArgs e)
 		{
 			lock (_syncRoot)
 			{
-				SearchWorkers.Single(w => w.Id == ((FileSearcher)sender).Id).Status = WorkerStatus.Running.ToString();
+				var worker = SearchWorkers.SingleOrDefault(w => w.Id == ((FileSearcher)sender).Id);
+				if (worker != null)
+					worker.Status = WorkerStatus.Running.ToString();
 			}
 		}
 
@@ -154,8 +127,9 @@ namespace SearcherCore
 		{
 			lock (_syncRoot)
 			{
-				//_foundFiles.Rows.Add(e.SearcherId, e.FileName);
-				SearchWorkers.Single(w => w.Id == e.SearcherId).FilesFound++;
+				var worker = SearchWorkers.SingleOrDefault(w => w.Id == e.SearcherId);
+				if (worker != null)
+					worker.FilesFound++;
 				FileFound(e.SearcherId, e.FileName);
 			}
 		}
