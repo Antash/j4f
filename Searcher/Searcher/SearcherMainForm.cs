@@ -16,11 +16,11 @@ namespace Searcher
 
 			_sm = manager;
 
-			//var bs = new BindingSource {DataSource = _sm.FoundFiles};
-			//bs.DataSourceChanged += bs_DataSourceChanged;
-			//dgwResult.DataSource = bs;
 			//dgwResult.DataSource = _sm.FoundFiles;
-			//dgwResultdgwResult.Columns[0].Visible = false;
+			//dgwResult.Columns[0].Visible = false;
+			
+			dgwResult.Columns.Add("1", "a");
+			dgwResult.CellValueNeeded += dgwResult_CellValueNeeded;
 
 			dgwWorkers.DataSource = _sm.SearchWorkers;
 			dgwWorkers.Columns[0].DisplayIndex = dgwWorkers.Columns.Count - 1;
@@ -28,6 +28,11 @@ namespace Searcher
 
 			if (tscbSelPl.ComboBox != null)
 				tscbSelPl.ComboBox.DataSource = _sm.PluginList;
+		}
+
+		void dgwResult_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+		{
+			dgwResult[e.ColumnIndex, e.RowIndex].Value = _sm.FoundFiles.ToTable().Rows[e.RowIndex][e.ColumnIndex];
 		}
 
 		private void bSearch_Click(object sender, EventArgs e)
@@ -66,7 +71,10 @@ namespace Searcher
 			if (e.ColumnIndex == 0)
 				_sm.TerminateSearch(worker);
 			else
+			{
 				_sm.ApplyFilter(worker);
+				dgwResult.RowCount = _sm.FoundFiles.Table.Rows.Count;
+			}
 		}
 
 		private void tsbHelp_Click(object sender, EventArgs e)
