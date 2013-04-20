@@ -16,7 +16,7 @@ namespace Searcher
 		private readonly IList<Tuple<int, string>> _foundFiles;
 		private IList<int> _filter; 
 		private const int GridRowsMargine = 50;
-		private int _resultRowCount;
+		private int _lastVisibleRow;
  
 		public SearcherMainForm(SearchManager manager)
 		{
@@ -44,10 +44,10 @@ namespace Searcher
 			{
 				_foundFiles.Add(new Tuple<int, string>(e.SearcherId, e.FileName));
 			}
-			if (dgwResult.RowCount < _resultRowCount && dgwResult.InvokeRequired)
+			if (dgwResult.RowCount < _lastVisibleRow + GridRowsMargine && dgwResult.InvokeRequired)
 				dgwResult.Invoke((MethodInvoker)delegate
 					{
-						dgwResult.RowCount = _resultRowCount;
+						dgwResult.RowCount = _lastVisibleRow + GridRowsMargine;
 					});
 		}
 
@@ -140,7 +140,7 @@ namespace Searcher
 		{
 			var visibleRowsCount = dgwResult.DisplayedRowCount(true);
 			var firstVisibleRowIndex = dgwResult.FirstDisplayedScrollingRowIndex;
-			_resultRowCount = (firstVisibleRowIndex + visibleRowsCount) + GridRowsMargine;
+			_lastVisibleRow = firstVisibleRowIndex + visibleRowsCount;
 		}
 
 		private void dgwWorkers_SelectionChanged(object sender, EventArgs e)
@@ -152,6 +152,7 @@ namespace Searcher
 		{
 			_filter = new List<int>(ids);
 			dgwResult.Rows.Clear();
+			UpdateRowCount();
 		}
 
 		private void DeleteWorkerResult(int id)
@@ -161,6 +162,7 @@ namespace Searcher
 				_foundFiles.Remove(fl);
 			}
 			dgwResult.Rows.Clear();
+			UpdateRowCount();
 		}
 	}
 }
