@@ -152,7 +152,6 @@ namespace Searcher
 		{
 			_filter = new List<int>(ids);
 			dgwResult.Rows.Clear();
-			UpdateRowCount();
 		}
 
 		private void DeleteWorkerResult(int id)
@@ -162,7 +161,6 @@ namespace Searcher
 				_foundFiles.Remove(fl);
 			}
 			dgwResult.Rows.Clear();
-			UpdateRowCount();
 		}
 	}
 }
