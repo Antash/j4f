@@ -52,6 +52,7 @@
 			this.dgwResult = new System.Windows.Forms.DataGridView();
 			this.fbdPlugin = new System.Windows.Forms.FolderBrowserDialog();
 			this.fbdSearch = new System.Windows.Forms.FolderBrowserDialog();
+			this.fname = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -274,6 +275,8 @@
 			this.dgwResult.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 			this.dgwResult.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dgwResult.ColumnHeadersVisible = false;
+			this.dgwResult.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.fname});
 			this.dgwResult.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dgwResult.Location = new System.Drawing.Point(0, 0);
 			this.dgwResult.Name = "dgwResult";
@@ -297,6 +300,12 @@
 			this.fbdSearch.Description = "Select search folder";
 			this.fbdSearch.RootFolder = System.Environment.SpecialFolder.MyComputer;
 			this.fbdSearch.ShowNewFolderButton = false;
+			// 
+			// fname
+			// 
+			this.fname.HeaderText = "fname";
+			this.fname.Name = "fname";
+			this.fname.ReadOnly = true;
 			// 
 			// SearcherMainForm
 			// 
@@ -345,5 +354,6 @@
 		private System.Windows.Forms.ToolStripButton tsbHelp;
 		private System.Windows.Forms.DataGridView dgwResult;
 		private System.Windows.Forms.DataGridViewButtonColumn control;
+		private System.Windows.Forms.DataGridViewTextBoxColumn fname;
 	}
 }
