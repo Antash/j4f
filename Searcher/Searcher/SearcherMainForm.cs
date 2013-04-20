@@ -16,8 +16,11 @@ namespace Searcher
 
 			_sm = manager;
 
-			dgwResult.DataSource = _sm.FoundFiles;
-			dgwResult.Columns[0].Visible = false;
+			//var bs = new BindingSource {DataSource = _sm.FoundFiles};
+			//bs.DataSourceChanged += bs_DataSourceChanged;
+			//dgwResult.DataSource = bs;
+			//dgwResult.DataSource = _sm.FoundFiles;
+			//dgwResultdgwResult.Columns[0].Visible = false;
 
 			dgwWorkers.DataSource = _sm.SearchWorkers;
 			dgwWorkers.Columns[0].DisplayIndex = dgwWorkers.Columns.Count - 1;

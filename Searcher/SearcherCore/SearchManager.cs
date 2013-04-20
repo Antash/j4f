@@ -12,6 +12,13 @@ namespace SearcherCore
 {
 	public class SearchManager
 	{
+		private enum WorkerStatus
+		{
+			Pending,
+			Running,
+			Stopped
+		}
+
 		private readonly object _syncRoot;
 		private readonly PluginManager _pluginMgr = new PluginManager();
 		private IDictionary<int, CancellationTokenSource> WorkerTokenSources { get; set; }
@@ -55,6 +62,7 @@ namespace SearcherCore
 			var token = workerTokenSource.Token;
 
 			var searcher = CreateSearcher(token, param.PlugName);
+			searcher.OnSearchStarted += searcher_OnSearchStarted;
 			searcher.OnFileFound += searcher_OnFileFound;
 
 			SearchWorkers.Add(new SearchWorker
@@ -62,7 +70,7 @@ namespace SearcherCore
 					Id = searcher.Id,
 					FilesFound = 0,
 					Parameter = param.ToString(),
-					Status = "Running"
+					Status = WorkerStatus.Pending.ToString()
 				});
 			WorkerTokenSources.Add(searcher.Id, workerTokenSource);
 			try
@@ -83,7 +91,7 @@ namespace SearcherCore
 			{
 				var worker = SearchWorkers.SingleOrDefault(w => w.Id == searcher.Id);
 				if (worker != null)
-					worker.Status = "Stopped";
+					worker.Status = WorkerStatus.Stopped.ToString();
 				WorkerTokenSources.Remove(searcher.Id);
 			}
 		}
@@ -112,6 +120,14 @@ namespace SearcherCore
 			lock (_syncRoot)
 			{
 				FoundFiles.RowFilter = string.Format("wid = {0}", worker.Id);
+			}
+		}
+
+		void searcher_OnSearchStarted(object sender, EventArgs e)
+		{
+			lock (_syncRoot)
+			{
+				SearchWorkers.Single(w => w.Id == ((FileSearcher)sender).Id).Status = WorkerStatus.Running.ToString();
 			}
 		}
 
