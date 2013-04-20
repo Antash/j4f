@@ -35,13 +35,6 @@ namespace SearcherCore
 
 		#region event declaration
 
-		internal class FileFoundArgs : EventArgs
-		{
-			internal int SearcherId { get; set; }
-			internal string FileName { get; set; }
-		}
-
-		internal delegate void OnFileFoundDelegate(object sender, FileFoundArgs e);
 		internal event OnFileFoundDelegate OnFileFound;
 
 		private void FileFound(string fileName)
