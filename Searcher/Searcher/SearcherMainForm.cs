@@ -152,6 +152,7 @@ namespace Searcher
 		{
 			_filter = new List<int>(ids);
 			dgwResult.Rows.Clear();
+			dgwResult.RowCount = GridRowsMargine;
 		}
 
 		private void DeleteWorkerResult(int id)
@@ -161,6 +162,7 @@ namespace Searcher
 				_foundFiles.Remove(fl);
 			}
 			dgwResult.Rows.Clear();
+			dgwResult.RowCount = GridRowsMargine;
 		}
 	}
 }
