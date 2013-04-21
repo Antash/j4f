@@ -45,7 +45,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbSearchPattern.Location = new System.Drawing.Point(87, 6);
 			this.tbSearchPattern.Name = "tbSearchPattern";
-			this.tbSearchPattern.Size = new System.Drawing.Size(321, 22);
+			this.tbSearchPattern.Size = new System.Drawing.Size(336, 22);
 			this.tbSearchPattern.TabIndex = 13;
 			// 
 			// lSearchPattern
@@ -63,7 +63,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbRootDir.Location = new System.Drawing.Point(87, 35);
 			this.tbRootDir.Name = "tbRootDir";
-			this.tbRootDir.Size = new System.Drawing.Size(321, 22);
+			this.tbRootDir.Size = new System.Drawing.Size(336, 22);
 			this.tbRootDir.TabIndex = 15;
 			// 
 			// bSelDir
@@ -88,7 +88,7 @@
 			this.cbPlugin.FormattingEnabled = true;
 			this.cbPlugin.Location = new System.Drawing.Point(65, 62);
 			this.cbPlugin.Name = "cbPlugin";
-			this.cbPlugin.Size = new System.Drawing.Size(104, 24);
+			this.cbPlugin.Size = new System.Drawing.Size(134, 24);
 			this.cbPlugin.TabIndex = 26;
 			// 
 			// label5
@@ -105,7 +105,7 @@
 			this.cbRecursive.AutoSize = true;
 			this.cbRecursive.Checked = true;
 			this.cbRecursive.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbRecursive.Location = new System.Drawing.Point(310, 64);
+			this.cbRecursive.Location = new System.Drawing.Point(333, 64);
 			this.cbRecursive.Name = "cbRecursive";
 			this.cbRecursive.Size = new System.Drawing.Size(93, 21);
 			this.cbRecursive.TabIndex = 28;
@@ -115,7 +115,7 @@
 			// cbFollowHidden
 			// 
 			this.cbFollowHidden.AutoSize = true;
-			this.cbFollowHidden.Location = new System.Drawing.Point(182, 65);
+			this.cbFollowHidden.Location = new System.Drawing.Point(205, 65);
 			this.cbFollowHidden.Name = "cbFollowHidden";
 			this.cbFollowHidden.Size = new System.Drawing.Size(122, 21);
 			this.cbFollowHidden.TabIndex = 29;
@@ -135,7 +135,7 @@
 			this.Controls.Add(this.lSearchPattern);
 			this.Controls.Add(this.tbSearchPattern);
 			this.Name = "SearchParamEditor";
-			this.Size = new System.Drawing.Size(411, 95);
+			this.Size = new System.Drawing.Size(426, 93);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
