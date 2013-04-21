@@ -182,12 +182,12 @@
 		private System.Windows.Forms.Button bSelDir;
 		private System.Windows.Forms.FolderBrowserDialog fbdSearch;
 		private System.Windows.Forms.CheckBox cbIgnoreCase;
-		private System.Windows.Forms.ComboBox cbPlugin;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.CheckBox cbRecursive;
 		private System.Windows.Forms.CheckBox cbFollowHidden;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ComboBox cbFilter;
+		internal System.Windows.Forms.ComboBox cbPlugin;
 
 	}
 }

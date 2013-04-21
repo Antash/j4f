@@ -19,8 +19,8 @@ namespace Searcher
 					{
 						RootDir = tbRootDir.Text,
 						SearchPattern = tbSearchPattern.Text,
-						PlugName = cbPlugin.SelectedText,
-						Filter = cbFilter.SelectedText,
+						PlugName = cbPlugin.SelectedItem.ToString(),
+						Filter = cbFilter.SelectedIndex.ToString(),
 						IgnoreCase = cbIgnoreCase.Checked,
 						SearchInHiden = cbFollowHidden.Checked,
 						IsRecursive = cbRecursive.Checked
@@ -30,8 +30,8 @@ namespace Searcher
 			{
 				tbRootDir.Text = value.RootDir;
 				tbSearchPattern.Text = value.SearchPattern;
-				cbPlugin.SelectedText = value.PlugName;
-				cbFilter.SelectedText = value.Filter;
+				cbPlugin.SelectedItem = value.PlugName;
+				cbFilter.SelectedItem = value.Filter;
 				cbIgnoreCase.Checked = value.IgnoreCase;
 				cbFollowHidden.Checked = value.SearchInHiden;
 				cbRecursive.Checked = value.IsRecursive;
