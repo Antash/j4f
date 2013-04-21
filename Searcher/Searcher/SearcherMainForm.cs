@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,7 +12,8 @@ namespace Searcher
 	{
 		private readonly SearchManager _sm;
 
-		private readonly IList<Tuple<int, string>> _foundFiles;
+		private readonly object _syncRoot;
+		private IList<Tuple<int, string>> _foundFiles;
 		private IList<int> _filter;
 
 		private const int ResultRowMargine = 3;
@@ -22,6 +22,7 @@ namespace Searcher
 		{
 			InitializeComponent();
 
+			_syncRoot = new object();
 			_foundFiles = new List<Tuple<int, string>>();
 			_filter = new List<int>();
 
@@ -40,7 +41,7 @@ namespace Searcher
 
 		private void _sm_OnFileFound(object sender, FileFoundArgs e)
 		{
-			lock (((ICollection)_foundFiles).SyncRoot)
+			lock (_syncRoot)
 			{
 				_foundFiles.Add(new Tuple<int, string>(e.SearcherId, e.FileName));
 			}
@@ -55,7 +56,7 @@ namespace Searcher
 
 		void dgwResult_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
 		{
-			lock (((ICollection) _foundFiles).SyncRoot)
+			lock (_syncRoot)
 			{
 				var filt = _foundFiles.Where(f => _filter.Contains(f.Item1)).ToList();
 				if (filt.Count > e.RowIndex)
@@ -156,9 +157,9 @@ namespace Searcher
 
 		private void DeleteWorkerResult(int id)
 		{
-			foreach (var fl in _foundFiles.Where(f => f.Item1 == id).ToList())
+			lock (_syncRoot)
 			{
-				_foundFiles.Remove(fl);
+				_foundFiles = _foundFiles.Where(f => f.Item1 != id).ToList();
 			}
 			dgwResult.Rows.Clear();
 		}
