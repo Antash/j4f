@@ -38,7 +38,7 @@ namespace Searcher
 			searchParamEditor.cbPlugin.DataSource = _sm.PluginList;
 		}
 
-		void _sm_OnFileFound(object sender, FileFoundArgs e)
+		private void _sm_OnFileFound(object sender, FileFoundArgs e)
 		{
 			lock (((ICollection)_foundFiles).SyncRoot)
 			{
