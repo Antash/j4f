@@ -40,10 +40,10 @@
 			this.bSearch = new System.Windows.Forms.Button();
 			this.fbdPlugin = new System.Windows.Forms.FolderBrowserDialog();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.searchParamEditor = new Searcher.SearchParamEditor();
 			this.tsbLoadPlugins = new System.Windows.Forms.ToolStripButton();
 			this.tsbHelp = new System.Windows.Forms.ToolStripButton();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.searchParamEditor = new Searcher.SearchParamEditor();
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -148,6 +148,7 @@
 			this.dgwResult.TabIndex = 0;
 			this.dgwResult.VirtualMode = true;
 			this.dgwResult.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgwResult_CellMouseDoubleClick);
+			this.dgwResult.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgwResult_CellValueNeeded);
 			this.dgwResult.Scroll += new System.Windows.Forms.ScrollEventHandler(this.dgwResult_Scroll);
 			this.dgwResult.Resize += new System.EventHandler(this.dgwResult_Resize);
 			// 
@@ -183,16 +184,6 @@
 			this.panel1.Size = new System.Drawing.Size(607, 99);
 			this.panel1.TabIndex = 14;
 			// 
-			// searchParamEditor
-			// 
-			this.searchParamEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.searchParamEditor.Location = new System.Drawing.Point(3, 3);
-			this.searchParamEditor.Name = "searchParamEditor";
-			this.searchParamEditor.Size = new System.Drawing.Size(520, 93);
-			this.searchParamEditor.TabIndex = 9;
-			// 
 			// tsbLoadPlugins
 			// 
 			this.tsbLoadPlugins.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -223,6 +214,16 @@
 			this.toolStrip1.Size = new System.Drawing.Size(607, 27);
 			this.toolStrip1.TabIndex = 9;
 			this.toolStrip1.Text = "toolStrip1";
+			// 
+			// searchParamEditor
+			// 
+			this.searchParamEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.searchParamEditor.Location = new System.Drawing.Point(3, 3);
+			this.searchParamEditor.Name = "searchParamEditor";
+			this.searchParamEditor.Size = new System.Drawing.Size(520, 93);
+			this.searchParamEditor.TabIndex = 9;
 			// 
 			// SearcherMainForm
 			// 
