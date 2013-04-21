@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using SearcherCore;
 
@@ -25,13 +18,23 @@ namespace Searcher
 				return new FileSearchParam
 					{
 						RootDir = tbRootDir.Text,
-						SearchPattern = tbSearchPattern.Text
+						SearchPattern = tbSearchPattern.Text,
+						PlugName = cbPlugin.SelectedText,
+						Filter = cbFilter.SelectedText,
+						IgnoreCase = cbIgnoreCase.Checked,
+						SearchInHiden = cbFollowHidden.Checked,
+						IsRecursive = cbRecursive.Checked
 					};
 			}
 			set
 			{
 				tbRootDir.Text = value.RootDir;
 				tbSearchPattern.Text = value.SearchPattern;
+				cbPlugin.SelectedText = value.PlugName;
+				cbFilter.SelectedText = value.Filter;
+				cbIgnoreCase.Checked = value.IgnoreCase;
+				cbFollowHidden.Checked = value.SearchInHiden;
+				cbRecursive.Checked = value.IsRecursive;
 			}
 		}
 
