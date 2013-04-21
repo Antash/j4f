@@ -15,8 +15,6 @@ namespace Searcher
 
 		private readonly IList<Tuple<int, string>> _foundFiles;
 		private IList<int> _filter; 
-		private const int GridRowsMargine = 50;
-		private int _lastVisibleRow;
  
 		public SearcherMainForm(SearchManager manager)
 		{
@@ -46,10 +44,10 @@ namespace Searcher
 			{
 				_foundFiles.Add(new Tuple<int, string>(e.SearcherId, e.FileName));
 			}
-			if (dgwResult.RowCount < _lastVisibleRow + GridRowsMargine && dgwResult.InvokeRequired)
+			if (dgwResult.RowCount < PossibleLastDisplayedRowCount() && dgwResult.InvokeRequired)
 				dgwResult.Invoke((MethodInvoker)delegate
 					{
-						dgwResult.RowCount = _lastVisibleRow + GridRowsMargine;
+						dgwResult.RowCount++;
 					});
 		}
 
@@ -112,32 +110,43 @@ namespace Searcher
 
 		private void dgwResult_Scroll(object sender, ScrollEventArgs e)
 		{
-			UpdateRowCount();
+			if (dgwResult.RowCount < PossibleLastDisplayedRowCount() &&
+				dgwResult.RowCount < ResultCount())
+				dgwResult.RowCount++;
+		}
+
+		private int ResultCount()
+		{
+			return dgwWorkers.SelectedRows.Cast<DataGridViewRow>().Sum(w =>
+				((SearchWorker) w.DataBoundItem).FilesFound);
 		}
 
 		private void dgwResult_Resize(object sender, EventArgs e)
 		{
-			UpdateRowCount();
+			if (dgwResult.RowCount < PossibleLastDisplayedRowCount() &&
+				dgwResult.RowCount < ResultCount())
+				dgwResult.RowCount++;
 		}
 
-		private void UpdateRowCount()
+		private int PossibleLastDisplayedRowCount()
 		{
-			var visibleRowsCount = dgwResult.DisplayedRowCount(true);
-			var firstVisibleRowIndex = dgwResult.FirstDisplayedScrollingRowIndex;
-			_lastVisibleRow = firstVisibleRowIndex + visibleRowsCount;
+			return dgwResult.DisplayRectangle.Height/dgwResult.RowTemplate.Height + dgwResult.FirstDisplayedScrollingRowIndex + 1;
 		}
 
 		private void dgwWorkers_SelectionChanged(object sender, EventArgs e)
 		{
-			searchParamEditor.SearchParameters = ((SearchWorker) dgwWorkers.SelectedRows[0].DataBoundItem).Parameter;
-			FilterResult(dgwWorkers.SelectedRows.Cast<DataGridViewRow>().Select(r => ((SearchWorker)r.DataBoundItem).Id));
+			if (dgwWorkers.SelectedRows.Count > 0)
+			{
+				searchParamEditor.SearchParameters = ((SearchWorker) dgwWorkers.SelectedRows[0].DataBoundItem).Parameter;
+				FilterResult(dgwWorkers.SelectedRows.Cast<DataGridViewRow>().Select(r => ((SearchWorker) r.DataBoundItem).Id));
+			}
 		}
 
 		private void FilterResult(IEnumerable<int> ids)
 		{
 			_filter = new List<int>(ids);
 			dgwResult.Rows.Clear();
-			dgwResult.RowCount = GridRowsMargine;
+			dgwResult.RowCount = Math.Min(ResultCount(), PossibleLastDisplayedRowCount());
 		}
 
 		private void DeleteWorkerResult(int id)
@@ -147,7 +156,6 @@ namespace Searcher
 				_foundFiles.Remove(fl);
 			}
 			dgwResult.Rows.Clear();
-			dgwResult.RowCount = GridRowsMargine;
 		}
 
 		private void bSearch_Click(object sender, EventArgs e)
