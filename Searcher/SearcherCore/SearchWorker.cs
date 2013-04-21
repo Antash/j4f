@@ -17,11 +17,10 @@ namespace SearcherCore
 		public string PlugName { get; set; }
 		public string RootDir { get; set; }
 		public string SearchPattern { get; set; }
+		public string Filter { get; set; }
 		public bool IgnoreCase { get; set; }
-		public DateTime? CreationTimeFrom { get; set; }
-		public DateTime? CreationTimeTo { get; set; }
-		public long? SizeFrom { get; set; }
-		public long? SizeTo { get; set; }
+		public bool IsRecursive { get; set; }
+		public bool SearchInHiden { get; set; }
 	}
 
 	public class SearchWorker : INotifyPropertyChanged

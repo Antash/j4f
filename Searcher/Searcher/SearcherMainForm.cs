@@ -37,8 +37,8 @@ namespace Searcher
 			dgwWorkers.Columns[0].DisplayIndex = dgwWorkers.Columns.Count - 1;
 			dgwWorkers.Columns[1].Visible = false;
 
-			if (tscbSelPl.ComboBox != null)
-				tscbSelPl.ComboBox.DataSource = _sm.PluginList;
+			//if (tscbSelPl.ComboBox != null)
+			//	tscbSelPl.ComboBox.DataSource = _sm.PluginList;
 		}
 
 		void _sm_OnFileFound(object sender, FileFoundArgs e)
