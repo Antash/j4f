@@ -31,8 +31,6 @@ namespace Searcher
 
 		private void SearcherMainForm_Load(object sender, EventArgs e)
 		{
-			dgwResult.CellValueNeeded += dgwResult_CellValueNeeded;
-
 			dgwWorkers.DataSource = _sm.SearchWorkers;
 			dgwWorkers.Columns[0].DisplayIndex = dgwWorkers.Columns.Count - 1;
 			dgwWorkers.Columns[1].Visible = false;
@@ -53,6 +51,8 @@ namespace Searcher
 					});
 		}
 
+		#region Result grid event handlers
+
 		void dgwResult_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
 		{
 			lock (((ICollection) _foundFiles).SyncRoot)
@@ -65,15 +65,33 @@ namespace Searcher
 			}
 		}
 
-		private void tsbLoadPlugins_Click(object sender, EventArgs e)
+		private void dgwResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
-			fbdPlugin.SelectedPath = Application.StartupPath;
-			if (fbdPlugin.ShowDialog() == DialogResult.OK)
+			new Process
 			{
-				var loadedPlug = _sm.LoadPlugins(fbdPlugin.SelectedPath);
-				MessageBox.Show(string.Format("{0} plugins loaded", loadedPlug));
-			}
+				StartInfo =
+				{
+					UseShellExecute = true,
+					FileName = @"explorer",
+					Arguments = string.Format("/select, \"{0}\"", dgwResult.Rows[e.RowIndex].Cells[e.ColumnIndex].Value)
+				}
+			}.Start();
 		}
+
+		private void dgwResult_Resize(object sender, EventArgs e)
+		{
+			ActualizeRowCount();
+		}
+
+		private void dgwResult_Scroll(object sender, ScrollEventArgs e)
+		{
+			if (NewRowNeeded())
+				dgwResult.RowCount++;
+		}
+
+		#endregion
+
+		#region Workers grid event handlers
 
 		private void dgwWorkers_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
@@ -96,30 +114,16 @@ namespace Searcher
 			ActualizeRowCount();
 		}
 
-		private void dgwResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+		private void dgwWorkers_SelectionChanged(object sender, EventArgs e)
 		{
-			new Process
+			if (dgwWorkers.SelectedRows.Count > 0)
 			{
-				StartInfo =
-					{
-						UseShellExecute = true,
-						FileName = @"explorer",
-						Arguments = string.Format("/select, \"{0}\"", dgwResult.Rows[e.RowIndex].Cells[e.ColumnIndex].Value)
-					}
-			}.Start();
+				searchParamEditor.SearchParameters = ((SearchWorker)dgwWorkers.SelectedRows[0].DataBoundItem).Parameter;
+				FilterResult(dgwWorkers.SelectedRows.Cast<DataGridViewRow>().Select(r => ((SearchWorker)r.DataBoundItem).Id));
+			}
 		}
 
-		private void tsbHelp_Click(object sender, EventArgs e)
-		{
-			if (File.Exists("readme.txt"))
-				Process.Start("readme.txt");
-		}
-
-		private void dgwResult_Scroll(object sender, ScrollEventArgs e)
-		{
-			if (NewRowNeeded())
-				dgwResult.RowCount++;
-		}
+		#endregion
 
 		private bool NewRowNeeded()
 		{
@@ -137,24 +141,10 @@ namespace Searcher
 				((SearchWorker) w.DataBoundItem).FilesFound);
 		}
 
-		private void dgwResult_Resize(object sender, EventArgs e)
-		{
-			ActualizeRowCount();
-		}
-
 		private int PossibleLastDisplayedRowCount()
 		{
 			return dgwResult.DisplayRectangle.Height/dgwResult.RowTemplate.Height + 
 				dgwResult.FirstDisplayedScrollingRowIndex + ResultRowMargine;
-		}
-
-		private void dgwWorkers_SelectionChanged(object sender, EventArgs e)
-		{
-			if (dgwWorkers.SelectedRows.Count > 0)
-			{
-				searchParamEditor.SearchParameters = ((SearchWorker) dgwWorkers.SelectedRows[0].DataBoundItem).Parameter;
-				FilterResult(dgwWorkers.SelectedRows.Cast<DataGridViewRow>().Select(r => ((SearchWorker) r.DataBoundItem).Id));
-			}
 		}
 
 		private void FilterResult(IEnumerable<int> ids)
@@ -173,9 +163,25 @@ namespace Searcher
 			dgwResult.Rows.Clear();
 		}
 
+		private void tsbHelp_Click(object sender, EventArgs e)
+		{
+			if (File.Exists("readme.txt"))
+				Process.Start("readme.txt");
+		}
+
 		private void bSearch_Click(object sender, EventArgs e)
 		{
 			_sm.StartSearch(searchParamEditor.SearchParameters);
+		}
+
+		private void tsbLoadPlugins_Click(object sender, EventArgs e)
+		{
+			fbdPlugin.SelectedPath = Application.StartupPath;
+			if (fbdPlugin.ShowDialog() == DialogResult.OK)
+			{
+				var loadedPlug = _sm.LoadPlugins(fbdPlugin.SelectedPath);
+				MessageBox.Show(string.Format("{0} plugins loaded", loadedPlug));
+			}
 		}
 	}
 }
