@@ -78,7 +78,7 @@ namespace SearcherCore
 				{
 					Id = searcher.Id,
 					FilesFound = 0,
-					Parameter = param.ToString(),
+					Parameter = param,
 					Status = WorkerStatus.Pending.ToString()
 				});
 			WorkerTokenSources.Add(searcher.Id, workerTokenSource);

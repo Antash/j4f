@@ -1,12 +1,33 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace SearcherCore
 {
+	public class FileSearchParam
+	{
+		public override string ToString()
+		{
+			return string.Format("Searching '{0}' in '{1}' {2}",
+				SearchPattern,
+				string.IsNullOrEmpty(RootDir) ? "everyware" : RootDir,
+				string.IsNullOrWhiteSpace(PlugName) ? string.Empty : string.Format("using {0}", PlugName));
+		}
+
+		public string PlugName { get; set; }
+		public string RootDir { get; set; }
+		public string SearchPattern { get; set; }
+		public bool IgnoreCase { get; set; }
+		public DateTime? CreationTimeFrom { get; set; }
+		public DateTime? CreationTimeTo { get; set; }
+		public long? SizeFrom { get; set; }
+		public long? SizeTo { get; set; }
+	}
+
 	public class SearchWorker : INotifyPropertyChanged
 	{
 		public int Id { get; set; }
-		public string Parameter { get; set; }
+		public FileSearchParam Parameter { get; set; }
 
 		private int _filesFound;
 		public int FilesFound

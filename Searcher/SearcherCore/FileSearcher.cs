@@ -8,6 +8,14 @@ using System.Diagnostics;
 
 namespace SearcherCore
 {
+	public class FileFoundArgs : EventArgs
+	{
+		public int SearcherId { get; set; }
+		public string FileName { get; set; }
+	}
+
+	public delegate void OnFileFoundDelegate(object sender, FileFoundArgs e);
+
 	internal class FileSearcher
 	{
 		private readonly IFileProcessor _proc;
