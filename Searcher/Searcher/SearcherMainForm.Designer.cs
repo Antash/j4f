@@ -32,6 +32,7 @@
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SearcherMainForm));
+			SearcherCore.FileSearchParam fileSearchParam1 = new SearcherCore.FileSearchParam();
 			this.dgwWorkers = new System.Windows.Forms.DataGridView();
 			this.control = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -43,11 +44,11 @@
 			this.tsbHelp = new System.Windows.Forms.ToolStripButton();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.bSearch = new System.Windows.Forms.Button();
-			this.searchParamEditor1 = new Searcher.SearchParamEditor();
 			this.dgwResult = new System.Windows.Forms.DataGridView();
 			this.fname = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.fbdPlugin = new System.Windows.Forms.FolderBrowserDialog();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.searchParamEditor = new Searcher.SearchParamEditor();
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -198,16 +199,6 @@
 			this.bSearch.UseVisualStyleBackColor = true;
 			this.bSearch.Click += new System.EventHandler(this.bSearch_Click);
 			// 
-			// searchParamEditor1
-			// 
-			this.searchParamEditor1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.searchParamEditor1.Location = new System.Drawing.Point(3, 3);
-			this.searchParamEditor1.Name = "searchParamEditor1";
-			this.searchParamEditor1.Size = new System.Drawing.Size(523, 118);
-			this.searchParamEditor1.TabIndex = 9;
-			// 
 			// dgwResult
 			// 
 			this.dgwResult.AllowUserToAddRows = false;
@@ -246,12 +237,31 @@
 			// panel1
 			// 
 			this.panel1.Controls.Add(this.bSearch);
-			this.panel1.Controls.Add(this.searchParamEditor1);
+			this.panel1.Controls.Add(this.searchParamEditor);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point(0, 28);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(610, 124);
 			this.panel1.TabIndex = 14;
+			// 
+			// searchParamEditor
+			// 
+			this.searchParamEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.searchParamEditor.Location = new System.Drawing.Point(3, 3);
+			this.searchParamEditor.Name = "searchParamEditor";
+			fileSearchParam1.CreationTimeFrom = null;
+			fileSearchParam1.CreationTimeTo = null;
+			fileSearchParam1.IgnoreCase = false;
+			fileSearchParam1.PlugName = null;
+			fileSearchParam1.RootDir = null;
+			fileSearchParam1.SearchPattern = null;
+			fileSearchParam1.SizeFrom = null;
+			fileSearchParam1.SizeTo = null;
+			this.searchParamEditor.SearchParameters = fileSearchParam1;
+			this.searchParamEditor.Size = new System.Drawing.Size(523, 118);
+			this.searchParamEditor.TabIndex = 9;
 			// 
 			// SearcherMainForm
 			// 
@@ -263,6 +273,7 @@
 			this.Controls.Add(this.toolStrip1);
 			this.Name = "SearcherMainForm";
 			this.Text = "SearcherMainForm";
+			this.Load += new System.EventHandler(this.SearcherMainForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.dgwWorkers)).EndInit();
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
@@ -292,7 +303,7 @@
 		private System.Windows.Forms.DataGridView dgwResult;
 		private System.Windows.Forms.DataGridViewButtonColumn control;
 		private System.Windows.Forms.DataGridViewTextBoxColumn fname;
-		private SearchParamEditor searchParamEditor1;
+		private SearchParamEditor searchParamEditor;
 		private System.Windows.Forms.Button bSearch;
 		private System.Windows.Forms.Panel panel1;
 	}
