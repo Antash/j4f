@@ -91,7 +91,7 @@ namespace Searcher
 
 		private void dgwWorkers_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
 		{
-			dgwResult.RowCount = Math.Min(FilteredResultCount(), PossibleLastDisplayedRowCount());
+			ActualizeRowCount();
 		}
 
 		private void dgwResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -124,6 +124,11 @@ namespace Searcher
 			return dgwResult.RowCount < PossibleLastDisplayedRowCount() && dgwResult.RowCount < FilteredResultCount();
 		}
 
+		private void ActualizeRowCount()
+		{
+			dgwResult.RowCount = Math.Min(FilteredResultCount(), PossibleLastDisplayedRowCount());
+		}
+
 		private int FilteredResultCount()
 		{
 			return dgwWorkers.SelectedRows.Cast<DataGridViewRow>().Sum(w =>
@@ -154,7 +159,6 @@ namespace Searcher
 		{
 			_filter = new List<int>(ids);
 			dgwResult.Rows.Clear();
-			dgwResult.RowCount = Math.Min(FilteredResultCount(), PossibleLastDisplayedRowCount());
 		}
 
 		private void DeleteWorkerResult(int id)
