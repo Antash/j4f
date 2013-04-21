@@ -27,7 +27,10 @@ namespace Searcher
 
 			_sm = manager;
 			_sm.OnFileFound += _sm_OnFileFound;
+		}
 
+		private void SearcherMainForm_Load(object sender, EventArgs e)
+		{
 			dgwResult.CellValueNeeded += dgwResult_CellValueNeeded;
 
 			dgwWorkers.DataSource = _sm.SearchWorkers;
@@ -127,6 +130,7 @@ namespace Searcher
 
 		private void dgwWorkers_SelectionChanged(object sender, EventArgs e)
 		{
+			searchParamEditor.SearchParameters = ((SearchWorker) dgwWorkers.SelectedRows[0].DataBoundItem).Parameter;
 			FilterResult(dgwWorkers.SelectedRows.Cast<DataGridViewRow>().Select(r => ((SearchWorker)r.DataBoundItem).Id));
 		}
 
@@ -149,7 +153,7 @@ namespace Searcher
 
 		private void bSearch_Click(object sender, EventArgs e)
 		{
-			//_sm.StartSearch();
+			_sm.StartSearch(searchParamEditor.SearchParameters);
 		}
 	}
 }
