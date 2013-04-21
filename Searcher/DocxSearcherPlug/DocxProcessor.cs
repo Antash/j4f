@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Packaging;
-using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using SearcherExtensibility;
@@ -43,8 +43,14 @@ namespace DocxSearcherPlug
 					mgr.AddNamespace("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
 
 					var xmlNodeList = xmlDoc.SelectNodes("/descendant::w:t", mgr);
-					return xmlNodeList != null && 
-						(from XmlNode node in xmlNodeList select _regx.IsMatch(node.InnerText)).Any(result => result);
+					var sb = new StringBuilder();
+					if (xmlNodeList != null)
+					{
+						foreach (XmlNode node in xmlNodeList)
+							sb.Append(node.InnerXml);
+						return _regx.IsMatch(sb.ToString());
+					}
+					return false;
 				}
 			}
 			catch (Exception ex)
