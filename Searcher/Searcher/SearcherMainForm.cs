@@ -14,8 +14,10 @@ namespace Searcher
 		private readonly SearchManager _sm;
 
 		private readonly IList<Tuple<int, string>> _foundFiles;
-		private IList<int> _filter; 
- 
+		private IList<int> _filter;
+
+		private const int ResultRowMargine = 3;
+
 		public SearcherMainForm(SearchManager manager)
 		{
 			InitializeComponent();
@@ -143,7 +145,8 @@ namespace Searcher
 
 		private int PossibleLastDisplayedRowCount()
 		{
-			return dgwResult.DisplayRectangle.Height/dgwResult.RowTemplate.Height + dgwResult.FirstDisplayedScrollingRowIndex + 2;
+			return dgwResult.DisplayRectangle.Height/dgwResult.RowTemplate.Height + 
+				dgwResult.FirstDisplayedScrollingRowIndex + ResultRowMargine;
 		}
 
 		private void dgwWorkers_SelectionChanged(object sender, EventArgs e)
@@ -159,6 +162,7 @@ namespace Searcher
 		{
 			_filter = new List<int>(ids);
 			dgwResult.Rows.Clear();
+			ActualizeRowCount();
 		}
 
 		private void DeleteWorkerResult(int id)
