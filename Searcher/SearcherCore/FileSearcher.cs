@@ -72,9 +72,13 @@ namespace SearcherCore
 
 		#endregion
 
+		private FileSearchParam _param;
+
 		internal void Search(FileSearchParam param)
 		{
 			SearchStarted();
+
+			_param = param;
 			if (string.IsNullOrEmpty(param.RootDir))
 			{
 				var drives = DriveInfo.GetDrives().Where(d => d.DriveType == DriveType.Fixed);
@@ -146,7 +150,11 @@ namespace SearcherCore
 						Console.WriteLine("File found: {0}", file.FullName);
 					}
 				}
-				foreach (var dir in root.EnumerateDirectories())
+				if (!_param.IsRecursive)
+					return;
+				var dirs = root.EnumerateDirectories().Where(dir => 
+					_param.SearchInHiden || ((dir.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden));
+				foreach (var dir in dirs)
 				{
 					StopCheck();
 					// Suppose short filename and creation timestamp concztenation is unique
