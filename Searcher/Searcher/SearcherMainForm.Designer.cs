@@ -92,7 +92,7 @@
 			this.dgwWorkers.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
 			this.dgwWorkers.RowTemplate.Height = 24;
 			this.dgwWorkers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dgwWorkers.Size = new System.Drawing.Size(607, 81);
+			this.dgwWorkers.Size = new System.Drawing.Size(607, 74);
 			this.dgwWorkers.TabIndex = 8;
 			this.dgwWorkers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwWorkers_CellContentClick);
 			this.dgwWorkers.SelectionChanged += new System.EventHandler(this.dgwWorkers_SelectionChanged);
@@ -112,7 +112,7 @@
 			// splitContainer1
 			// 
 			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer1.Location = new System.Drawing.Point(0, 126);
+			this.splitContainer1.Location = new System.Drawing.Point(0, 146);
 			this.splitContainer1.Name = "splitContainer1";
 			this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
@@ -123,8 +123,8 @@
 			// splitContainer1.Panel2
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.dgwResult);
-			this.splitContainer1.Size = new System.Drawing.Size(607, 256);
-			this.splitContainer1.SplitterDistance = 81;
+			this.splitContainer1.Size = new System.Drawing.Size(607, 236);
+			this.splitContainer1.SplitterDistance = 74;
 			this.splitContainer1.TabIndex = 11;
 			// 
 			// dgwResult
@@ -144,7 +144,7 @@
 			this.dgwResult.ReadOnly = true;
 			this.dgwResult.RowHeadersVisible = false;
 			this.dgwResult.RowTemplate.Height = 24;
-			this.dgwResult.Size = new System.Drawing.Size(607, 171);
+			this.dgwResult.Size = new System.Drawing.Size(607, 158);
 			this.dgwResult.TabIndex = 0;
 			this.dgwResult.VirtualMode = true;
 			this.dgwResult.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgwResult_CellMouseDoubleClick);
@@ -181,7 +181,7 @@
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point(0, 27);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(607, 99);
+			this.panel1.Size = new System.Drawing.Size(607, 119);
 			this.panel1.TabIndex = 14;
 			// 
 			// tsbLoadPlugins
@@ -222,7 +222,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.searchParamEditor.Location = new System.Drawing.Point(3, 3);
 			this.searchParamEditor.Name = "searchParamEditor";
-			this.searchParamEditor.Size = new System.Drawing.Size(520, 93);
+			this.searchParamEditor.Size = new System.Drawing.Size(520, 113);
 			this.searchParamEditor.TabIndex = 9;
 			// 
 			// SearcherMainForm

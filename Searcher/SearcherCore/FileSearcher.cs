@@ -105,7 +105,7 @@ namespace SearcherCore
 					pattern += ".*";
 				SearchInternal(root, pattern, ListFiles);
 			}
-			else if (_proc.Init(pattern))
+			else if (_proc.Init(pattern, _param.IsCaseSensitive))
 			{
 				SearchInternal(root, pattern, ListFilesForPlugin);
 			}

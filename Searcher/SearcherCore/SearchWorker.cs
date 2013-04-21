@@ -7,12 +7,13 @@ namespace SearcherCore
 	{
 		public override string ToString()
 		{
-			return string.Format("Searching '{0}' in '{1}'{2}{3}{4}",
+			return string.Format("Searching '{0}' in '{1}'{2}{3}{4}{5}",
 				SearchPattern,
 				string.IsNullOrEmpty(RootDir) ? "everyware" : RootDir,
 				string.IsNullOrWhiteSpace(PlugName) ? string.Empty : string.Format("; using {0}", PlugName),
 				IsRecursive ? "; recursive" : string.Empty,
-				SearchInHiden ? "; hidden" : string.Empty);
+				SearchInHiden ? "; hidden" : string.Empty,
+				IsCaseSensitive ? string.Empty : "; ignore case");
 		}
 
 		public string PlugName { get; set; }
@@ -20,6 +21,7 @@ namespace SearcherCore
 		public string SearchPattern { get; set; }
 		public bool IsRecursive { get; set; }
 		public bool SearchInHiden { get; set; }
+		public bool IsCaseSensitive { get; set; }
 	}
 
 	public class SearchWorker : INotifyPropertyChanged

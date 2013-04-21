@@ -21,7 +21,8 @@ namespace Searcher
 						SearchPattern = tbSearchPattern.Text,
 						PlugName = cbPlugin.SelectedItem.ToString(),
 						SearchInHiden = cbFollowHidden.Checked,
-						IsRecursive = cbRecursive.Checked
+						IsRecursive = cbRecursive.Checked,
+						IsCaseSensitive = cbCaseSensitive.Checked
 					};
 			}
 			set
@@ -31,6 +32,7 @@ namespace Searcher
 				cbPlugin.SelectedItem = value.PlugName;
 				cbFollowHidden.Checked = value.SearchInHiden;
 				cbRecursive.Checked = value.IsRecursive;
+				cbCaseSensitive.Checked = value.IsCaseSensitive;
 			}
 		}
 

@@ -37,6 +37,7 @@
 			this.label5 = new System.Windows.Forms.Label();
 			this.cbRecursive = new System.Windows.Forms.CheckBox();
 			this.cbFollowHidden = new System.Windows.Forms.CheckBox();
+			this.cbCaseSensitive = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// tbSearchPattern
@@ -45,7 +46,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbSearchPattern.Location = new System.Drawing.Point(87, 6);
 			this.tbSearchPattern.Name = "tbSearchPattern";
-			this.tbSearchPattern.Size = new System.Drawing.Size(336, 22);
+			this.tbSearchPattern.Size = new System.Drawing.Size(360, 22);
 			this.tbSearchPattern.TabIndex = 13;
 			// 
 			// lSearchPattern
@@ -63,7 +64,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbRootDir.Location = new System.Drawing.Point(87, 35);
 			this.tbRootDir.Name = "tbRootDir";
-			this.tbRootDir.Size = new System.Drawing.Size(336, 22);
+			this.tbRootDir.Size = new System.Drawing.Size(360, 22);
 			this.tbRootDir.TabIndex = 15;
 			// 
 			// bSelDir
@@ -122,10 +123,21 @@
 			this.cbFollowHidden.Text = "Hidden folders";
 			this.cbFollowHidden.UseVisualStyleBackColor = true;
 			// 
+			// cbCaseSensitive
+			// 
+			this.cbCaseSensitive.AutoSize = true;
+			this.cbCaseSensitive.Location = new System.Drawing.Point(205, 92);
+			this.cbCaseSensitive.Name = "cbCaseSensitive";
+			this.cbCaseSensitive.Size = new System.Drawing.Size(122, 21);
+			this.cbCaseSensitive.TabIndex = 30;
+			this.cbCaseSensitive.Text = "Case-sensitive";
+			this.cbCaseSensitive.UseVisualStyleBackColor = true;
+			// 
 			// SearchParamEditor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.cbCaseSensitive);
 			this.Controls.Add(this.cbFollowHidden);
 			this.Controls.Add(this.cbRecursive);
 			this.Controls.Add(this.label5);
@@ -135,7 +147,7 @@
 			this.Controls.Add(this.lSearchPattern);
 			this.Controls.Add(this.tbSearchPattern);
 			this.Name = "SearchParamEditor";
-			this.Size = new System.Drawing.Size(426, 93);
+			this.Size = new System.Drawing.Size(450, 118);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -152,6 +164,7 @@
 		private System.Windows.Forms.CheckBox cbRecursive;
 		private System.Windows.Forms.CheckBox cbFollowHidden;
 		internal System.Windows.Forms.ComboBox cbPlugin;
+		private System.Windows.Forms.CheckBox cbCaseSensitive;
 
 	}
 }
