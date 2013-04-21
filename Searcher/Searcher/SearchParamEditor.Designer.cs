@@ -72,7 +72,7 @@
 			this.bSelDir.Name = "bSelDir";
 			this.bSelDir.Size = new System.Drawing.Size(75, 23);
 			this.bSelDir.TabIndex = 16;
-			this.bSelDir.Text = "Select dir";
+			this.bSelDir.Text = "Folder:";
 			this.bSelDir.UseVisualStyleBackColor = true;
 			this.bSelDir.Click += new System.EventHandler(this.bSelDir_Click);
 			// 
