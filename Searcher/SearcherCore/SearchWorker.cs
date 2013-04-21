@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace SearcherCore
@@ -8,10 +7,12 @@ namespace SearcherCore
 	{
 		public override string ToString()
 		{
-			return string.Format("Searching '{0}' in '{1}' {2}",
+			return string.Format("Searching '{0}' in '{1}'{2}{3}{4}",
 				SearchPattern,
 				string.IsNullOrEmpty(RootDir) ? "everyware" : RootDir,
-				string.IsNullOrWhiteSpace(PlugName) ? string.Empty : string.Format("using {0}", PlugName));
+				string.IsNullOrWhiteSpace(PlugName) ? string.Empty : string.Format("; using {0}", PlugName),
+				IsRecursive ? "; recursive" : string.Empty,
+				SearchInHiden ? "; hidden" : string.Empty);
 		}
 
 		public string PlugName { get; set; }
