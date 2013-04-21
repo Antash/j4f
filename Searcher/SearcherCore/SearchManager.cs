@@ -15,6 +15,7 @@ namespace SearcherCore
 		{
 			Pending,
 			Running,
+			Finished,
 			Stopped
 		}
 
@@ -74,13 +75,14 @@ namespace SearcherCore
 			searcher.OnSearchStarted += searcher_OnSearchStarted;
 			searcher.OnFileFound += searcher_OnFileFound;
 
-			SearchWorkers.Add(new SearchWorker
+			var worker = new SearchWorker
 				{
 					Id = searcher.Id,
 					FilesFound = 0,
 					Parameter = param,
 					Status = WorkerStatus.Pending.ToString()
-				});
+				};
+			SearchWorkers.Add(worker);
 			WorkerTokenSources.Add(searcher.Id, workerTokenSource);
 			try
 			{
@@ -90,6 +92,8 @@ namespace SearcherCore
 			{
 				// handle task cancelation
 				Debug.WriteLine("Search canseled: {0}", searcher.Id);
+				worker.Status = WorkerStatus.Stopped.ToString();
+				return;
 			}
 			catch (Exception ex)
 			{
@@ -98,11 +102,9 @@ namespace SearcherCore
 			}
 			finally
 			{
-				var worker = SearchWorkers.SingleOrDefault(w => w.Id == searcher.Id);
-				if (worker != null)
-					worker.Status = WorkerStatus.Stopped.ToString();
 				WorkerTokenSources.Remove(searcher.Id);
 			}
+			worker.Status = WorkerStatus.Finished.ToString();
 		}
 
 		public void TerminateSearch(SearchWorker worker)
