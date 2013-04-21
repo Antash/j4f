@@ -17,6 +17,8 @@ namespace NETSearcherPlug
 		{
 			try
 			{
+				if (string.IsNullOrWhiteSpace(pat))
+					pat = "*";
 				_regx = new Regex(pat.Replace("*", @"\S*").Replace("?", @"\S?"), RegexOptions.IgnoreCase);
 				return true;
 			}

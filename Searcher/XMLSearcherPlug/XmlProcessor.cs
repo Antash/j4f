@@ -16,6 +16,8 @@ namespace XMLSearcherPlug
 		{
 			try
 			{
+				if (string.IsNullOrWhiteSpace(pat))
+					pat = "*";
 				_regx = new Regex(string.Format(@"<[^?!<>]{0}[\s>]", pat.Replace("*", @"\S*").Replace("?", @"\S?")),
 					RegexOptions.IgnoreCase);
 				return true;
