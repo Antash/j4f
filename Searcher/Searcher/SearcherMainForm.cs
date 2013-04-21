@@ -44,7 +44,7 @@ namespace Searcher
 			{
 				_foundFiles.Add(new Tuple<int, string>(e.SearcherId, e.FileName));
 			}
-			if (dgwResult.RowCount < PossibleLastDisplayedRowCount() && dgwResult.InvokeRequired)
+			if (NewRowNeeded() && dgwResult.InvokeRequired)
 				dgwResult.Invoke((MethodInvoker)delegate
 					{
 						dgwResult.RowCount++;
@@ -89,6 +89,11 @@ namespace Searcher
 			DeleteWorkerResult(worker.Id);
 		}
 
+		private void dgwWorkers_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
+		{
+			dgwResult.RowCount = Math.Min(FilteredResultCount(), PossibleLastDisplayedRowCount());
+		}
+
 		private void dgwResult_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			new Process
@@ -110,12 +115,16 @@ namespace Searcher
 
 		private void dgwResult_Scroll(object sender, ScrollEventArgs e)
 		{
-			if (dgwResult.RowCount < PossibleLastDisplayedRowCount() &&
-				dgwResult.RowCount < ResultCount())
+			if (NewRowNeeded())
 				dgwResult.RowCount++;
 		}
 
-		private int ResultCount()
+		private bool NewRowNeeded()
+		{
+			return dgwResult.RowCount < PossibleLastDisplayedRowCount() && dgwResult.RowCount < FilteredResultCount();
+		}
+
+		private int FilteredResultCount()
 		{
 			return dgwWorkers.SelectedRows.Cast<DataGridViewRow>().Sum(w =>
 				((SearchWorker) w.DataBoundItem).FilesFound);
@@ -123,14 +132,13 @@ namespace Searcher
 
 		private void dgwResult_Resize(object sender, EventArgs e)
 		{
-			if (dgwResult.RowCount < PossibleLastDisplayedRowCount() &&
-				dgwResult.RowCount < ResultCount())
+			if (NewRowNeeded())
 				dgwResult.RowCount++;
 		}
 
 		private int PossibleLastDisplayedRowCount()
 		{
-			return dgwResult.DisplayRectangle.Height/dgwResult.RowTemplate.Height + dgwResult.FirstDisplayedScrollingRowIndex + 1;
+			return dgwResult.DisplayRectangle.Height/dgwResult.RowTemplate.Height + dgwResult.FirstDisplayedScrollingRowIndex + 2;
 		}
 
 		private void dgwWorkers_SelectionChanged(object sender, EventArgs e)
@@ -146,7 +154,7 @@ namespace Searcher
 		{
 			_filter = new List<int>(ids);
 			dgwResult.Rows.Clear();
-			dgwResult.RowCount = Math.Min(ResultCount(), PossibleLastDisplayedRowCount());
+			dgwResult.RowCount = Math.Min(FilteredResultCount(), PossibleLastDisplayedRowCount());
 		}
 
 		private void DeleteWorkerResult(int id)

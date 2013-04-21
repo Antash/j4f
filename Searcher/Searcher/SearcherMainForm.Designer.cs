@@ -96,6 +96,7 @@
 			this.dgwWorkers.TabIndex = 8;
 			this.dgwWorkers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwWorkers_CellContentClick);
 			this.dgwWorkers.SelectionChanged += new System.EventHandler(this.dgwWorkers_SelectionChanged);
+			this.dgwWorkers.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgwWorkers_UserDeletedRow);
 			this.dgwWorkers.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgwWorkers_UserDeletingRow);
 			// 
 			// control
