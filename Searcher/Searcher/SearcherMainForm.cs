@@ -63,16 +63,6 @@ namespace Searcher
 			}
 		}
 
-		private void bSearch_Click(object sender, EventArgs e)
-		{
-			_sm.StartSearch(new FileSearchParam
-			{
-				RootDir = tbRootDir.Text,
-				SearchPattern = tbSearchPattern.Text,
-				PlugName = tscbSelPl.SelectedItem.ToString()
-			});
-		}
-
 		private void tsbLoadPlugins_Click(object sender, EventArgs e)
 		{
 			fbdPlugin.SelectedPath = Application.StartupPath;
@@ -80,14 +70,6 @@ namespace Searcher
 			{
 				var loadedPlug = _sm.LoadPlugins(fbdPlugin.SelectedPath);
 				MessageBox.Show(string.Format("{0} plugins loaded", loadedPlug));
-			}
-		}
-
-		private void bSelDir_Click(object sender, EventArgs e)
-		{
-			if (fbdSearch.ShowDialog() == DialogResult.OK)
-			{
-				tbRootDir.Text = fbdSearch.SelectedPath;
 			}
 		}
 
@@ -163,6 +145,11 @@ namespace Searcher
 			}
 			dgwResult.Rows.Clear();
 			dgwResult.RowCount = GridRowsMargine;
+		}
+
+		private void bSearch_Click(object sender, EventArgs e)
+		{
+			//_sm.StartSearch();
 		}
 	}
 }

@@ -54,6 +54,12 @@
     <Compile Include="SearcherMainForm.Designer.cs">
       <DependentUpon>SearcherMainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SearchParamEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SearchParamEditor.Designer.cs">
+      <DependentUpon>SearchParamEditor.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -67,6 +73,9 @@
   <ItemGroup>
     <EmbeddedResource Include="SearcherMainForm.resx">
       <DependentUpon>SearcherMainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchParamEditor.resx">
+      <DependentUpon>SearchParamEditor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
