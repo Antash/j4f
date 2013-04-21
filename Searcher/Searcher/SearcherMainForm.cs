@@ -139,8 +139,7 @@ namespace Searcher
 
 		private void dgwResult_Resize(object sender, EventArgs e)
 		{
-			if (NewRowNeeded())
-				dgwResult.RowCount++;
+			ActualizeRowCount();
 		}
 
 		private int PossibleLastDisplayedRowCount()
