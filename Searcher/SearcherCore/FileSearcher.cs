@@ -123,7 +123,7 @@ namespace SearcherCore
 		{
 			if (_ct.IsCancellationRequested)
 			{
-				Debug.WriteLine("Search canseled");
+				Debug.WriteLine("Search canceled");
 				_ct.ThrowIfCancellationRequested();
 			}
 		}
