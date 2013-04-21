@@ -15,13 +15,15 @@ namespace DocxSearcherPlug
     {
 		private Regex _regx;
 
-		public bool Init(string pat)
+		public bool Init(string pat, bool isCaseSensitive)
 		{
+			IsCaseSensitive = isCaseSensitive;
 			try
 			{
 				if (string.IsNullOrWhiteSpace(pat))
 					pat = "*";
-				_regx = new Regex(pat.Replace("*", @"\S*").Replace("?", @"\S?"), RegexOptions.IgnoreCase);
+				_regx = new Regex(pat.Replace("*", @"\S*").Replace("?", @"\S?"),
+					IsCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
 				return true;
 			}
 			catch (Exception ex)
@@ -59,6 +61,8 @@ namespace DocxSearcherPlug
 				return false;
 			}
 		}
+
+		public bool IsCaseSensitive { get; private set; }
 
 		public IEnumerable<string> FileExtentionPatterns
 		{

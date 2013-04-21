@@ -12,14 +12,15 @@ namespace XMLSearcherPlug
 	{
 		private Regex _regx;
 
-		public bool Init(string pat)
+		public bool Init(string pat, bool isCaseSensitive)
 		{
+			IsCaseSensitive = isCaseSensitive;
 			try
 			{
 				if (string.IsNullOrWhiteSpace(pat))
 					pat = "*";
 				_regx = new Regex(string.Format(@"<[^?!<>]{0}[\s>]", pat.Replace("*", @"\S*").Replace("?", @"\S?")),
-					RegexOptions.IgnoreCase);
+					IsCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
 				return true;
 			}
 			catch (Exception ex)
@@ -48,6 +49,8 @@ namespace XMLSearcherPlug
 				return false;
 			}
 		}
+
+		public bool IsCaseSensitive { get; private set; }
 
 		public IEnumerable<string> FileExtentionPatterns
 		{

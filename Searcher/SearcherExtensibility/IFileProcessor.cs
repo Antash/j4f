@@ -6,8 +6,9 @@ namespace SearcherExtensibility
 {
 	public interface IFileProcessor
 	{
-		bool Init(string pat);
+		bool Init(string pat, bool isCaseSensitive);
 		bool ProcessFile(string fileName);
+		bool IsCaseSensitive { get; }
 		IEnumerable<string> FileExtentionPatterns { get; }
 	}
 
