@@ -35,7 +35,7 @@ namespace LicensePlateRecognition
 		{
 			//create OCR engine
 			_ocr = new Tesseract(dataPath, "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
-			_ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZ-1234567890");
+			_ocr.SetVariable("tessedit_char_whitelist", "1234567890");
 		}
 
 		/// <summary>
@@ -89,7 +89,7 @@ namespace LicensePlateRecognition
 			using (Image<Gray, Byte> canny = new Image<Gray, byte>(gray.Size))
 			using (MemStorage stor = new MemStorage())
 			{
-				CvInvoke.cvCanny(gray, canny, 100, 50, 3);
+				CvInvoke.cvCanny(gray, canny, 10, 100, 3);
 
 				Contour<Point> contours = canny.FindContours(
 					 Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE,

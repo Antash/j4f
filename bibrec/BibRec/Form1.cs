@@ -14,6 +14,8 @@ using Emgu.CV.Structure;
 using Emgu.CV.UI;
 
 using System.Diagnostics;
+using Emgu.CV.OCR;
+using FaceDetection;
 
 namespace LicensePlateRecognition
 {
@@ -27,6 +29,25 @@ namespace LicensePlateRecognition
 			_licensePlateDetector = new LicensePlateDetector("");
 
 			ProcessImage(new Image<Bgr, byte>(@"..\..\sample.jpg"));
+			//ProcessImage(new Image<Bgr, byte>(@"..\..\s1.jpg"));
+		}
+
+		List<Rectangle> DF(Image<Bgr, byte> image)
+		{
+			long detectionTime;
+			List<Rectangle> faces = new List<Rectangle>();
+			List<Rectangle> eyes = new List<Rectangle>();
+			DetectFace.Detect(image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", faces, eyes, out detectionTime);
+			return faces;
+
+			//foreach (Rectangle eye in eyes)
+			//	image.Draw(eye, new Bgr(Color.Blue), 2);
+
+			//display the image 
+			//ImageViewer.Show(image, String.Format(
+			//   "Completed face and eye detection using {0} in {1} milliseconds",
+			//   GpuInvoke.HasCuda ? "GPU" : "CPU",
+			//   detectionTime));
 		}
 
 		private void ProcessImage(Image<Bgr, byte> image)
@@ -36,27 +57,57 @@ namespace LicensePlateRecognition
 			List<Image<Gray, Byte>> licensePlateImagesList = new List<Image<Gray, byte>>();
 			List<Image<Gray, Byte>> filteredLicensePlateImagesList = new List<Image<Gray, byte>>();
 			List<MCvBox2D> licenseBoxList = new List<MCvBox2D>();
-			List<string> words = _licensePlateDetector.DetectLicensePlate(
-			   image,
-			   licensePlateImagesList,
-			   filteredLicensePlateImagesList,
-			   licenseBoxList);
+			//List<string> words = _licensePlateDetector.DetectLicensePlate(
+			//   image,
+			//   licensePlateImagesList,
+			//   filteredLicensePlateImagesList,
+			//   licenseBoxList);
+
+			var _ocr = new Tesseract("", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
+			_ocr.SetVariable("tessedit_char_whitelist", "1234567890");
+
+			List<String> licenses = new List<String>();
+			using (Image<Gray, byte> gray = image.Convert<Gray, Byte>())
+			//using (Image<Gray, byte> gray = GetWhitePixelMask(img))
+			using (Image<Gray, Byte> canny = new Image<Gray, byte>(gray.Size))
+			using (MemStorage stor = new MemStorage())
+			{
+				//CvInvoke.cvCanny(gray, canny, 100, 100, 3);
+				CvInvoke.cvThreshold(gray, canny, 75, 255, Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY);
+
+				//imageBox1.Image = gray;
+				var faces = DF(image);
+				foreach (Rectangle face in faces)
+					canny.Draw(face, new Gray(1), 3);
+
+				imageBox1.Image = canny;
+				//_ocr.Recognize(canny);
+				//var words = _ocr.GetCharactors();
+				//this.Text = _ocr.GetText();
+
+				//Contour<Point> contours = canny.FindContours(
+				//	 Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE,
+				//	 Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_TREE,
+				//	 stor);
+				//FindLicensePlate(contours, gray, canny, licensePlateImagesList, filteredLicensePlateImagesList, detectedLicensePlateRegionList, licenses);
+			}
+
 
 			watch.Stop(); //stop the timer
 			processTimeLabel.Text = String.Format("License Plate Recognition time: {0} milli-seconds", watch.Elapsed.TotalMilliseconds);
 
-			panel1.Controls.Clear();
-			Point startPoint = new Point(10, 10);
-			for (int i = 0; i < words.Count; i++)
-			{
-				AddLabelAndImage(
-				   ref startPoint,
-				   String.Format("License: {0}", words[i]),
-				   licensePlateImagesList[i].ConcateVertical(filteredLicensePlateImagesList[i]));
-				image.Draw(licenseBoxList[i], new Bgr(Color.Red), 2);
-			}
+			//panel1.Controls.Clear();
+			//Point startPoint = new Point(10, 10);
+			//for (int i = 0; i < words.Count; i++)
+			//{
+			//	AddLabelAndImage(
+			//	   ref startPoint,
+			//	   String.Format("License: {0}", words[i]),
+			//	   licensePlateImagesList[i].ConcateVertical(filteredLicensePlateImagesList[i]));
+			//	image.Draw(licenseBoxList[i], new Bgr(Color.Red), 2);
+			//}
 
-			imageBox1.Image = image;
+			//imageBox1.Image = image;
 		}
 
 		private void AddLabelAndImage(ref Point startPoint, String labelText, IImage image)
