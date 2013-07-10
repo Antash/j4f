@@ -63,8 +63,8 @@ namespace LicensePlateRecognition
 			//   filteredLicensePlateImagesList,
 			//   licenseBoxList);
 
-			var _ocr = new Tesseract("", "eng", Tesseract.OcrEngineMode.OEM_TESSERACT_CUBE_COMBINED);
-			_ocr.SetVariable("tessedit_char_whitelist", "1234567890");
+			var _ocr = new Tesseract(@".\tessdata\", "eng", 
+				Tesseract.OcrEngineMode.OEM_DEFAULT, "1234567890");
 
 			List<String> licenses = new List<String>();
 			using (Image<Gray, byte> gray = image.Convert<Gray, Byte>())
@@ -75,10 +75,39 @@ namespace LicensePlateRecognition
 				//CvInvoke.cvCanny(gray, canny, 100, 100, 3);
 				CvInvoke.cvThreshold(gray, canny, 75, 255, Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY);
 
+				var bibs = new List<Image<Gray, Byte>>();
+				var bibsreg = new List<Rectangle>();
 				//imageBox1.Image = gray;
 				var faces = DF(image);
+
+				Point startPoint = new Point(10, 10);
+				this.Text = "";
 				foreach (Rectangle face in faces)
-					canny.Draw(face, new Gray(1), 3);
+				{
+					canny.Draw(face, new Gray(1), 2);
+
+					
+					var r = new Rectangle(face.X - face.Width/2, face.Y + face.Height * 2,
+						face.Width * 2, face.Height * 3);
+
+					
+					bibsreg.Add(r);
+
+					CvInvoke.cvSetImageROI(canny, r);
+
+					var ni = canny.Copy();
+
+					_ocr.Recognize(ni);
+
+					var words = _ocr.GetCharactors();
+
+					CvInvoke.cvResetImageROI(canny);
+					this.Text += " bib:" + _ocr.GetText().Replace(" ", string.Empty);
+					//AddLabelAndImage(ref startPoint, _ocr.GetText(), ni);
+				}
+
+				foreach (Rectangle r in bibsreg)
+					canny.Draw(r, new Gray(1), 10);
 
 				imageBox1.Image = canny;
 				//_ocr.Recognize(canny);
@@ -122,10 +151,10 @@ namespace LicensePlateRecognition
 
 			ImageBox box = new ImageBox();
 			panel1.Controls.Add(box);
-			box.ClientSize = image.Size;
-			box.Image = image;
+			//box.ClientSize = image.Size;
+			//box.Image = image;
 			box.Location = startPoint;
-			startPoint.Y += box.Height + 10;
+			startPoint.Y += 15;
 		}
 
 		private void button1_Click(object sender, EventArgs e)

@@ -71,7 +71,7 @@ namespace FaceDetection
 						   gray,
 						   1.1,
 						   10,
-						   new Size(70, 70),
+						   new Size(30, 30),
 						   Size.Empty);
 						faces.AddRange(facesDetected);
 
