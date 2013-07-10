@@ -26,7 +26,7 @@ namespace LicensePlateRecognition
 			InitializeComponent();
 			_licensePlateDetector = new LicensePlateDetector("");
 
-			//ProcessImage(new Image<Bgr, byte>("license-plate.jpg"));
+			ProcessImage(new Image<Bgr, byte>(@"..\..\sample.jpg"));
 		}
 
 		private void ProcessImage(Image<Bgr, byte> image)
