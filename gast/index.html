@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title>Gast</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+
+function getXMLHttp()
+{
+  var xmlHttp
+  try
+  {
+    xmlHttp = new XMLHttpRequest();
+  }
+  catch(e)
+  {
+    try
+    {
+      xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+    }
+    catch(e)
+    {
+      try
+      {
+        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      catch(e)
+      {
+        alert("AJAX not supported.")
+        return false;
+      }
+    }
+  }
+  return xmlHttp;
+}
+
+function MakeRequest()
+{
+  var xmlHttp = getXMLHttp();
+  xmlHttp.onreadystatechange = function()
+  {
+    if(xmlHttp.readyState == 4)
+    {
+      HandleResponse(xmlHttp.responseText);
+    }
+  }
+  xmlHttp.open("GET", "count.php", true); 
+  xmlHttp.send(null);
+}
+
+function HandleResponse(response)
+{
+  document.getElementById('ResponseDiv').innerHTML = response;
+}
+        </script>
+        <input type='button' onclick='MakeRequest();' value='Понаехать!'/>
+        <br />
+        <br />
+		Таджиков:&nbsp
+        <div id='ResponseDiv'>
+            0
+        </div>
+    </body>
+</html>
