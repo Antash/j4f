@@ -12,5 +12,6 @@
     fwrite($fp, $clicks);
     fclose($fp);
     flock($fp, LOCK_UN);
-
+	
+	echo $clicks;
 ?>
