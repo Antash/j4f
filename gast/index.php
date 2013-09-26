@@ -1,5 +1,5 @@
 <?
 
-echo hello!
+echo hello!;
 
 ?>
