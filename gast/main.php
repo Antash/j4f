@@ -1,5 +1,7 @@
 <?php
 
+
+
 if(isset($_POST['action']) && !empty($_POST['action']))
 {
     $action = $_POST['action'];
@@ -15,28 +17,26 @@ $sessionId;
 function init()
 {
 	$cookieName = 'GastSessionId';
-
+	global $sessionId;
+	
 	if (isset($_COOKIE[$cookieName]))
 	{
-		echo 'init' . $_COOKIE[$cookieName];
-		header('Location: main.php/?id=' . $_COOKIE[$cookieName], true);
+		$sessionId $_COOKIE[$cookieName];
 	}
 	else
 	{
 		$link = mysql_connect('192.168.1.2', 'gast', 'okoo2Aephe');
 		mysql_select_db('gast');
 		
-		if (!$link) {
+		if (!$link)
+		{
 			die('Could not connect: ' . mysql_error());
 		}
-		#echo 'Connected successfully';
 		
-		global $sessionId = uniqid();
+		$sessionId = uniqid();
 		$query = sprintf('INSERT INTO sessions VALUES (\'%1$s\',0)', $sessionId);
-		#echo $query;
-		if (!mysql_query($query)) { 
-			echo mysql_error();
-		}
+		mysql_query($query);
+		
 		setcookie($cookieName, $sessionId, time()+3600 * 24 * 30);
 		
 		mysql_close($link);
@@ -49,21 +49,10 @@ function init()
 
 function click()
 {
-	#echo 'Hello ' . htmlspecialchars($_GET["id"]) . '!';
+	global $sessionId;
 	
-    $clicks = file_get_contents("clicks.txt");
-    $clicks++;
-
-    $fp = fopen("clicks.txt", "w+");
-
-    while ( !flock($fp, LOCK_EX) )
-	{    
-        usleep(500000); // Delay half a second
-    }
-
-    fwrite($fp, $clicks);
-    fclose($fp);
-    flock($fp, LOCK_UN);
+	mysql_query('UPDATE sessions SET clicks = clicks+1 WHERE id=\'%1$s\'', $sessionId);
+	$clicks = mysql_query('SELECT clicks FROM sessions WHERE id=\'%1$s\'', $sessionId)
 	
 	echo $clicks;
 }
