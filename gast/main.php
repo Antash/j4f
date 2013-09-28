@@ -41,14 +41,21 @@ function initSession($sessionId)
 
 function loadSession($sessionId)
 {
+	$link = dbConnect();
+		
+	$query = sprintf('SELECT clicks FROM sessions WHERE id=\'%1$s\'', $sessionId);
+	$clicks = mysql_result(mysql_query($query), 0);
+	mysql_close($link);
+	$_SESSION['uid'] = $sessionId;
+	
+	echo $clicks;
 }
 
 function init()
 {
 	if (isset($_COOKIE[COOKIE_NAME]))
 	{
-		$sessionId = $_COOKIE[COOKIE_NAME];
-		echo $sessionId;
+		loadSession($_COOKIE[COOKIE_NAME]);
 	}
 	else
 	{
@@ -63,14 +70,7 @@ function click()
 	
 	$link = dbConnect();
 	mysql_query(sprintf('UPDATE sessions SET clicks = clicks+1 WHERE id=\'%1$s\'', $sessionId));
-	if (mysql_affected_rows() > 0)
-	{
-		$clicks = mysql_result(mysql_query(sprintf('SELECT clicks FROM sessions WHERE id=\'%1$s\'', $sessionId)), 0);
-	}
-	else
-	{
-		initSession($sessionId);
-	}
+	$clicks = mysql_result(mysql_query(sprintf('SELECT clicks FROM sessions WHERE id=\'%1$s\'', $sessionId)), 0);
 	mysql_close($link);
 	
 	echo $clicks;
