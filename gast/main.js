@@ -17,7 +17,7 @@ function InitSession()
 		type: 'POST',
 		data: {action: 'init'},
 		success: function(data) { 
-			//$('#Test').html(data);
+			$('#gastCount').html(data);
 		}
 	});
 }

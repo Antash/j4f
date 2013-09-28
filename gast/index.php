@@ -13,14 +13,11 @@ session_start();
 		<script type="text/JavaScript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 		<script type="text/JavaScript" src="main.js"></script>
 		
-		<div id='Test'>
-        </div>
         <input id="btnMain" type='button' onClick='Click();' value='Понаехать!'/>
         <br/>
 		<br/>
 		Таджиков:
         <div id='gastCount'>
-		0
         </div>
     </body>
 </html>
