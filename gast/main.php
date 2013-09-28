@@ -43,18 +43,18 @@ function init()
 		echo ' ID = ' . $sessionId;
 	}
 	
-	session_id($sessionId);
+	$_SESSION['uid'] = $sessionId;
 	#setcookie($cookieName, "", time() - 3600);
 }
 
 function click()
 {
-	$sessionId = session_id();
-	echo $sessionId;
-	//mysql_query('UPDATE sessions SET clicks = clicks+1 WHERE id=\'%1$s\'', $sessionId);
-	//$clicks = mysql_query('SELECT clicks FROM sessions WHERE id=\'%1$s\'', $sessionId);
+	$sessionId = $_SESSION['uid'];
+	echo $_SESSION['uid'];
+	mysql_query('UPDATE sessions SET clicks = clicks+1 WHERE id=\'%1$s\'', $sessionId);
+	$clicks = mysql_query('SELECT clicks FROM sessions WHERE id=\'%1$s\'', $sessionId);
 	
-	//echo $clicks;
+	echo $clicks;
 }
 
 ?>
