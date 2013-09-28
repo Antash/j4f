@@ -35,7 +35,7 @@ function initSession($sessionId)
 	mysql_query($query);
 	mysql_close($link);
 	
-	setcookie(Constants::COOKIE_NAME, $sessionId, time()+3600 * 24 * 30);
+	setcookie(COOKIE_NAME, $sessionId, time()+3600 * 24 * 30);
 	$_SESSION['uid'] = $sessionId;
 }
 
@@ -45,9 +45,9 @@ function loadSession($sessionId)
 
 function init()
 {
-	if (isset($_COOKIE[Constants::COOKIE_NAME]))
+	if (isset($_COOKIE[COOKIE_NAME]))
 	{
-		$sessionId = $_COOKIE[Constants::COOKIE_NAME];
+		$sessionId = $_COOKIE[COOKIE_NAME];
 		echo $sessionId;
 	}
 	else
