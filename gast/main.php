@@ -1,6 +1,6 @@
 <?php
 
-define("COOKIE_NAME", "GastSessionId");
+define("COOKIE_NAME", 'GastSessionId');
 
 session_start();
 
