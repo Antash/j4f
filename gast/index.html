@@ -2,87 +2,21 @@
     <head>
         <title>Gast</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
     </head>
     <body onload='InitSession();'>
 	
-	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-	
-        <script type="text/javascript">
-
-function getXMLHttp()
-{
-  var xmlHttp
-  try
-  {
-    xmlHttp = new XMLHttpRequest();
-  }
-  catch(e)
-  {
-    try
-    {
-      xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
-    }
-    catch(e)
-    {
-      try
-      {
-        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-      }
-      catch(e)
-      {
-        alert("AJAX not supported.")
-        return false;
-      }
-    }
-  }
-  return xmlHttp;
-}
-
-function MakeRequest()
-{
-  var xmlHttp = getXMLHttp();
-  xmlHttp.onreadystatechange = function()
-  {
-    if(xmlHttp.readyState == 4)
-    {
-      HandleResponse(xmlHttp.responseText);
-    }
-  }
-  xmlHttp.open("GET", "count.php", true); 
-  xmlHttp.send(null);
-}
-
-function InitSession()
-{
-  var xmlHttp = getXMLHttp();
-  xmlHttp.onreadystatechange = function()
-  {
-    if(xmlHttp.readyState == 4)
-    {
-      HandleInitResponse(xmlHttp.responseText);
-    }
-  }
-  xmlHttp.open("GET", "init.php", true); 
-  xmlHttp.send(null);
-}
-
-function HandleResponse(response)
-{
-  document.getElementById('ResponseDiv').innerHTML = response;
-}
-
-function HandleInitResponse(response)
-{
-  document.getElementById('Init').innerHTML = response;
-}
-        </script>
-		<div id='Init'>
+		<script type="text/JavaScript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<script type="text/JavaScript" src="main.js"></script>
+		
+		<div id='Test'>
         </div>
-        <input type='button' onclick='MakeRequest();' value='Понаехать!'/>
-        <br />
-        <br />
+        <input id="btnMain" type='button' onClick='Click();' value='Понаехать!'/>
+        <br/>
+		<br/>
 		Таджиков:
-        <div id='ResponseDiv'>
+        <div id='gastCount'>
+		0
         </div>
     </body>
 </html>
