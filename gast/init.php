@@ -1,11 +1,12 @@
 <?php
 
 $cookieName = 'GastSessionId';
+$sessionId
 
 if (isset($_COOKIE[$cookieName]))
 {
 	echo 'init' . $_COOKIE[$cookieName];
-	header('Location: count.php/?id=' . $_COOKIE[$cookieName]);
+	header('Location: count.php/?id=' . $_COOKIE[$cookieName], true);
 }
 else
 {
@@ -17,7 +18,7 @@ else
 	}
 	#echo 'Connected successfully';
 	
-	$sessionId = uniqid();
+	global $sessionId = uniqid();
 	$query = sprintf('INSERT INTO sessions VALUES (\'%1$s\',0)', $sessionId);
 	#echo $query;
 	if (!mysql_query($query)) { 

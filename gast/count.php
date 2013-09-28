@@ -1,5 +1,7 @@
 <?php
-
+	
+	echo 'Hello ' . htmlspecialchars($_GET["id"]) . '!';
+	
     $clicks = file_get_contents("clicks.txt");
     $clicks++;
 
