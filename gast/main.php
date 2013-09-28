@@ -21,7 +21,7 @@ function init()
 	
 	if (isset($_COOKIE[$cookieName]))
 	{
-		$sessionId $_COOKIE[$cookieName];
+		$sessionId = $_COOKIE[$cookieName];
 	}
 	else
 	{
