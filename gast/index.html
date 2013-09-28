@@ -2,7 +2,7 @@
     <head>
         <title>Gast</title>
     </head>
-    <body onload='MakeRequest();'>
+    <body onload='InitSession();'>
         <script type="text/javascript">
 
 function getXMLHttp()
@@ -48,6 +48,11 @@ function MakeRequest()
   xmlHttp.send(null);
 }
 
+function InitSession()
+{
+  document.getElementById('ResponseDiv').innerHTML = "0";
+}
+
 function HandleResponse(response)
 {
   document.getElementById('ResponseDiv').innerHTML = response;
@@ -56,7 +61,7 @@ function HandleResponse(response)
         <input type='button' onclick='MakeRequest();' value='Понаехать!'/>
         <br />
         <br />
-		Таджиков:&nbsp
+		Таджиков:
         <div id='ResponseDiv'>
         </div>
     </body>
