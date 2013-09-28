@@ -1,6 +1,6 @@
 <?php
 
-
+session_start();
 
 if(isset($_POST['action']) && !empty($_POST['action']))
 {
@@ -12,16 +12,15 @@ if(isset($_POST['action']) && !empty($_POST['action']))
     }
 }
 
-$sessionId;
-
 function init()
 {
 	$cookieName = 'GastSessionId';
-	global $sessionId;
+	$sessionId;
 	
 	if (isset($_COOKIE[$cookieName]))
 	{
 		$sessionId = $_COOKIE[$cookieName];
+		echo $sessionId;
 	}
 	else
 	{
@@ -43,18 +42,19 @@ function init()
 		
 		echo ' ID = ' . $sessionId;
 	}
-
+	
+	session_id($sessionId);
 	#setcookie($cookieName, "", time() - 3600);
 }
 
 function click()
 {
-	global $sessionId;
+	$sessionId = session_id();
+	echo $sessionId;
+	//mysql_query('UPDATE sessions SET clicks = clicks+1 WHERE id=\'%1$s\'', $sessionId);
+	//$clicks = mysql_query('SELECT clicks FROM sessions WHERE id=\'%1$s\'', $sessionId);
 	
-	mysql_query('UPDATE sessions SET clicks = clicks+1 WHERE id=\'%1$s\'', $sessionId);
-	$clicks = mysql_query('SELECT clicks FROM sessions WHERE id=\'%1$s\'', $sessionId)
-	
-	echo $clicks;
+	//echo $clicks;
 }
 
 ?>
