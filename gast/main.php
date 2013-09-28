@@ -51,12 +51,11 @@ function click()
 {
 	$sessionId = $_SESSION['uid'];
 	$clicks = 0;
-	$result = mysql_query('UPDATE sessions SET clicks = clicks+1 WHERE id=\'%1$s\'', $sessionId);
+	$result = mysql_query(sprintf('UPDATE sessions SET clicks = clicks+1 WHERE id=\'%1$s\'', $sessionId));
 	if ($result)
 	{
-		$clicks = mysql_result(mysql_query('SELECT clicks FROM sessions WHERE id=\'%1$s\'', $sessionId), 0);
+		$clicks = mysql_result(mysql_query(sprintf('SELECT clicks FROM sessions WHERE id=\'%1$s\'', $sessionId)), 0);
 	}
-	else {$clicks = $_SESSION['uid'];}
 	
 	echo $clicks;
 }
