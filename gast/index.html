@@ -3,6 +3,9 @@
         <title>Gast</title>
     </head>
     <body onload='InitSession();'>
+	
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	
         <script type="text/javascript">
 
 function getXMLHttp()
@@ -50,14 +53,30 @@ function MakeRequest()
 
 function InitSession()
 {
-  document.getElementById('ResponseDiv').innerHTML = "0";
+  var xmlHttp = getXMLHttp();
+  xmlHttp.onreadystatechange = function()
+  {
+    if(xmlHttp.readyState == 4)
+    {
+      HandleInitResponse(xmlHttp.responseText);
+    }
+  }
+  xmlHttp.open("GET", "init.php", true); 
+  xmlHttp.send(null);
 }
 
 function HandleResponse(response)
 {
   document.getElementById('ResponseDiv').innerHTML = response;
 }
+
+function HandleInitResponse(response)
+{
+  document.getElementById('Init').innerHTML = response;
+}
         </script>
+		<div id='Init'>
+        </div>
         <input type='button' onclick='MakeRequest();' value='Понаехать!'/>
         <br />
         <br />
