@@ -14,11 +14,4 @@
     flock($fp, LOCK_UN);
 	
 	echo $clicks;
-	
-	$link = mysql_connect('192.168.1.2', 'gast', 'okoo2Aephe');
-	if (!$link) {
-		die('Could not connect: ' . mysql_error());
-	}
-	echo 'Connected successfully';
-	mysql_close($link);
 ?>
