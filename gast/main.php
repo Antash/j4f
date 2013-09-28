@@ -62,8 +62,8 @@ function click()
 	$clicks;
 	
 	$link = dbConnect();
-	$result = mysql_query(sprintf('UPDATE sessions SET clicks = clicks+1 WHERE id=\'%1$s\'', $sessionId));
-	if ($result)
+	mysql_query(sprintf('UPDATE sessions SET clicks = clicks+1 WHERE id=\'%1$s\'', $sessionId));
+	if (mysql_affected_rows() > 0)
 	{
 		$clicks = mysql_result(mysql_query(sprintf('SELECT clicks FROM sessions WHERE id=\'%1$s\'', $sessionId)), 0);
 	}
