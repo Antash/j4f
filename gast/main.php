@@ -44,7 +44,16 @@ function loadSession($sessionId)
 	$link = dbConnect();
 		
 	$query = sprintf('SELECT clicks FROM sessions WHERE id=\'%1$s\'', $sessionId);
-	$clicks = mysql_result(mysql_query($query), 0);
+	$result = mysql_query($query);
+	if (mysql_num_rows($result) > 0)
+	{
+		$clicks = mysql_result($result, 0);
+	}
+	else
+	{
+		initSession($sessionId);
+		$clicks = 0;
+	}
 	mysql_close($link);
 	$_SESSION['uid'] = $sessionId;
 	
