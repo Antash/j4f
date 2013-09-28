@@ -16,6 +16,8 @@ function InitSession()
 		url: 'main.php',
 		type: 'POST',
 		data: {action: 'init'},
-		success: function() { }
+		success: function(data) { 
+			//$('#Test').html(data);
+		}
 	});
 }
