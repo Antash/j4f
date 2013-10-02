@@ -37,7 +37,7 @@ if(isset($_POST['action']) && !empty($_POST['action']))
 
 function dbConnect()
 {
-	$link = mysql_connect('192.168.1.2', 'gast', 'okoo2Aephe');
+	$link = mysql_connect('faliot.ru', 'gast', 'okoo2Aephe');
 	mysql_select_db('gast');
 	
 	if (!$link)
