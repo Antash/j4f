@@ -4,10 +4,8 @@ function Click()
 		url: 'main.php',
 		type: 'POST',
 		data: {action: 'click'},
-		success: function(data) {
-			$('#gastCount').html(data);
-			}
 	});
+	$('#gastCount').html(parseInt($('#gastCount').html(), 10)+1);
 }
 
 function InitSession()
