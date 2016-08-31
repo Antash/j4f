@@ -93,7 +93,7 @@ namespace PGM
                                                  MessageBoxButtons.YesNo);
                         var drmemo = MessageBox.Show("Repeat to all?", "Save selected option",
                              MessageBoxButtons.YesNo);
-                        collisionActionToAll = drmemo == DialogResult.OK;
+                        collisionActionToAll = drmemo == DialogResult.Yes;
 
                         if (dr != DialogResult.OK)
                         {
