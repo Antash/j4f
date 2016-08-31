@@ -107,7 +107,7 @@ namespace PGM
                     {
                         Directory.CreateDirectory(dmd);
                     }
-                    var nname = Path.Combine(dmd, string.Format("{0:yyyy-mm-dd_hhmmss}.{1}", dateOfShot, Path.GetExtension(tf.FullName)));
+                    var nname = Path.Combine(dmd, string.Format("{0:yyyy-mm-dd_hhmmss}{1}", dateOfShot, Path.GetExtension(tf.FullName)));
 
                     if (File.Exists(nname))
                     {
@@ -168,7 +168,7 @@ namespace PGM
             int i = 1;
             while (File.Exists(newName))
             {
-                newName = Path.Combine(baseDir, string.Format("{0:yyyy-mm-dd_hhmmss}({1}).{2}", dateOfShot, i++, Path.GetExtension(fileName)));
+                newName = Path.Combine(baseDir, string.Format("{0:yyyy-mm-dd_hhmmss}({1}){2}", dateOfShot, i++, Path.GetExtension(fileName)));
             }
             return newName;
         }
