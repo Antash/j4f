@@ -3,13 +3,14 @@ using System.IO;
 using System.Globalization;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
+using System.Linq;
 
 namespace PGM
 {
     class Program
     {
         static readonly CultureInfo UsCulture = new CultureInfo("en-US");
-        private const string Ext = "jpg";
+        private static readonly string[] Ext = { "jpg", "jpeg", "jpe", "png", "bmp" };
 
         [STAThread]
         static void Main(string[] args)
@@ -35,9 +36,13 @@ namespace PGM
             }
             if (dd != null && d != null)
             {
+                Console.WriteLine("Enter image ignore threshold (by default all files are processed):");
+                var input = Console.ReadLine();
+                int limit = 0;
+                int.TryParse(input, out limit);
                 var dr = MessageBox.Show("Keep source files?", "Move or Copy", MessageBoxButtons.YesNo);
                 Console.WriteLine(String.Format("Keep source images = {0}", dr == DialogResult.Yes));
-                ImageProc(d, dd, dr == DialogResult.Yes);
+                ImageProc(d, dd, dr == DialogResult.Yes, limit);
             }
             else
             {
@@ -52,15 +57,20 @@ namespace PGM
             Copy, Skip
         }
 
-        private static void ImageProc(DirectoryInfo d, DirectoryInfo ddest, bool saveOriginal, bool collisionActionToAll = false, DefaulAction defAct = DefaulAction.Copy)
+        private static void ImageProc(DirectoryInfo d, DirectoryInfo ddest, bool saveOriginal, int sizeLimit, bool collisionActionToAll = false, DefaulAction defAct = DefaulAction.Copy)
         {
-            foreach (var tf in d.EnumerateFiles(String.Format("*.{0}", Ext)))
+            foreach (var tf in Ext.SelectMany(e => d.EnumerateFiles(string.Format("*.{0}", e), SearchOption.AllDirectories)))
             {
                 Console.WriteLine(String.Format("Processing image {0}", tf.Name));
                 DateTime dateOfShot = DateTime.MinValue;
                 using (FileStream foto = File.Open(tf.FullName, FileMode.Open, FileAccess.Read)) // открыли файл по адресу s для чтения
                 {
                     var decoder = BitmapDecoder.Create(foto, BitmapCreateOptions.IgnoreColorProfile, BitmapCacheOption.Default); //"распаковали" снимок и создали объект decoder
+                    if (sizeLimit > 0 && foto.Length < sizeLimit)
+                    {
+                        Console.WriteLine(String.Format("Skipping image {0}: too small.", tf.FullName));
+                        continue;
+                    }
                     var imageMetadata = decoder.Frames[0].Metadata;
                     if (imageMetadata != null)
                     {
@@ -83,7 +93,7 @@ namespace PGM
                 {
                     Directory.CreateDirectory(dmd);
                 }
-                var nname = Path.Combine(dmd, String.Format("{0:yyyy-mm-dd_hhmmss}.{1}", dateOfShot, Ext));
+                var nname = Path.Combine(dmd, String.Format("{0:yyyy-mm-dd_hhmmss}.{1}", dateOfShot, Path.GetExtension(tf.FullName)));
 
                 if (File.Exists(nname))
                 {
@@ -122,10 +132,6 @@ namespace PGM
                     Console.WriteLine(String.Format("Error during operation: {0};\r\n{1}", e.Message, e.StackTrace));
                 }
             }
-            foreach (var td in d.EnumerateDirectories())
-            {
-                ImageProc(td, ddest, saveOriginal, collisionActionToAll, defAct);
-            }
         }
 
         private static string ChooseName(string fileName, string baseDir, DateTime dateOfShot)
@@ -134,7 +140,7 @@ namespace PGM
             int i = 1;
             while (File.Exists(newName))
             {
-                newName = Path.Combine(baseDir, String.Format("{0:yyyy-mm-dd_hhmmss}({1}).{2}", dateOfShot, i++, Ext));
+                newName = Path.Combine(baseDir, String.Format("{0:yyyy-mm-dd_hhmmss}({1}).{2}", dateOfShot, i++, Path.GetExtension(fileName)));
             }
             return newName;
         }
