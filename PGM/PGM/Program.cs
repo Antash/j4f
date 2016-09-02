@@ -11,7 +11,8 @@ namespace PGM
     class Program
     {
         private static readonly CultureInfo UsCulture = new CultureInfo("en-US");
-        private static readonly string[] Ext = { "jpg", "jpeg", "jpe", "png", "bmp" };
+        private static readonly string[] PhotoExt = { "jpg", "jpeg", "jpe", "png", "bmp" };
+        private static readonly string[] VideoExt = { "avi", "mp4", "flv", "mov", "mkv", "3gp", "mpg", "m4v", "mp4", "swf", "wmv", "vob"};
         private static readonly TraceSource logger = new TraceSource("TraceSourceApp");
 
         private static bool collisionActionToAll = false;
@@ -44,9 +45,12 @@ namespace PGM
                 var input = Console.ReadLine();
                 int limit = 0;
                 int.TryParse(input, out limit);
+                Console.WriteLine("Input something if you want to process video files (by default photo files are processed):");
+                input = Console.ReadLine();
+                bool video = !string.IsNullOrEmpty(input);
                 var dr = MessageBox.Show("Keep source files?", "Move or Copy", MessageBoxButtons.YesNo);
                 Console.WriteLine(String.Format("Keep source images = {0}", dr == DialogResult.Yes));
-                ImageProc(d, dd, dr == DialogResult.Yes, limit);
+                ImageProc(d, dd, dr == DialogResult.Yes, limit, video ? VideoExt : PhotoExt);
             }
             else
             {
@@ -61,11 +65,11 @@ namespace PGM
             Copy, Skip
         }
 
-        private static void ImageProc(DirectoryInfo d, DirectoryInfo ddest, bool saveOriginal, int sizeLimit)
+        private static void ImageProc(DirectoryInfo d, DirectoryInfo ddest, bool saveOriginal, int sizeLimit, string[] extensions)
         {
             try
             {
-                foreach (var tf in Ext.SelectMany(e => d.EnumerateFiles(string.Format("*.{0}", e))))
+                foreach (var tf in extensions.SelectMany(e => d.EnumerateFiles(string.Format("*.{0}", e))))
                 {
                     logger.TraceInformation(string.Format("Processing image {0}", tf.FullName));
                     DateTime dateOfShot = DateTime.MinValue;
@@ -153,7 +157,7 @@ namespace PGM
             {
                 foreach (var td in d.EnumerateDirectories())
                 {
-                    ImageProc(td, ddest, saveOriginal, sizeLimit);
+                    ImageProc(td, ddest, saveOriginal, sizeLimit, extensions);
                 }
             }
             catch (UnauthorizedAccessException e)
